@@ -1,0 +1,45 @@
+﻿@model DryAgentSystem.Models.Booking
+
+@{
+    ViewBag.Title = "BookingDetails";
+    Layout = "~/Views/Shared/DetailLayout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@*@Scripts.Render("~/bundles/jqueryui")*@
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/bootstrap")
+@Styles.Render("~/Content/cssjqryUi")
+@Styles.Render("~/Content/sitecss")
+
+@*@Styles.Render("~/Content/bootstrapcss")*@
+
+<script src="~/JQuery/BookingDetails.js"></script>
+
+
+@*<script type="text/javascript">
+        var status = "@Html.Raw(@Model.BookingStatus)";
+        var rateCountered = "@Html.Raw(@Model.RateCountered)";
+    </script>*@
+<div class="form-horizontal">
+    <div id="tabs">
+        <ul>
+            <li>
+                <a href="#booking">Booking</a>
+            </li>
+            <li>
+                <a href="#vessel">Vessel</a>
+            </li>
+        </ul>
+        <div id="booking">
+            @{
+                Html.RenderPartial("BookingDetailsTab", Model);
+            }
+        </div>
+        <div id="vessel">
+            @{
+                Html.RenderPartial("VesselDetailsTab", Model.VesselModel);
+            }
+        </div>
+    </div>
+</div>

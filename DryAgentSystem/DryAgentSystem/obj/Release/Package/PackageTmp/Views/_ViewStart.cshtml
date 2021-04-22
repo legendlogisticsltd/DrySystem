@@ -1,0 +1,16 @@
+﻿@{
+    string CurrentControllerName = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
+
+    switch (CurrentControllerName)
+    {
+        case "RateRequest":
+            Layout = "~/Views/Shared/SearchAndGridLayout.cshtml";
+            break;
+        case "RateRequestDetails":
+            Layout = "~/Views/Shared/DetailLayout.cshtml";
+            break;
+        default:
+            Layout = "~/Views/Shared/Layout.cshtml";
+            break;
+    }
+}

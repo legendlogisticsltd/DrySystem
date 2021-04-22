@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryAgentSystem", "DryAgentSystem\DryAgentSystem.csproj", "{340847C2-E077-4BC9-86EC-0ED5B7B1C606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DryAgentSystem.Tests", "DryAgentSystem.Tests\DryAgentSystem.Tests.csproj", "{21F675A1-D922-42A6-A2E9-60144146D17F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{340847C2-E077-4BC9-86EC-0ED5B7B1C606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{340847C2-E077-4BC9-86EC-0ED5B7B1C606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{340847C2-E077-4BC9-86EC-0ED5B7B1C606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{340847C2-E077-4BC9-86EC-0ED5B7B1C606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21F675A1-D922-42A6-A2E9-60144146D17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21F675A1-D922-42A6-A2E9-60144146D17F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21F675A1-D922-42A6-A2E9-60144146D17F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21F675A1-D922-42A6-A2E9-60144146D17F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5A2E03A5-73FF-48E5-8642-016E3B802920}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://dev.azure.com/shashankmoolya
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = DryAgentSystem\\DryAgentSystem.csproj
+		SccProjectName1 = DryAgentSystem
+		SccLocalPath1 = DryAgentSystem
+		SccProjectUniqueName2 = DryAgentSystem.Tests\\DryAgentSystem.Tests.csproj
+		SccProjectName2 = DryAgentSystem.Tests
+		SccLocalPath2 = DryAgentSystem.Tests
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/bootstrapcss")
+    @Styles.Render("~/Content/sitecss")
+    @RenderSection("scripts", required: false)
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/Img/LogoOnlyStar.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>*@
+    @*<link rel="stylesheet" href="~/Content/Site.css">*@
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-fixed-top" id="navigationbar">
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="navbar-brand" href="@Url.Action("Home")" id="logo"><img src="~/Content/Img/LegendLogoWhiteNew.png" class="responsiveimg" alt=""></a>
+            }
+            else
+            {
+                <a class="navbar-brand" href="@Url.Action("Login")" id="logo"><img src="~/Content/Img/LegendLogoWhiteNew.png" class="responsiveimg" alt=""></a>
+            }
+            <div class="container">
+                <ul class="navbar-nav" id="navigationli">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("RATE REQUEST", "RateRequest", "RateRequest")</li>
+                        <li>@Html.ActionLink("QUOTATION", "Quotation", "Quotation")</li>
+                        <li>@Html.ActionLink("BOOKING", "Booking", "Booking")</li> @*Disabling for now will make it live for April 15 release.*@
+                        <li>@Html.ActionLink("SHIPMENT", "Shipment", "Shipment")</li> @*Disabling for now will make it live for April 15 release.*@
+                    }
+                </ul>
+                <ul class="navbar-nav navigationright">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="#">HELLO, <!--@Session["fname"]-->@User.Identity.Name</a></li>
+
+                        <li>@Html.ActionLink("LOGOUT", "Logout", "Login")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("LOGIN", "Login", "Login")</li>
+                    }
+                </ul>
+            </div>
+        </nav>
+        <div class="col-12">
+            <div class="mobile_menu d-block d-lg-none"></div>
+        </div>
+    </header>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidepanel").style.width = "600px";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidepanel").style.width = "0";
+        }
+    </script>
+
+    <br>
+    <br>
+    <br>
+    <div class="container body-content" id="content">
+        @RenderBody()
+    </div>
+    
+
+    <footer class="footer footer_bg_1">
+        <div class="footer_top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget ">
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget ">
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget ">
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                Information
+                            </h3>
+                            <p>
+                                531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531
+                            </p>
+                            <br>
+                            <p>
+                                Tel:+65 6221 4844
+                                <br>
+                                <a href="mailto:info.singapore@legendlogisticsltd.com">info.singapore@legendlogisticsltd.com</a>
+                            </p>
+                            <div class="footer_logo" style="top:-10px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="copy-right_text" style="padding:60px 0px 0px 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <p class="copy_right">
+                        <p class="obiz">
+                            Copyright &copy;
+                            <script>document.write(new Date().getFullYear());</script> All rights reserved | Legend Logistics Limited.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
