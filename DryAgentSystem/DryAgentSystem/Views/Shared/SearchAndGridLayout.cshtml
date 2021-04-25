@@ -1,0 +1,87 @@
+﻿<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/popper")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/modernizr")
+    @Styles.Render("~/Content/bootstrapcss")
+    @Styles.Render("~/Content/sitecss")
+    @RenderSection("scripts", required: false)
+
+    <link rel="shortcut icon" type="image/x-icon" href="~/Content/Img/LogoOnlyStar.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>*@
+    @*<link rel="stylesheet" href="~/Content/Site.css">*@
+</head>
+@{
+    ViewBag.Title = "SearchAndGridLayout";
+}
+
+@*@Scripts.Render("~/bundles/modernizr")
+@Scripts.Render("~/bundles/jquery")*@
+@RenderSection("scripts", required: false)
+
+
+@{
+    string CurrentControllerName = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
+
+    //Layout = "~/Views/Shared/SearchAndGridLayout.cshtml";
+    <div>
+        <nav class="navbar navbar-expand-sm navbar-dark navbar-fixed-top" id="navigationbar">
+            <a class="navbar-brand" href="@Url.Action("Home","Home")" id="logo"><img src="~/Content/Img/LegendLogoWhiteNew.png" class="responsiveimg" alt=""></a>
+            <div class="container">
+                <ul class="navbar-nav" id="navigationli">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        switch (CurrentControllerName)
+                        {
+                            case "RateRequest":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                <li>@Html.ActionLink("CREATE RATE REQUEST", "RateRequestDetails", "RateRequestDetails")</li>
+                                break;
+
+                            case "Quotation":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                break;
+
+                            case "Booking":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                break;
+
+                            case "Shipment":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                break;
+
+                            default:
+                                Layout = "~/Views/Shared/Layout.cshtml";
+                                break;
+                        }
+                    }
+                </ul>
+                <ul class="navbar-nav navigationright">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="#">HELLO, <!--@Session["fname"]-->@User.Identity.Name</a></li>
+
+                        <li>@Html.ActionLink("LOGOUT", "Logout", "Login")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("LOGIN", "Login", "Login")</li>
+                    }
+                </ul>
+            </div>
+        </nav>
+    </div>
+}
+<br>
+<div class="container body-content" id="content">
+    @RenderBody()
+</div>
+

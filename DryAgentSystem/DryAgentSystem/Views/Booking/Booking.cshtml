@@ -1,0 +1,86 @@
+﻿@model DryAgentSystem.Models.SearchParameters
+
+@{
+    ViewBag.Title = "Booking";
+    Layout = "~/Views/Shared/SearchAndGridLayout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+<script src="~/JQuery/Booking.js"></script>
+
+
+@using (Html.BeginForm("Booking", "Booking", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="form_group">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Booking</h2>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.BookingID, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.BookingID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.RateID, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.BookingNo, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.BookingNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.BookingNo, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.QuoteRefID, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.QuoteRefID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.QuoteRefID, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <input type="submit" name="submit" id="Search" value="Search" class="btn btn-warning" />
+                </div>
+                <div class="col-md-1">
+                    <br />
+                    <input type="submit" name="submit" id="Reset" value="Reset" class="btn btn-info"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statuslist, "Text", "Text"),
+                                 "Select Status", new { @class = "ui-selectmenu-menu", @id = "statusDropDownList" })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                  "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
+                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadportDropDownList" })
+                    @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.DischargePort, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.DischargePort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischportDropDownList" })
+                    @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<table id="bookingGrid" class="overflow:auto;">
+</table>
+<div id="bookingPager" style="text-align: center;">
+</div>
