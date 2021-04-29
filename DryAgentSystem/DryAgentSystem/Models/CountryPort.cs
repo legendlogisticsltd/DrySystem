@@ -16,6 +16,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Country")]
         public string Country { get; set; }
+        
+        [Display(Name = "PortCountry")]
+        public string PortCountry { get; set; }
 
     }
 }

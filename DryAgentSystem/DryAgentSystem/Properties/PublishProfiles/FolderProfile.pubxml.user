@@ -44,10 +44,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2017 22:59:22</publishTime>
     </File>
     <File Include="bin/DryAgentSystem.dll">
-      <publishTime>04/19/2021 17:31:06</publishTime>
+      <publishTime>04/26/2021 15:33:37</publishTime>
     </File>
     <File Include="bin/DryAgentSystem.pdb">
-      <publishTime>04/19/2021 17:31:06</publishTime>
+      <publishTime>04/26/2021 15:33:37</publishTime>
     </File>
     <File Include="bin/ExcelNumberFormat.dll">
       <publishTime>03/13/2020 09:36:50</publishTime>
@@ -325,6 +325,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/css/jquery-ui.min.css">
       <publishTime>03/24/2021 04:10:50</publishTime>
     </File>
+    <File Include="Content/css/jquery.datetimepicker.min.css">
+      <publishTime>04/22/2021 10:46:58</publishTime>
+    </File>
     <File Include="Content/css/magnific-popup.css">
       <publishTime>03/09/2021 11:09:24</publishTime>
     </File>
@@ -433,6 +436,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/images/ui-icons_ffffff_256x240.png">
       <publishTime>04/01/2021 16:31:16</publishTime>
     </File>
+    <File Include="Content/Img/BLLegendLogo.png">
+      <publishTime>04/26/2021 06:59:00</publishTime>
+    </File>
     <File Include="Content/Img/footer1920.png">
       <publishTime>03/16/2021 07:22:05</publishTime>
     </File>
@@ -444,6 +450,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Content/Img/LogoOnlyStar.png">
       <publishTime>04/01/2021 07:48:15</publishTime>
+    </File>
+    <File Include="Content/Img/printer-fill.svg">
+      <publishTime>04/26/2021 06:59:00</publishTime>
     </File>
     <File Include="Content/jquery.datetimepicker.css">
       <publishTime>04/13/2021 12:18:57</publishTime>
@@ -458,7 +467,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/16/2021 12:53:05</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>04/19/2021 14:37:13</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Content/themes/base/accordion.css">
       <publishTime>03/09/2021 11:09:25</publishTime>
@@ -644,7 +653,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/19/2021 17:25:26</publishTime>
     </File>
     <File Include="JQuery/BookingTab.js">
-      <publishTime>04/19/2021 17:25:26</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="JQuery/Quotation.js">
       <publishTime>04/19/2021 07:11:28</publishTime>
@@ -657,6 +666,12 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="JQuery/RateRequestDetails.js">
       <publishTime>04/19/2021 17:25:27</publishTime>
+    </File>
+    <File Include="JQuery/Shipment.js">
+      <publishTime>04/20/2021 12:34:34</publishTime>
+    </File>
+    <File Include="JQuery/ShipmentDetails.js">
+      <publishTime>04/23/2021 13:01:28</publishTime>
     </File>
     <File Include="JQuery/UpdateRateRequestDetails.js">
       <publishTime>04/19/2021 17:25:27</publishTime>
@@ -884,7 +899,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/13/2021 11:54:27</publishTime>
     </File>
     <File Include="Scripts/jquery.datetimepicker.full.min.js">
-      <publishTime>04/13/2021 11:54:27</publishTime>
+      <publishTime>04/22/2021 10:47:09</publishTime>
     </File>
     <File Include="Scripts/jquery.datetimepicker.js">
       <publishTime>03/29/2021 19:19:27</publishTime>
@@ -1160,13 +1175,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/01/2021 08:29:21</publishTime>
     </File>
     <File Include="Views/Booking/Booking.cshtml">
-      <publishTime>04/15/2021 07:07:56</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/BookingDetails/BookingDetails.cshtml">
       <publishTime>04/19/2021 17:25:27</publishTime>
     </File>
     <File Include="Views/BookingDetails/BookingDetailsTab.cshtml">
-      <publishTime>04/19/2021 17:25:26</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/BookingDetails/VesselDetailsTab.cshtml">
       <publishTime>04/19/2021 17:25:27</publishTime>
@@ -1174,44 +1189,50 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Home/Home.cshtml">
       <publishTime>03/17/2021 07:44:03</publishTime>
     </File>
+    <File Include="Views/Invoice/Invoice.cshtml">
+      <publishTime>04/26/2021 07:16:38</publishTime>
+    </File>
+    <File Include="Views/InvoiceDetails/InvoiceDetails.cshtml">
+      <publishTime>04/26/2021 07:17:49</publishTime>
+    </File>
     <File Include="Views/Login/Login.cshtml">
       <publishTime>03/16/2021 14:09:11</publishTime>
     </File>
     <File Include="Views/Quotation/Quotation.cshtml">
-      <publishTime>04/13/2021 17:57:21</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/QuotationDetails/QuotationDetails.cshtml">
       <publishTime>04/19/2021 07:11:28</publishTime>
     </File>
     <File Include="Views/RateRequest/RateRequest.cshtml">
-      <publishTime>04/08/2021 16:20:46</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/RateRequestDetails/RateRequestDetails.cshtml">
-      <publishTime>04/19/2021 17:25:26</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/RateRequestDetails/UpdateRateRequestDetails.cshtml">
       <publishTime>04/19/2021 17:25:27</publishTime>
     </File>
     <File Include="Views/Shared/DetailLayout.cshtml">
-      <publishTime>04/05/2021 09:04:30</publishTime>
+      <publishTime>04/26/2021 07:25:16</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>03/15/2021 10:09:49</publishTime>
     </File>
     <File Include="Views/Shared/Layout.cshtml">
-      <publishTime>04/13/2021 18:43:52</publishTime>
+      <publishTime>04/26/2021 07:39:13</publishTime>
     </File>
     <File Include="Views/Shared/RateRequestSearchParamView.cshtml">
       <publishTime>03/19/2021 09:52:48</publishTime>
     </File>
     <File Include="Views/Shared/SearchAndGridLayout.cshtml">
-      <publishTime>04/02/2021 13:24:59</publishTime>
+      <publishTime>04/26/2021 07:23:47</publishTime>
     </File>
     <File Include="Views/Shipment/Shipment.cshtml">
-      <publishTime>04/13/2021 10:28:14</publishTime>
+      <publishTime>04/22/2021 10:46:58</publishTime>
     </File>
     <File Include="Views/ShipmentDetails/ShipmentDetails.cshtml">
-      <publishTime>04/19/2021 14:37:13</publishTime>
+      <publishTime>04/26/2021 15:26:31</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>03/15/2021 10:09:45</publishTime>
@@ -1220,7 +1241,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>03/17/2021 11:03:51</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>04/19/2021 17:31:06</publishTime>
+      <publishTime>04/26/2021 15:33:37</publishTime>
     </File>
   </ItemGroup>
 </Project>

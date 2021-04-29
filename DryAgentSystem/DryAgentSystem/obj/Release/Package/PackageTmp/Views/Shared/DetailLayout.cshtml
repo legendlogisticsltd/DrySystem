@@ -23,8 +23,6 @@
     ViewBag.Title = "DetailLayout";
 }
 
-@*@Scripts.Render("~/bundles/modernizr")
-@Scripts.Render("~/bundles/jquery")*@
 @RenderSection("scripts", required: false)
 <link rel="stylesheet" href="~/Content/Site.css">
 
@@ -45,12 +43,18 @@
                                 <li>@Html.ActionLink("RATE REQUEST", "RateRequest", "RateRequest")</li>
                                 break;
                             case "QuotationDetails":
-                                
+
                                 <li>@Html.ActionLink("QUOTATION", "Quotation", "Quotation")</li>
-                                
+
                                 break;
                             case "BookingDetails":
                                 <li>@Html.ActionLink("BOOKING", "Booking", "Booking")</li>
+                                break;
+                            case "ShipmentDetails":
+                                <li>@Html.ActionLink("SHIPMENT", "Shipment", "Shipment")</li>
+                                break;
+                            case "InvoiceDetails":
+                                <li>@Html.ActionLink("Invoice", "Invoice", "Invoice")</li>
                                 break;
                             default:
                                 Layout = "~/C/Shared/Layout.cshtml";

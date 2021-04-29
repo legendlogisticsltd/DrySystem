@@ -228,6 +228,9 @@
         $("#RateTypeDry").prop("checked", true);
     }
 
+    $("#companyDropDownList").selectmenu({
+        width: 300
+    });
 
 });
 

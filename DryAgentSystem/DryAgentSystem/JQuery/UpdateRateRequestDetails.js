@@ -429,4 +429,8 @@
             });
         });
     }
+
+    $("#companyDropDownList").selectmenu({
+        width: 300
+    });
 });

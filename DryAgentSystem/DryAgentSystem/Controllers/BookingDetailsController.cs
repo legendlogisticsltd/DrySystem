@@ -95,6 +95,31 @@ namespace DryAgentSystem.Controllers
                 }
                 return RedirectToAction("BookingDetails", "BookingDetails", new { BookingID = booking.BookingID });
             }
+            if (submit == "Create Shipment")
+            {
+                ShipmentBL shipmentnew = new ShipmentBL();
+                if(ModelState.IsValid)
+                {
+                    shipmentnew.ShipmentDetailsModel.ShipmentTerm = booking.ShipmentTerm;
+                    shipmentnew.BLDetailsModel.LoadPort = booking.LoadPort;
+                    shipmentnew.BLDetailsModel.DischPort = booking.DischargePort;
+                    shipmentnew.BLDetailsModel.PlaceofReceipt = booking.PlaceOfReceipt;
+                    shipmentnew.BLDetailsModel.PlaceofDelivery = booking.PlaceOfDelivery;
+                    shipmentnew.BLDetailsModel.CargoDescription = booking.CargoType;
+                    shipmentnew.ShipmentDetailsModel.UniversalSerialNr = booking.UniversalSerialNr;
+
+                    TempData["shipmentobj"] = shipmentnew;
+                    ModelState.Clear();
+                    return RedirectToAction("ShipmentDetails", "ShipmentDetails");
+                }
+                else
+                {
+                    TempData["Message"] = "Please check the fields, some of the fields are not in correct format";
+
+                    ModelState.Clear();
+                    return View();
+                }
+            }
             else
             {
                 return View();
@@ -387,7 +412,7 @@ namespace DryAgentSystem.Controllers
                                 "POD \n" +
                                 "FINAL DEST \n" +
                                 "ETD "+booking.LoadPort+"\n" +
-                                "ETD "+booking.DischargePort+"\n" +
+                                "ETA "+booking.DischargePort+"\n" +
                                 "CARRIER \n" +
                                 "CARRIER BKG REF NO. \n" +
                                 "GROSS WEIGHT \n" +
@@ -444,6 +469,7 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
             table.AddCell(cell);
@@ -452,6 +478,7 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.PaddingLeft = 5f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
@@ -461,6 +488,7 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
             table.AddCell(cell);
@@ -469,6 +497,7 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
             table.AddCell(cell);
@@ -478,6 +507,7 @@ namespace DryAgentSystem.Controllers
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.PaddingLeft = 20f;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
             table.AddCell(cell);
@@ -487,6 +517,7 @@ namespace DryAgentSystem.Controllers
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.PaddingLeft = 20f;
             cell.Border = 0;
+            cell.PaddingBottom = 10f;
             cell.BorderWidthBottom = 1f;
             cell.AddElement(para);
             table.AddCell(cell);

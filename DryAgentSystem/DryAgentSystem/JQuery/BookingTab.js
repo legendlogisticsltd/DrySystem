@@ -150,6 +150,7 @@
         $("#Save").hide();
         $("#Update").hide();
         $("#Confirm").hide();
+        $("#Shipment").hide();
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
         $("#ServiceMode").attr('readonly', 'readonly');
@@ -191,6 +192,7 @@
         $("#Edit").hide();
         $("#Issue").hide();
 
+
         $("#RateTypeReefer").prop("disabled", true);
         $("#RateTypeDry").prop("disabled", true);
         $("#Temperature").attr('readonly', 'readonly');
@@ -228,6 +230,7 @@
         $("#PrintBC").hide();
         $("#PrintCRO").hide();
         $("#Issue").hide();
+        $("#Shipment").hide();
     }
 
     else {
@@ -235,6 +238,7 @@
         $("#Confirm").hide();
         $("#Edit").hide();
         $("#Issue").hide();
+        $("#Shipment").hide();
 
         $("#PrintBC").hide();
         $("#PrintCRO").hide();
