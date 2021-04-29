@@ -157,5 +157,12 @@ namespace DryAgentSystem.Models
         public string ID { get; set; }
         public string RateID { get; set; }
         public string Description { get; set; }
+        public decimal UnitRate { get; set; }
+        public string Currency { get; set; }
+        public decimal Exrate { get; set; }
+        public string PayBy { get; set; }
+        public string PaymentTerm { get; set; }
+        public string PayMode { get; set; }
+
     }
 }

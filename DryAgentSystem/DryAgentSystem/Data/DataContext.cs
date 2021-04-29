@@ -29,7 +29,7 @@ namespace DryAgentSystem.Data
             try
             {
                 //parameters.Add("@Password", currentPassword, DbType.String, ParameterDirection.Input);
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var valid = conn.Query<UserDetails>("Select Name, Password from UserAccountManagement where Name = ?", parameters);
 
@@ -69,7 +69,7 @@ namespace DryAgentSystem.Data
                 var userRoleParam = new DynamicParameters();
                 userRoleParam.Add("Name", currentUserName, DbType.String, ParameterDirection.Input);
 
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var roles = conn.Query<string>("Select privilegerole From UserAccountManagement  Where Name = ?", userRoleParam);
 
@@ -96,7 +96,7 @@ namespace DryAgentSystem.Data
                 var userRoleParam = new DynamicParameters();
                 userRoleParam.Add("Name", currentUserName, DbType.String, ParameterDirection.Input);
 
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
 
                     string query = "Select IDCompany From UserAccountManagement  Where Name = ?";
@@ -131,7 +131,7 @@ namespace DryAgentSystem.Data
             List<RateRequest> rateRequests = new List<RateRequest>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                    string selectquery = "Select RR.RateID, RR.CompanyName, RR.ShipmentTerm, RR.LoadPort, RR.DischargePort, RR.PlaceOfReceipt, RR.TransshipmentPort, RR.PlaceOfDelivery, RR.POLFreeDays, RR.PODFreeDays, RR.EffectiveDate, " +
                         "RR.ValidityDate, RR.Status, RR.Quantity, RR.EquipmentType, RR.CargoType, RR.Rate, RR.RateCountered, RR.AgentName, RR.ModifiedDate From RateRequest RR INNER JOIN UserAccountManagement UM ON RR.IDCompany = UM.IDCompany WHERE UM.Name = '" + username + "' AND";
@@ -217,9 +217,9 @@ namespace DryAgentSystem.Data
             List<CountryPort> ports = new List<CountryPort>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
-                    var allports = conn.Query<CountryPort>("Select Port, PortCode, Country from CountryPort Order By Port FETCH FIRST 10 ROWS ONLY");// FETCH FIRST 10 ROWS ONLY");
+                    var allports = conn.Query<CountryPort>("Select Port, PortCode, Country from CountryPort Order By Port");// FETCH FIRST 10 ROWS ONLY");
                     if (allports != null)
                     {
                         foreach (var por in allports)
@@ -228,12 +228,43 @@ namespace DryAgentSystem.Data
                             {
                                 Port = por.Port,
                                 PortCode = por.PortCode,
-                                Country = por.Country
+                                Country = por.Country,
+                                PortCountry = por.Port + ", " + por.Country
                             });
+                            
                         }
                     }
                 }
                 return ports;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public static string GetCountryPortFromPort(string Port)
+        {
+            CountryPort ports = new CountryPort();
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("Port", Port, DbType.String, ParameterDirection.Input);
+                    string query = ("Select Port, PortCode, Country from CountryPort WHERE Port = ?");
+                    var PortDetails = conn.Query<CountryPort>(query, parameters);
+                    foreach (var item in PortDetails)
+                    {
+                        ports.Port = item.Port;
+                        ports.PortCode = item.PortCode;
+                        ports.Country = item.Country;
+                        ports.PortCountry = ports.Port + ", " + ports.Country;
+                    }
+                    
+                }
+                return ports.PortCountry;
             }
             catch (Exception ex)
             {
@@ -247,7 +278,7 @@ namespace DryAgentSystem.Data
             List<SelectListItem> ports = new List<SelectListItem>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     string IDDepot = GetUserDetailsForUser(HttpContext.Current.User.Identity.Name).IDCompany;
                     var parameters = new DynamicParameters();
@@ -286,7 +317,7 @@ namespace DryAgentSystem.Data
             Booking booking = new Booking();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     string IDDepot = GetUserDetailsForUser(HttpContext.Current.User.Identity.Name).IDCompany;
                     var parameters = new DynamicParameters();
@@ -320,7 +351,7 @@ namespace DryAgentSystem.Data
             List<SelectListItem> companyname = new List<SelectListItem>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("Name", username, DbType.String, ParameterDirection.Input);
@@ -353,7 +384,7 @@ namespace DryAgentSystem.Data
             UpdateRateRequest rateRequest = new UpdateRateRequest();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("RateID", rateID, DbType.String, ParameterDirection.Input);
@@ -419,7 +450,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("CargoType", rateRequest.CargoType, DbType.String, ParameterDirection.Input);
@@ -502,7 +533,7 @@ namespace DryAgentSystem.Data
                 if (rateRequest.Status == Constant.Draft)
                 {
 
-                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                     {
                         var parameters = new DynamicParameters();
 
@@ -561,7 +592,7 @@ namespace DryAgentSystem.Data
                 else if (rateRequest.OfferRate > 0 && rateRequest.Status == Constant.CounterOffer)
                 {
                     rateRequest.RateCountered = rateRequest.OfferRate;
-                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("RateCountered", rateRequest.RateCountered.ToString(), DbType.String, ParameterDirection.Input);
@@ -602,7 +633,7 @@ namespace DryAgentSystem.Data
             string status = Constant.ApprovalRequired;
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -642,7 +673,7 @@ namespace DryAgentSystem.Data
             
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -684,7 +715,7 @@ namespace DryAgentSystem.Data
             string AccMonth = DateTime.Today.ToString("MMMyy");
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -736,7 +767,7 @@ namespace DryAgentSystem.Data
             string status = Constant.Draft;
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -778,7 +809,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("LoadPort", booking.LoadPort, DbType.String, ParameterDirection.Input);
@@ -864,7 +895,7 @@ namespace DryAgentSystem.Data
             {
                 if (booking.BookingStatus == Constant.Draft)
                 {
-                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                    using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("LoadPort", booking.LoadPort, DbType.String, ParameterDirection.Input);
@@ -942,7 +973,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -977,7 +1008,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -1012,7 +1043,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -1047,7 +1078,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -1081,12 +1112,12 @@ namespace DryAgentSystem.Data
             List<DQuoteSales> dQuoteSales = new List<DQuoteSales>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
                     parameters.Add("RateID", rateID, DbType.String, ParameterDirection.Input);
-                    var allcharges = conn.Query<DQuoteSales>("Select ID, RateID, Description from DQuoteSales where RateID= ? ", parameters);
+                    var allcharges = conn.Query<DQuoteSales>("Select ID, RateID, Description, PayBy, PaymentTerm, PayMode, UnitRate, ExRate, Currency from DQuoteSales where RateID= ? ", parameters);
                     if (allcharges != null)
                     {
                         foreach (var charge in allcharges)
@@ -1096,6 +1127,12 @@ namespace DryAgentSystem.Data
                                 ID = charge.ID,
                                 RateID = charge.RateID,
                                 Description = charge.Description,
+                                PayBy = charge.PayBy,
+                                PaymentTerm = charge.PaymentTerm,
+                                PayMode = charge.PayMode,
+                                UnitRate = charge.UnitRate,
+                                Exrate = charge.Exrate,
+                                Currency = charge.Currency,
                             }) ;
                         }
                     }
@@ -1114,12 +1151,12 @@ namespace DryAgentSystem.Data
             List<DQuoteSales> dQuoteSales = new List<DQuoteSales>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
                     parameters.Add("RateID", rateID, DbType.String, ParameterDirection.Input);
-                    var allcharges = conn.Query<DQuoteSales>("Select ID, RateID, Description from DQuoteCostLI where RateID= ? ", parameters);
+                    var allcharges = conn.Query<DQuoteSales>("Select ID, RateID, Description, PayBy, PaymentTerm, PayMode, UnitRate, ExRate, Currency from DQuoteCostLI where RateID= ? ", parameters);
                     if (allcharges != null)
                     {
                         foreach (var charge in allcharges)
@@ -1129,6 +1166,12 @@ namespace DryAgentSystem.Data
                                 ID = charge.ID,
                                 RateID = charge.RateID,
                                 Description = charge.Description,
+                                PayBy = charge.PayBy,
+                                PaymentTerm = charge.PaymentTerm,
+                                PayMode = charge.PayMode,
+                                UnitRate = charge.UnitRate,
+                                Exrate = charge.Exrate,
+                                Currency = charge.Currency,
                             });
                         }
                     }
@@ -1148,7 +1191,7 @@ namespace DryAgentSystem.Data
 
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
@@ -1184,7 +1227,7 @@ namespace DryAgentSystem.Data
             List<QuoteRef> quoteRefs = new List<QuoteRef>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     string query = "Select q.QuoteRefID, q.RateID, q.CompanyName, q.ShipmentTerm, q.LoadPort, q.TransshipmentPort, q.DischargePort, q.PlaceOfReceipt, q.PlaceOfDelivery, q.POLFreeDays, q.PODFreeDays, q.EffectiveDate,  " +
                             "q.Validity, q.StatusDIS, q.Quantity, q.EquipmentType, q.CargoType, r.Rate, r.RateCountered, r.AgentName From QuoteReference q INNER JOIN RateRequest r ON q.RateID = r.RateID INNER JOIN UserAccountManagement um ON r.IDCompany = um.IDCompany WHERE um.Name = '" + username + "' AND q.StatusDIS <> 'DRAFT' AND"; 
@@ -1275,7 +1318,7 @@ namespace DryAgentSystem.Data
             try
             {
 
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("QuoteRefID", QuoteRefID, DbType.String, ParameterDirection.Input);
@@ -1340,7 +1383,7 @@ namespace DryAgentSystem.Data
             try
             {
 
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("BookingID", BookingID, DbType.String, ParameterDirection.Input);
@@ -1410,6 +1453,7 @@ namespace DryAgentSystem.Data
                             bookref.PlaceOfReceipt = quotedetails.PlaceOfReceipt;
                             bookref.TransshipmentPort = quotedetails.TransshipmentPort;
                             bookref.TransshipmentType = quotedetails.TransshipmentType;
+                            bookref.ShipmentTerm = quotedetails.ShipmentTerm;
 
                         }
 
@@ -1436,19 +1480,44 @@ namespace DryAgentSystem.Data
             return bookref;
         }
 
+        public static string GetIDfromTank(string TankNo, string UniversalSerialNr)
+        {
+            string ID = "";
+            try
+            {
+
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("TankNo", TankNo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select ID from AllocateEquipment where TankNo = ? AND UniversalSerialNr = ?";
+
+                    ID = conn.Query<Booking>(query, parameters).ToString();
+                    
+                }
+            }
+
+            catch (Exception)
+            { 
+                throw;
+            }
+            return ID;
+        }
+
         public static ShipmentBL GetShipmentFromJobRef(string JobRef)
         {
             ShipmentBL shipmentRef = new ShipmentBL();
 
             try
             {
-
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parametersd = new DynamicParameters();
                     parametersd.Add("JobRef", JobRef, DbType.String, ParameterDirection.Input);
 
-                    string querysd = "Select JobRef, HBLHAWB, ShipmentTerm, MBLMAWB, CustomerRef, UniversalSerialNr from ShipmentDetailDry where JobRef = ?";
+                    string querysd = "Select JobRef, HBLHAWB, ShipmentTerm, MBLMAWB, CustomerRef, UniversalSerialNr, LoadPort from ShipmentDetailDry where JobRef = ?";
 
                     var ShipmentData = conn.Query<ShipmentDetails>(querysd, parametersd);
                     foreach (var item in ShipmentData)
@@ -1459,13 +1528,14 @@ namespace DryAgentSystem.Data
                         shipmentRef.ShipmentDetailsModel.MBLMAWB = item.MBLMAWB;
                         shipmentRef.ShipmentDetailsModel.CustomerRef = item.CustomerRef;
                         shipmentRef.ShipmentDetailsModel.UniversalSerialNr = item.UniversalSerialNr;
-                        
+                        shipmentRef.ShipmentDetailsModel.LoadPort = item.LoadPort;                        
+                        shipmentRef.ShipmentDetailsModel.ContainerList = GetContainerList(shipmentRef.ShipmentDetailsModel.LoadPort).Select(x => new SelectListItem { Text = x.TankNo, Value = x.TankNo });
                     }
 
                     var parameterbl = new DynamicParameters();
-                    parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
 
-                    string querybl = "Select * from BLDetail where UniversalSerialNr = ?";
+                    string querybl = "Select * from BLDetail where JobRef = ?";
 
                     var BLData = conn.Query<BLDetails>(querybl, parameterbl);
                     foreach (var item in BLData)
@@ -1478,9 +1548,9 @@ namespace DryAgentSystem.Data
                         shipmentRef.BLDetailsModel.DischAgentNameBL = item.DischAgentNameBL;
                         shipmentRef.BLDetailsModel.NotifyPartyAddress = item.NotifyPartyAddress;
                         shipmentRef.BLDetailsModel.DischAgentAddress = item.DischAgentAddress;
-                        shipmentRef.BLDetailsModel.CountryPOL = item.CountryPOL;
+                        shipmentRef.BLDetailsModel.LoadPort = item.LoadPort;
                         shipmentRef.BLDetailsModel.PlaceofReceipt = item.PlaceofReceipt;
-                        shipmentRef.BLDetailsModel.CountryPOD = item.CountryPOD;
+                        shipmentRef.BLDetailsModel.DischPort = item.DischPort;
                         shipmentRef.BLDetailsModel.PlaceofDelivery = item.PlaceofDelivery;
                         shipmentRef.BLDetailsModel.VesselDetails = item.VesselDetails;
                         shipmentRef.BLDetailsModel.MarksandNo = item.MarksandNo;
@@ -1492,19 +1562,22 @@ namespace DryAgentSystem.Data
                         shipmentRef.BLDetailsModel.DateofIssue = item.DateofIssue;
                         shipmentRef.BLDetailsModel.MBLFreightPayment = item.MBLFreightPayment;
                         shipmentRef.BLDetailsModel.NoofOriginalBLissued = item.NoofOriginalBLissued;
-
+                        shipmentRef.BLDetailsModel.BLTypes = item.BLTypes;
+                        shipmentRef.BLDetailsModel.PreCarriageBy = item.PreCarriageBy;
                     }
 
                     var parameterv = new DynamicParameters();
                     parameterv.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string queryv = "Select ETD, ETA from VesselScheduleDry where UniversalSerialNr = ?";
+                    string queryv = "Select ETD, ETA,VesselName,VoyNo from VesselScheduleDry where UniversalSerialNr = ?";
 
                     var VesselData = conn.Query<Vessel>(queryv, parameterv);
                     foreach (var item in VesselData)
                     {
                         shipmentRef.VesselModel.ETD = item.ETD;
                         shipmentRef.VesselModel.ETA = item.ETA;
+                        shipmentRef.VesselModel.VesselName = item.VesselName;
+                        shipmentRef.VesselModel.VoyNo = item.VoyNo;
                     }
                 }
             }
@@ -1517,12 +1590,294 @@ namespace DryAgentSystem.Data
             return shipmentRef;
         }
 
+        public static ErrorLog SaveShipment(ShipmentBL shipmentRef)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            //string status = "DRAFT";
+            //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
+
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parametersd = new DynamicParameters();
+                    parametersd.Add("ShipmentTerm", shipmentRef.ShipmentDetailsModel.ShipmentTerm, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("MBLMAWB", shipmentRef.ShipmentDetailsModel.MBLMAWB, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("HBLHAWB", shipmentRef.ShipmentDetailsModel.HBLHAWB, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("CustomerRef", shipmentRef.ShipmentDetailsModel.CustomerRef, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("User", username, DbType.String, ParameterDirection.Input);
+                    
+
+                    string odbcQuerysd = "Insert Into ShipmentDetailDRY(ShipmentTerm, MBLMAWB, HBLHAWB, CustomerRef, UniversalSerialNr, \"User\") Values(?, ?, ?, ?, ?, ?)";
+
+                    int rowsAffected = conn.Execute(odbcQuerysd, parametersd);
+                    if (rowsAffected > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+
+                    string query = "SELECT JobRef FROM ShipmentDetailDRY WHERE \"User\" = '" + username + "' ORDER BY CreationTimestamp DESC FETCH FIRST 1 ROWS ONLY";
+
+                    var shipmentreference = conn.Query<ShipmentDetails>(query);
+                    foreach (var item in shipmentreference)
+                    {
+                        shipmentRef.ShipmentDetailsModel.JobRef = item.JobRef;
+                    }
+
+
+                    var parameterbl = new DynamicParameters();
+                    parameterbl.Add("ShipperNameBL", shipmentRef.BLDetailsModel.ShipperNameBL, DbType.String, ParameterDirection.Input); //Change field name to DischargePort
+                    parameterbl.Add("ConsigneeNameBL", shipmentRef.BLDetailsModel.ConsigneeNameBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("ShipperAddressBL", shipmentRef.BLDetailsModel.ShipperAddressBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("ConsigneeAddressBL", shipmentRef.BLDetailsModel.ConsigneeAddressBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NotifyPartyName", shipmentRef.BLDetailsModel.NotifyPartyName, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischAgentNameBL", shipmentRef.BLDetailsModel.DischAgentNameBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NotifyPartyAddress", shipmentRef.BLDetailsModel.NotifyPartyAddress, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischAgentAddress", shipmentRef.BLDetailsModel.DischAgentAddress, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LoadPort", shipmentRef.BLDetailsModel.LoadPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PlaceofReceipt", shipmentRef.BLDetailsModel.PlaceofReceipt, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischPort", shipmentRef.BLDetailsModel.DischPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PlaceofDelivery", shipmentRef.BLDetailsModel.PlaceofDelivery, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("VesselDetails", shipmentRef.BLDetailsModel.VesselDetails, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("MarksandNo", shipmentRef.BLDetailsModel.MarksandNo, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("CargoDescription", shipmentRef.BLDetailsModel.CargoDescription, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("PlaceofIssue", shipmentRef.BLDetailsModel.PlaceofIssue, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LadenOnBoard", shipmentRef.BLDetailsModel.LadenOnBoard, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("HBLFreightPayment", shipmentRef.BLDetailsModel.HBLFreightPayment, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("BLFinalisedDate", shipmentRef.BLDetailsModel.BLFinalisedDate, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("DateofIssue", shipmentRef.BLDetailsModel.DateofIssue, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("MBLFreightPayment", shipmentRef.BLDetailsModel.MBLFreightPayment, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NoofOriginalBLissued", shipmentRef.BLDetailsModel.NoofOriginalBLissued, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("BLTypes", shipmentRef.BLDetailsModel.BLTypes, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRefFull", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+
+                    string odbcQuerybl = "Insert Into BLDetail (ShipperNameBL, ConsigneeNameBL, ShipperAddressBL, ConsigneeAddressBL, NotifyPartyName, DischAgentNameBL, NotifyPartyAddress, DischAgentAddress, " +
+                        "LoadPort, PlaceofReceipt, DischPort, PlaceofDelivery, MarksandNo, CargoDescription, LadenOnBoard, HBLFreightPayment, BLFinalisedDate, DateofIssue, MBLFreightPayment, " +
+                        "NoofOriginalBLissued, BLTypes, UniversalSerialNr, JobRef, JobRefFull, CreatedBy) " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                    int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
+                    SendShipmentCharges(shipmentRef.ShipmentDetailsModel.UniversalSerialNr);
+                    if (rowsAffectedbl > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+                    
+
+                }
+
+
+                errorLog.ErrorMessage = shipmentRef.ShipmentDetailsModel.JobRef;
+            }
+            catch (Exception ex)
+            {
+
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message.ToString();
+            }
+            return errorLog;
+        }
+
+        public static ErrorLog UpdateShipment(ShipmentBL shipmentRef)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            //string status = "DRAFT";
+            //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
+
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parametersd = new DynamicParameters();
+                    parametersd.Add("ShipmentTerm", shipmentRef.ShipmentDetailsModel.ShipmentTerm, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("MBLMAWB", shipmentRef.ShipmentDetailsModel.MBLMAWB, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("HBLHAWB", shipmentRef.ShipmentDetailsModel.HBLHAWB, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("CustomerRef", shipmentRef.ShipmentDetailsModel.CustomerRef, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("UserModify", username, DbType.String, ParameterDirection.Input);
+                    parametersd.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
+
+
+                    string odbcQuerysd = "UPDATE ShipmentDetailDRY SET ShipmentTerm = ?, MBLMAWB = ?, HBLHAWB = ?, CustomerRef = ?, UniversalSerialNr = ?, UserModify = ? WHERE JobRef = ?";
+
+                    int rowsAffected = conn.Execute(odbcQuerysd, parametersd);
+                    if (rowsAffected > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+
+
+                    var parameterbl = new DynamicParameters();
+                    parameterbl.Add("ShipperNameBL", shipmentRef.BLDetailsModel.ShipperNameBL, DbType.String, ParameterDirection.Input); //Change field name to DischargePort
+                    parameterbl.Add("ConsigneeNameBL", shipmentRef.BLDetailsModel.ConsigneeNameBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("ShipperAddressBL", shipmentRef.BLDetailsModel.ShipperAddressBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("ConsigneeAddressBL", shipmentRef.BLDetailsModel.ConsigneeAddressBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NotifyPartyName", shipmentRef.BLDetailsModel.NotifyPartyName, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischAgentNameBL", shipmentRef.BLDetailsModel.DischAgentNameBL, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NotifyPartyAddress", shipmentRef.BLDetailsModel.NotifyPartyAddress, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischAgentAddress", shipmentRef.BLDetailsModel.DischAgentAddress, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LoadPort", shipmentRef.BLDetailsModel.LoadPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PlaceofReceipt", shipmentRef.BLDetailsModel.PlaceofReceipt, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischPort", shipmentRef.BLDetailsModel.DischPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PlaceofDelivery", shipmentRef.BLDetailsModel.PlaceofDelivery, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("VesselDetails", shipmentRef.BLDetailsModel.VesselDetails, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("MarksandNo", shipmentRef.BLDetailsModel.MarksandNo, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("CargoDescription", shipmentRef.BLDetailsModel.CargoDescription, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("PlaceofIssue", shipmentRef.BLDetailsModel.PlaceofIssue, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LadenOnBoard", shipmentRef.BLDetailsModel.LadenOnBoard, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("HBLFreightPayment", shipmentRef.BLDetailsModel.HBLFreightPayment, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("BLFinalisedDate", shipmentRef.BLDetailsModel.BLFinalisedDate, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("DateofIssue", shipmentRef.BLDetailsModel.DateofIssue, DbType.Date, ParameterDirection.Input);
+                    parameterbl.Add("MBLFreightPayment", shipmentRef.BLDetailsModel.MBLFreightPayment, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("NoofOriginalBLissued", shipmentRef.BLDetailsModel.NoofOriginalBLissued, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("BLTypes", shipmentRef.BLDetailsModel.BLTypes, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("ModifiedBy", username, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
+
+                    string odbcQuerybl = "Update BLDetail  SET ShipperNameBL = ?, ConsigneeNameBL = ?, ShipperAddressBL = ?, ConsigneeAddressBL = ?, NotifyPartyName = ?, DischAgentNameBL = ?, NotifyPartyAddress = ?, DischAgentAddress = ?, " +
+                        "LoadPort = ?, PlaceofReceipt = ?, DischPort = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
+                        "NoofOriginalBLissued = ?, BLTypes = ?, ModifiedBy = ? WHERE JobRef = ? ";
+
+                    int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
+
+                    if (rowsAffectedbl > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+   
+
+                }
+
+
+                errorLog.ErrorMessage = shipmentRef.ShipmentDetailsModel.JobRef;
+            }
+            catch (Exception ex)
+            {
+
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message.ToString();
+            }
+            return errorLog;
+        }
+
+        public static ErrorLog SendShipmentCharges(string UniversalSerialNr)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            //string status = "DRAFT";
+            //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
+            string RateID = "";
+            try
+            {
+
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select QR.RateID from BookingConfirmation BC INNER JOIN QuoteReference QR ON BC.QuoteRefID = QR.QuoteRefID where BC.UniversalSerialNr = ?";
+
+                    RateID = conn.QueryFirst<string>(query, parameters);
+
+                    var costcharges = GetRateChargesList(RateID);
+                    var salescharges = GetQuoteChargesList(RateID);
+
+                    
+                    string costQuery = "";
+                    foreach (var item in costcharges)
+                    {
+                        var parameterc = new DynamicParameters();
+                        parameterc.Add("Description", item.Description, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("UnitRate", item.UnitRate, DbType.Decimal, ParameterDirection.Input);
+                        parameterc.Add("Currency", item.Currency, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("Exrate", item.Exrate, DbType.Decimal, ParameterDirection.Input);
+                        parameterc.Add("PayBy", item.PayBy, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("PaymentTerm", item.PaymentTerm, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("PayMode", item.PayMode, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("User", username, DbType.String, ParameterDirection.Input);
+                        
+                        costQuery = "Insert Into DryShipmentCostLI (Description, UnitRate, Currency, Exrate, PayBy, PaymentTerm, PayMode, UniversalSerialNr, \"User\") " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        int rowsAffected = conn.Execute(costQuery,parameterc);
+                        if (rowsAffected > 0)
+                        {
+                            errorLog.IsError = false;
+                        }
+                        else
+                        {
+                            errorLog.IsError = true;
+                        }
+                    }
+
+                    string salesQuery = "";
+                    foreach (var item in salescharges)
+                    {
+                        var parametersc = new DynamicParameters();
+                        parametersc.Add("Description", item.Description, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("UnitRate", item.UnitRate, DbType.Decimal, ParameterDirection.Input);
+                        parametersc.Add("Currency", item.Currency, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("Exrate", item.Exrate, DbType.Decimal, ParameterDirection.Input);
+                        parametersc.Add("PayBy", item.PayBy, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("PaymentTerm", item.PaymentTerm, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("PayMode", item.PayMode, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                        parametersc.Add("User", username, DbType.String, ParameterDirection.Input);
+
+                        salesQuery = "Insert Into DryShipmentSellLI (Description, UnitRate, Currency, Exrate, PayBy, PaymentTerm, PayMode, UniversalSerialNr, \"User\") " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        int rowsAffected = conn.Execute(salesQuery, parametersc);
+                        if (rowsAffected > 0)
+                        {
+                            errorLog.IsError = false;
+                        }
+                        else
+                        {
+                            errorLog.IsError = true;
+                        }
+                    }
+
+                }
+
+
+                //errorLog.ErrorMessage = shipmentRef.ShipmentDetailsModel.JobRef;
+            }
+            catch (Exception ex)
+            {
+
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message.ToString();
+            }
+            return errorLog;
+        }
+
         public static List<Vessel> GetVesselsDetails(string UniversalSerialNr)
         {
             List<Vessel> vessels = new List<Vessel>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
@@ -1559,13 +1914,194 @@ namespace DryAgentSystem.Data
             return vessels;
         }
 
+        public static List<AllocateEquipment> GetTanksDetails(string UniversalSerialNr)
+        {
+            List<AllocateEquipment> tanks = new List<AllocateEquipment>();
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select ID, TankNo, SealNo, GrossWeight, NettWeight, Measurement, UniversalSerialNr" +
+                        " From AllocateEquipment where UniversalSerialNr = ?";
+
+                    var tankData = conn.Query<AllocateEquipment>(query, parameters);
+                    foreach (var item in tankData)
+                    {
+                        tanks.Add(new AllocateEquipment
+                        {
+                            ID = item.ID,
+                            TankNo = item.TankNo,
+                            SealNo = item.SealNo,
+                            GrossWeight = item.GrossWeight,
+                            NettWeight = item.NettWeight,
+                            Measurement = item.Measurement,
+                            UniversalSerialNr = item.UniversalSerialNr
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return tanks;
+        }
+
+        public static ErrorLog CreateTank(AllocateEquipment tank)
+        {
+            try
+            {
+                string username = HttpContext.Current.User.Identity.Name;
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("TankNo", tank.TankNo, DbType.String, ParameterDirection.Input);
+                    //parameters.Add("DateATA", vessel.DateATA, DbType.Date, ParameterDirection.Input); //Change field name to DischargePort
+                    //parameters.Add("DateSOB", vessel.DateSOB, DbType.Date, ParameterDirection.Input);
+                    parameters.Add("SealNo", tank.SealNo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("GrossWeight", tank.GrossWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("NettWeight", tank.NettWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("Measurement", tank.Measurement, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("UniversalSerialNr", tank.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameters.Add("User", username, DbType.String, ParameterDirection.Input);
+
+                    string odbcQuery = "Insert Into AllocateEquipment (TankNo, SealNo, GrossWeight,  NettWeight, Measurement, UniversalSerialNr, \"User\") " +
+                        //"ModifiedBy, ModificationTimestamp) " +
+                        "Values(?, ?, ?, ?, ?, ?, ?)";
+
+                    int rowsAffected = conn.Execute(odbcQuery, parameters);
+                    if (rowsAffected > 0)
+                    {
+                        errorLog.IsError = false;
+                        string query = "Select MAX (ID) as ID from AllocateEquipment";
+
+                        var tankData = conn.Query<AllocateEquipment>(query, parameters);
+                        foreach (var item in tankData)
+                        {
+                            tank.ID = item.ID;
+                        }
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                        errorLog.ErrorMessage=tank.ID;
+                    }
+
+                    string invQuery = "UPDATE Inventory SET StatusTrack = 'allocated' AND UserModify = '" + username + "' WHERE TankNo = '" + tank.TankNo + "' " +
+                        //"ModifiedBy, ModificationTimestamp) " +
+                        "Values(?, ?, ?, ?, ?, ?)";
+
+                    int rowsAffectedq = conn.Execute(invQuery, parameters);
+                    if (rowsAffectedq > 0)
+                    {
+                        errorLog.IsError = false;
+                        string query = "Select MAX (ID) as ID from AllocateEquipment";
+
+                        var tankData = conn.Query<AllocateEquipment>(query, parameters);
+                        foreach (var item in tankData)
+                        {
+                            tank.ID = item.ID;
+                        }
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                        errorLog.ErrorMessage = tank.ID;
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message;
+            }
+            return errorLog;
+        }
+
+        public static ErrorLog UpdateTank(AllocateEquipment tank)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("TankNo", tank.TankNo, DbType.String, ParameterDirection.Input);
+                    //parameters.Add("DateATA", vessel.DateATA, DbType.Date, ParameterDirection.Input); //Change field name to DischargePort
+                    //parameters.Add("DateSOB", vessel.DateSOB, DbType.Date, ParameterDirection.Input);
+                    parameters.Add("SealNo", tank.SealNo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("GrossWeight", tank.GrossWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("NettWeight", tank.NettWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("Measurement", tank.Measurement, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("UniversalSerialNr", tank.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameters.Add("ModifyUser", username, DbType.String, ParameterDirection.Input);
+                    parameters.Add("ID", tank.ID, DbType.String, ParameterDirection.Input);
+
+                    string odbcQuery = "Update AllocateEquipment Set TankNo = ?, SealNo = ?, GrossWeight = ?, " +
+                           "NettWeight = ?, Measurement = ?, UniversalSerialNr = ?, ModifyUser = ? " +
+                           "Where ID = ?";
+
+                    int rowsAffected = conn.Execute(odbcQuery, parameters);
+                    if (rowsAffected > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message;
+            }
+            return errorLog;
+        }
+
+        public static ErrorLog DeleteTank(string ID)
+        {
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("ID", ID, DbType.String, ParameterDirection.Input);
+                    string query = "DELETE FROM AllocateEquipment Where ID = ?";
+                    int rowsAffected = conn.Execute(query, parameters);
+                    if (rowsAffected > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message;
+            }
+            return errorLog;
+        }
+
         public static List<Booking> GetBookingDetails(SearchParameters search)
         {
             string IDCompany = GetUserDetailsForUser(HttpContext.Current.User.Identity.Name).IDCompany;
             List<Booking> bookings = new List<Booking>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     string query = "Select BC.BookingID, BC.BookingNo, BC.QuoteRefID, BC.CompanyName, BC.DischargePort, BC.LoadPort, BC.UniversalSerialNr, BC.BookingStatus" +
                         " From BookingConfirmation BC INNER JOIN AgentAddressBook AB ON BC.CompanyName = AB.CompanyName WHERE AB.IDCompany = '" + IDCompany + "' AND";
@@ -1649,7 +2185,7 @@ namespace DryAgentSystem.Data
             List<ShipmentDetails> shipments = new List<ShipmentDetails>();
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     string query = "Select SD.JobRef, BC.BookingNo, SD.pzChargeParty, SD.IDQuoteRef, SD.DischPort, SD.LoadPort, SD.UniversalSerialNr, SD.StatusShipment" +
                         " From ShipmentDetailDRY SD INNER JOIN BookingConfirmation BC ON SD.UniversalSerialNr = BC.UniversalSerialNr ";//INNER JOIN AgentAddressBook AB ON BC.CompanyName = AB.CompanyName "; +
@@ -1703,7 +2239,7 @@ namespace DryAgentSystem.Data
                         query = query.Remove(query.LastIndexOf("AND"));
                     }
 
-                    query += " Order By BC.BKID DESC";// FETCH FIRST 10 ROWS ONLY";
+                    query += " Order By SD.CreationTimestamp DESC";// FETCH FIRST 10 ROWS ONLY";
 
                     var shipmentData = conn.Query<ShipmentDetails>(query);
                     foreach (var item in shipmentData)
@@ -1731,9 +2267,10 @@ namespace DryAgentSystem.Data
 
         public static ErrorLog CreateVessel(Vessel vessel)
         {
+            string username = HttpContext.Current.User.Identity.Name;
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("Carrier", vessel.Carrier, DbType.String, ParameterDirection.Input);
@@ -1747,11 +2284,12 @@ namespace DryAgentSystem.Data
                     parameters.Add("VoyNo", vessel.VoyNo, DbType.String, ParameterDirection.Input);
                     parameters.Add("CarrierBookingRefNo", vessel.CarrierBookingRefNo, DbType.String, ParameterDirection.Input);
                     parameters.Add("UniversalSerialNr", vessel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameters.Add("User", username, DbType.String, ParameterDirection.Input);
 
-                    string odbcQuery = "Insert Into VesselScheduleDry (Carrier, ETA, ETD,  DischPort, LoadPort, VesselName,  VoyNo, CarrierBookingRefNo, " +
-                        "UniversalSerialNr) " +
+                    string odbcQuery = "Insert Into VesselScheduleDry (Carrier, ETA, ETD,  DischPort, LoadPort, VesselName, VoyNo, CarrierBookingRefNo, " +
+                        "UniversalSerialNr, User) " +
                         //"ModifiedBy, ModificationTimestamp) " +
-                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     int rowsAffected = conn.Execute(odbcQuery, parameters);
                     if (rowsAffected > 0)
@@ -1782,9 +2320,10 @@ namespace DryAgentSystem.Data
 
         public static ErrorLog UpdateVessel(Vessel vessel)
         {
+            string username = HttpContext.Current.User.Identity.Name;
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("Carrier", vessel.Carrier, DbType.String, ParameterDirection.Input);
@@ -1799,10 +2338,11 @@ namespace DryAgentSystem.Data
                     parameters.Add("CarrierBookingRefNo", vessel.CarrierBookingRefNo, DbType.String, ParameterDirection.Input);
                    // parameters.Add("BookingNo", vessel.BookingNo, DbType.Date, ParameterDirection.Input);
                     parameters.Add("UniversalSerialNr", vessel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameters.Add("UserModify", username, DbType.String, ParameterDirection.Input);
                     parameters.Add("ID", vessel.ID, DbType.String, ParameterDirection.Input);
 
                     string odbcQuery = "Update VesselScheduleDry Set Carrier = ?, DischPort = ?, ETA = ?, " +
-                           "ETD = ?, LoadPort = ?, VesselName = ?, VoyNo = ?, CarrierBookingRefNo = ?, UniversalSerialNr = ? " +
+                           "ETD = ?, LoadPort = ?, VesselName = ?, VoyNo = ?, CarrierBookingRefNo = ?, UniversalSerialNr = ?, UserModify = ? " +
                            "Where ID = ?";
 
                     int rowsAffected = conn.Execute(odbcQuery, parameters);
@@ -1828,7 +2368,7 @@ namespace DryAgentSystem.Data
         {
             try
             {
-                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendTankLogistics"].ConnectionString))
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("UniversalSerialNr", universalSerialNr, DbType.String, ParameterDirection.Input);
@@ -1852,6 +2392,38 @@ namespace DryAgentSystem.Data
                 errorLog.ErrorMessage = ex.Message;
             }
             return errorLog;
+        }
+
+        public static List<Inventory> GetContainerList(string loadPort)
+        {
+            List<Inventory> inventories = new List<Inventory>();
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("ActiveLPort", loadPort, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select TankNo, UniversalSerialNr From Inventory where ActiveLPort = ? and StatusTrack IN ('NEW','AVAILABLE','POST AVAILABLE') " +
+                        "FETCH FIRST 10 ROWS ONLY";
+
+                    var inventoryList = conn.Query<Inventory>(query, parameters);
+                    foreach (var item in inventoryList)
+                    {
+                        inventories.Add(new Inventory
+                        {
+                            UniversalSerialNr = item.UniversalSerialNr,
+                            TankNo = item.TankNo
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            return inventories;
         }
 
         public static List<SelectListItem> ShipmentTerm()
@@ -2090,6 +2662,40 @@ namespace DryAgentSystem.Data
                 {
                     Text = "Agent",
                     Value = "Agent"
+                }
+            };
+
+            return stat;
+        }
+
+        public static List<SelectListItem> GetBLType()
+        {
+            List<SelectListItem> stat = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "ORIGINAL",
+                    Value = "ORIGINAL"
+                },
+                new SelectListItem
+                {
+                    Text = "NON-NEGOTIABLE",
+                    Value = "NON-NEGOTIABLE"
+                },
+                new SelectListItem
+                {
+                    Text = "SEAWAY",
+                    Value = "SEAWAY"
+                },
+                new SelectListItem
+                {
+                    Text = "SURRENDER",
+                    Value = "SURRENDER"
+                },
+                new SelectListItem
+                {
+                    Text = "DRAFT",
+                    Value = "DRAFT"
                 }
             };
 

@@ -180,6 +180,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceDetailsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\QuotationDetailsController.cs" />
     <Compile Include="Controllers\QuotationController.cs" />
@@ -195,7 +197,9 @@
     </Compile>
     <Compile Include="Models\AgencyLocalCharges.cs" />
     <Compile Include="Models\AgencyLocalChargesModel.cs" />
+    <Compile Include="Models\AllocateEquipment.cs" />
     <Compile Include="Models\BLDetails.cs" />
+    <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\MailModel.cs" />
     <Compile Include="Models\ShipmentBL.cs" />
     <Compile Include="Models\ShipmentDetails.cs" />
@@ -262,10 +266,12 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Img\BLLegendLogo.png" />
     <Content Include="Content\Img\footer1920.png" />
     <Content Include="Content\Img\LegendLogoWhiteNew.png" />
     <Content Include="Content\Img\logo1.png" />
     <Content Include="Content\Img\LogoOnlyStar.png" />
+    <Content Include="Content\Img\printer-fill.svg" />
     <Content Include="Content\jquery.jqGrid\ellipsis-xbl.xml" />
     <Content Include="Content\jquery.jqGrid\ui.jqgrid.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -533,12 +539,13 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="fonts\" />
-    <Folder Include="Views\Invoice\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Shipment\Shipment.cshtml" />
     <Content Include="Views\ShipmentDetails\ShipmentDetails.cshtml" />
+    <Content Include="Views\Invoice\Invoice.cshtml" />
+    <Content Include="Views\InvoiceDetails\InvoiceDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

@@ -40,8 +40,19 @@
                     {
                         <li>@Html.ActionLink("RATE REQUEST", "RateRequest", "RateRequest")</li>
                         <li>@Html.ActionLink("QUOTATION", "Quotation", "Quotation")</li>
-                        <li>@Html.ActionLink("BOOKING", "Booking", "Booking")</li> @*Disabling for now will make it live for April 15 release.*@
-                        <li>@Html.ActionLink("SHIPMENT", "Shipment", "Shipment")</li> @*Disabling for now will make it live for April 15 release.*@
+                        <li>@Html.ActionLink("BOOKING", "Booking", "Booking")</li>
+
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                EXPORT
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                @Html.ActionLink("SHIPMENT", "Shipment", "Shipment")
+                                @Html.ActionLink("INVOICE", "Invoice", "Invoice")
+                            </div>
+                        </div>
+
                     }
                 </ul>
                 <ul class="navbar-nav navigationright">
@@ -79,7 +90,7 @@
     <div class="container body-content" id="content">
         @RenderBody()
     </div>
-    
+
 
     <footer class="footer footer_bg_1">
         <div class="footer_top">

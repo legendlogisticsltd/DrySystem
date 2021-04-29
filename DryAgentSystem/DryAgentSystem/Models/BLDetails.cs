@@ -81,7 +81,7 @@ namespace DryAgentSystem.Models
         public string Gweightmeasurment { get; set; }
 
         [Display(Name = "HBL Freight Payment")]
-        public bool HBLFreightPayment { get; set; }
+        public string HBLFreightPayment { get; set; }
 
         [Display(Name = "Job Ref")]
         public string JobRef { get; set; }
@@ -102,7 +102,7 @@ namespace DryAgentSystem.Models
         public string MarksandNo2 { get; set; }
 
         [Display(Name = "MBL Freight Payment")]
-        public bool MBLFreightPayment { get; set; }
+        public string MBLFreightPayment { get; set; }
 
         [Display(Name = "Measurement Unit")]
         public string MeasurementUnit { get; set; }

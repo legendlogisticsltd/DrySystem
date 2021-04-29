@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace DryAgentSystem.Models
 {
@@ -128,7 +129,7 @@ namespace DryAgentSystem.Models
         [Display(Name = "Grand Total Sales")]
         public string GrandTotalSales { get; set; }
 
-        [Display(Name = "HBLHAWB")]
+        [Display(Name = "House BL No.")]
         public string HBLHAWB { get; set; }
 
         [Display(Name = "ID Agent Disch")]
@@ -197,7 +198,7 @@ namespace DryAgentSystem.Models
         [Display(Name = "Log")]
         public string Log { get; set; }
 
-        [Display(Name = "MBLMAWB")]
+        [Display(Name = "Master BL No")]
         public string MBLMAWB { get; set; }
 
         [Display(Name = "Modify Date")]
@@ -316,5 +317,14 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Week Nr")]
         public string WeekNr { get; set; }
+
+        public IEnumerable<SelectListItem> ContainerList { get; set; }
+
+        public List<string> SelectedContainerList { get; set; }
+
+        public ShipmentDetails()
+        {
+            SelectedContainerList = new List<string>();
+        }
     }
 }

@@ -126,12 +126,14 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CompanyName)
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
                         "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
                         @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-md-1"></div>
+                </div>
+                <br />
+                <div class="row">
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.AgencyType)
                     </div>
@@ -141,10 +143,10 @@
                         @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
-                    <div class="col-md-1 forleftalign">
+                    <div class="col-md-2">
                         @Html.LabelFor(model => model.ShipperName)
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.ShipperName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ShipperName, "", new { @class = "text-danger" })
                     </div>

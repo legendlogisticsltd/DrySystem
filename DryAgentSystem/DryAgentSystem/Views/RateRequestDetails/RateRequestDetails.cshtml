@@ -20,6 +20,7 @@
 </script>
 
 
+
 @using (Html.BeginForm("RateRequestDetails", "RateRequestDetails", FormMethod.Post, new { id = "RateRequestForm" }))
 {
     @Html.AntiForgeryToken()
@@ -98,7 +99,9 @@
                "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1"></div>
+        </div>
+        <br>
+        <div class="row">
             <div class="col-md-2">
                 @Html.LabelFor(model => model.AgencyType)
             </div>
@@ -108,15 +111,15 @@
                 @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
             </div>
             <div class="col-md-1"></div>
-            <div class="col-md-1 forleftalign">
+            <div class="col-md-2">
                 @Html.LabelFor(model => model.ShipperName)
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3 forleftalign">
                 @Html.EditorFor(model => model.ShipperName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ShipperName, "", new { @class = "text-danger" })
             </div>
         </div>
-        <br>
+        <br />
         <div class="row">
             <div class="col-md-2">
                 @Html.LabelFor(model => model.EquipmentType, htmlAttributes: new { @class = "control-label" })
