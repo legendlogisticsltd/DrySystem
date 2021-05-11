@@ -31,7 +31,7 @@ namespace DryAgentSystem.Models
         public DateTime ClosingDate { get; set; }
 
         [Display(Name = "Closing Time")]
-        public DateTime ClosingTime { get; set; }
+        public TimeSpan ClosingTime { get; set; }
 
         [Display(Name = "Cost Agency")]
         public string CostAgency { get; set; }
@@ -61,6 +61,7 @@ namespace DryAgentSystem.Models
         public string CreationTimestamp { get; set; }
 
         [Display(Name = "Customer Ref")]
+        [Required(ErrorMessage = "Please provide Customer Reference")]
         public string CustomerRef { get; set; }
 
         [Display(Name = "Date ATA")]
@@ -88,6 +89,7 @@ namespace DryAgentSystem.Models
         public int DetRateLoad { get; set; }
 
         [Display(Name = "Disch Agent Address")]
+        [Required(ErrorMessage = "Please provide Disch Agent Address")]
         public string DischAgentAddress { get; set; }
 
         [Display(Name = "Disch FT")]
@@ -130,6 +132,7 @@ namespace DryAgentSystem.Models
         public string GrandTotalSales { get; set; }
 
         [Display(Name = "House BL No.")]
+        [Required(ErrorMessage = "Please provide House BL No.")]
         public string HBLHAWB { get; set; }
 
         [Display(Name = "ID Agent Disch")]
@@ -170,6 +173,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Last 3 Cargo List")]
         public string Last3CargoList { get; set; }
+        
+        [Display(Name = "Load Depot Terminal")]
+        public string LDepotTerminal { get; set; }
 
         [Display(Name = "L Detention")]
         public string LDetention { get; set; }
@@ -199,6 +205,7 @@ namespace DryAgentSystem.Models
         public string Log { get; set; }
 
         [Display(Name = "Master BL No")]
+        [Required(ErrorMessage = "Please provide Master BL No.")]
         public string MBLMAWB { get; set; }
 
         [Display(Name = "Modify Date")]
@@ -241,7 +248,7 @@ namespace DryAgentSystem.Models
         public string ProductName { get; set; }
 
         [Display(Name = "Charge Party")]
-        public string pzChargeParty { get; set; }
+        public string ChargeParty { get; set; }
 
         [Display(Name = "Quantity")]
         public int Quantity { get; set; }
@@ -271,7 +278,12 @@ namespace DryAgentSystem.Models
         public string ShipmentTerm { get; set; }
 
         [Display(Name = "Shipper Address")]
-        public string ShipperAddress { get; set; }
+        [Required(ErrorMessage = "Please provide Shipper Address")]
+        public string ShipperAddress { get; set; } 
+        
+        [Display(Name = "Shipper Name")]
+        [Required(ErrorMessage = "Please provide Shipper Address")]
+        public string Shipper { get; set; }
 
         [Display(Name = "Status Cancel")]
         public string StatusCancel { get; set; }
@@ -285,11 +297,6 @@ namespace DryAgentSystem.Models
         [Display(Name = "Status UNLocked")]
         public string StatusUNLocked { get; set; }
 
-        [Display(Name = "Test")]
-        public string test { get; set; }
-
-        [Display(Name = "Test Final")]
-        public string testfinal { get; set; }
 
         [Display(Name = "Transit Day")]
         public int TransitDay { get; set; }
@@ -306,9 +313,6 @@ namespace DryAgentSystem.Models
         [Display(Name = "User Modify")]
         public string UserModify { get; set; }
 
-        [Display(Name = "vessel Label")]
-        public string vesselLabel { get; set; }
-
         [Display(Name = "Voy No IGM")]
         public string VoyNoIGM { get; set; }
 
@@ -317,6 +321,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Week Nr")]
         public string WeekNr { get; set; }
+
+        [Display(Name = "Equipment Type")]
+        public string EquipmentType { get; set; }
 
         public IEnumerable<SelectListItem> ContainerList { get; set; }
 

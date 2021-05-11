@@ -72,8 +72,6 @@
 
     var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
 
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
     var $s = $("#agencyDropDownList").selectmenu();
 
     $("#Status").val("DRAFT");

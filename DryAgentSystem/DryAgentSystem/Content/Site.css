@@ -830,11 +830,11 @@ height: 200px;
 .dropbtn1 {
     background-color: #4CAF50;
     color: white;
-    padding: 16px;
+    padding: 8px;
     font-size: 16px;
     border: none;
-    border-radius: 7px;
-    margin-left: 20px;
+    border-radius: 5px;
+    margin-left: 29px;
 }
 
 .dropdown1 {
@@ -845,8 +845,8 @@ height: 200px;
 .dropdown-content1 {
     display: none;
     position: absolute;
-    margin-left: 130px;
-    margin-top: -75px;
+    margin-left: 10px;
+    margin-top: 0px;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -931,3 +931,15 @@ height: 200px;
     /*background-color: blue;*/
 }
 /* Ends Here */
+
+.ForLeftAlignRadioBtn{
+    padding-left: -50px;
+}
+
+.MBLFright {
+    margin-left: 35px;
+}
+
+.RequiredAstrik {
+    color: red;
+}

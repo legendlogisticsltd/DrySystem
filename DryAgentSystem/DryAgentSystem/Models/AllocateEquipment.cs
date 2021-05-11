@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace DryAgentSystem.Models
 {
     public class AllocateEquipment
     {
-        [Display(Name = "Tank No")]
-        public string TankNo { get; set; } 
-        
+        [Display(Name = "Container No")]
+        public string ContainerNo { get; set; }
+
         [Display(Name = "ID")]
         public string ID { get; set; }
 
@@ -28,5 +29,7 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Measurement")]
         public string Measurement { get; set; }
+
+        public IEnumerable<SelectListItem> ContainerList { get; set; }
     }
 }

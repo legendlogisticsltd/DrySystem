@@ -60,6 +60,7 @@ namespace DryAgentSystem.Controllers
                     bookingnew.Grossweight = quote.GrossWt;
                     bookingnew.RateID = quote.RateID;
                     bookingnew.QuoteRefID = quote.QuoteRefID;
+                    bookingnew.Shipper = quote.ShipperName3;
 
                     bookingnew.Remark = quote.Remark;
 

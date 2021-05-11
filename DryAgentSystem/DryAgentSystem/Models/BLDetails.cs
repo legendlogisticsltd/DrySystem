@@ -11,25 +11,32 @@ namespace DryAgentSystem.Models
         [Display(Name = "BL Count")]
         public string BLCount { get; set; }
 
-        [Display(Name = "BL Types")]
+        [Display(Name = "BL Type")]
         public string BLTypes { get; set; }
+        
+        [Display(Name = "BL Status")]
+        public string BLStatus { get; set; }
 
         [Display(Name = "BL Finalised Date")]
+        [Required(ErrorMessage = "Please provide BL Finalised Date")]
         public DateTime BLFinalisedDate { get; set; }
 
         [Display(Name = "Cargo Description")]
+        [Required(ErrorMessage = "Please provide Cargo Description")]
         public string CargoDescription { get; set; }
 
         [Display(Name = "Cargo Description2")]
         public string CargoDescription2 { get; set; }
 
         [Display(Name = "Consignee Address BL")]
+        [Required(ErrorMessage = "Please provide Consignee Address")]
         public string ConsigneeAddressBL { get; set; }
 
         [Display(Name = "Consignee Address SI")]
         public string ConsigneeAddressSI { get; set; }
 
         [Display(Name = "Consignee Name BL")]
+        [Required(ErrorMessage = "Please provide Consignee Name")]
         public string ConsigneeNameBL { get; set; }
 
         [Display(Name = "Consignee Name SI")]
@@ -54,12 +61,14 @@ namespace DryAgentSystem.Models
         public DateTime CreationTimestamp { get; set; }
 
         [Display(Name = "Date of Issue")]
+        [Required(ErrorMessage = "Please provide Date of Issue")]
         public DateTime DateofIssue { get; set; }
 
         [Display(Name = "Disch Agent Address")]
         public string DischAgentAddress { get; set; }
 
         [Display(Name = "Disch Agent Name BL")]
+        [Required(ErrorMessage = "Please provide Disch Agent Name")]
         public string DischAgentNameBL { get; set; }
 
         [Display(Name = "Disch Port")]
@@ -77,10 +86,11 @@ namespace DryAgentSystem.Models
         [Display(Name = "Gross Weight Unit")]
         public string GrossWeightUnit { get; set; }
 
-        [Display(Name = "Gweight measurment")]
-        public string Gweightmeasurment { get; set; }
+        [Display(Name = "Total Gweight")]
+        public string TotalGweight { get; set; }
 
         [Display(Name = "HBL Freight Payment")]
+        [Required(ErrorMessage = "Please provide HBL Freight Payment")]
         public string HBLFreightPayment { get; set; }
 
         [Display(Name = "Job Ref")]
@@ -90,18 +100,21 @@ namespace DryAgentSystem.Models
         public string JobRefFull { get; set; }
 
         [Display(Name = "Laden On Board")]
+        [Required(ErrorMessage = "Please provide Laden On Board Date")]
         public DateTime LadenOnBoard { get; set; }
 
         [Display(Name = "Load Port")]
         public string LoadPort { get; set; }
 
-        [Display(Name = "Marks and No")]
+        [Display(Name = "Marks and No.")]
+        [Required(ErrorMessage = "Please provide Marks and No.")]
         public string MarksandNo { get; set; }
 
         [Display(Name = "Marks and No2")]
         public string MarksandNo2 { get; set; }
 
         [Display(Name = "MBL Freight Payment")]
+        [Required(ErrorMessage = "Please provide MBL Freight Payment")]
         public string MBLFreightPayment { get; set; }
 
         [Display(Name = "Measurement Unit")]
@@ -116,13 +129,16 @@ namespace DryAgentSystem.Models
         [Display(Name = "NetWt Unit")]
         public string NetWtUnit { get; set; }
 
-        [Display(Name = "No of Original BL issued")]
+        [Display(Name = "No. of Original BL issued")]
+        [Required(ErrorMessage = "Please provide No. of Original BL issued")]
         public string NoofOriginalBLissued { get; set; }
 
         [Display(Name = "Notify Party Address")]
+        [Required(ErrorMessage = "Please provide Notify Party Address")]
         public string NotifyPartyAddress { get; set; }
 
         [Display(Name = "Notify Party Name")]
+        [Required(ErrorMessage = "Please provide Notify Party Name")]
         public string NotifyPartyName { get; set; }
 
         [Display(Name = "Place of Delivery")]
@@ -133,6 +149,14 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Place of Receipt")]
         public string PlaceofReceipt { get; set; }
+        
+        [Display(Name = "No. of Packages")]
+        [Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        public int NoOfPkgs { get; set; }
+        
+        [Display(Name = "Package Type")]
+        [Required(ErrorMessage = "Please provide Package Type")]
+        public string PkgType { get; set; }
 
         [Display(Name = "PreCarriage By")]
         public string PreCarriageBy { get; set; }
@@ -159,6 +183,7 @@ namespace DryAgentSystem.Models
         public string ShipperAddressSI { get; set; }
 
         [Display(Name = "Shipper Name BL")]
+        
         public string ShipperNameBL { get; set; }
 
         [Display(Name = "Shipper Name SI")]
@@ -180,6 +205,6 @@ namespace DryAgentSystem.Models
         public string Vessel { get; set; }
 
         [Display(Name = "VesselDetails")]
-        public bool VesselDetails { get; set; }        
+        public string VesselDetails { get; set; }        
     }
 }

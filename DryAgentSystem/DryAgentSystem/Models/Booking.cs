@@ -197,7 +197,7 @@ namespace DryAgentSystem.Models
         //[Display(Name = "Discharge Agent")]
         //public string DischAgent { get; set; }
 
-        
+
 
         [Display(Name = "Payment Terms")]
         public string PaymentTerms { get; set; }
@@ -258,6 +258,11 @@ namespace DryAgentSystem.Models
         public string Email { get; set; }
 
         [Display(Name = "CRO PickUp Date")]
-        public DateTime CROPickUpDate { get; set; }
+        public DateTime CROPickUpDate { get; set; } 
+        
+        [Display(Name = "Shipper")]
+        public string Shipper { get; set; }
+
+        public bool hasshipment { get; set; }
     }
 }

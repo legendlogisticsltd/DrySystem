@@ -21,7 +21,7 @@
             },
             {
                 key: false,
-                name: 'pzChargeParty',
+                name: 'ChargeParty',
                 width: '335px',
                 
             },
@@ -64,6 +64,7 @@
         altRows: true,
         altclass: 'shipmentRow',
         loadtext: 'Loading Data please wait ...',
+        rownumbers: true,
         emptyrecords: 'No records to display',
         //jsonReader: {
         //    root: "rows",
@@ -87,4 +88,5 @@
     //var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
 });

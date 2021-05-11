@@ -87,31 +87,6 @@
     $("#GrossweightMeasurement").attr('readonly', 'readonly');
     
 
-    //$("#cutoffDateTimePicker").datepicker({
-    //    //dateFormat: "mm-dd-yy",
-    //    //changeMonth: true,
-    //    //changeYear: true,
-    //    showOn: 'both',
-    //    controlType: 'select',
-    //    timeFormat: 'hh:mm TT'
-        
-    //    //yearRange: "-60:+0"
-    //});
-
-    //$("#cutoffDateTimePicker").datepicker();
-
-    //$("#cutoffDateTimePicker").datepicker().next('button').button({
-    //    icons: {
-    //        primary: 'ui-icon-calendar'
-    //    },
-    //    text: false
-    //});
-    //$("#cutoffDateTimePicker").datepicker().show();
-
-    //if ($("#cutoffDateTimePicker").val() == "01-01-0001 12:00 AM") {
-    //    $("#cutoffDateTimePicker").datepicker("setDate", new Date());
-    //}
-
     $("#submit").click(function () {
         document.forms[0].submit();
         return false;
@@ -191,7 +166,9 @@
         $("#Confirm").hide();
         $("#Edit").hide();
         $("#Issue").hide();
-
+        if (hasshipment == "True") {
+            $("#Shipment").hide();
+        }
 
         $("#RateTypeReefer").prop("disabled", true);
         $("#RateTypeDry").prop("disabled", true);

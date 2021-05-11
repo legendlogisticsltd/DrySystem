@@ -101,12 +101,16 @@ namespace DryAgentSystem.Controllers
                 if(ModelState.IsValid)
                 {
                     shipmentnew.ShipmentDetailsModel.ShipmentTerm = booking.ShipmentTerm;
-                    shipmentnew.BLDetailsModel.LoadPort = booking.LoadPort;
-                    shipmentnew.BLDetailsModel.DischPort = booking.DischargePort;
-                    shipmentnew.BLDetailsModel.PlaceofReceipt = booking.PlaceOfReceipt;
-                    shipmentnew.BLDetailsModel.PlaceofDelivery = booking.PlaceOfDelivery;
+                    shipmentnew.ShipmentDetailsModel.LoadPort = booking.LoadPort;
+                    shipmentnew.ShipmentDetailsModel.DischPort = booking.DischargePort;
+                    shipmentnew.ShipmentDetailsModel.PlaceOfReceipt = booking.PlaceOfReceipt;
+                    shipmentnew.ShipmentDetailsModel.PlaceOfDelivery = booking.PlaceOfDelivery;
                     shipmentnew.BLDetailsModel.CargoDescription = booking.CargoType;
                     shipmentnew.ShipmentDetailsModel.UniversalSerialNr = booking.UniversalSerialNr;
+                    shipmentnew.ShipmentDetailsModel.IDQuoteRef = booking.QuoteRefID;
+                    shipmentnew.ShipmentDetailsModel.Quantity = booking.Quantity;
+                    shipmentnew.ShipmentDetailsModel.LDepotTerminal = booking.CollectionYard;
+                    shipmentnew.ShipmentDetailsModel.Shipper = booking.Shipper;
 
                     TempData["shipmentobj"] = shipmentnew;
                     ModelState.Clear();
@@ -434,7 +438,7 @@ namespace DryAgentSystem.Controllers
                                 ":  "+vessels[0].Carrier+"\n" +
                                 ":  "+vessels[0].CarrierBookingRefNo+" \n" +
                                 ":  "+booking.Grossweight+" \n" +
-                                ":  "+booking.GrossweightMeasurement+" \n" +
+                                ":  "+booking.GrossweightMeasurement + " \n" +
                                 ":  "+booking.Commodity+" \n" +
                                 ":  "+quoteRef.Quantity+" \t X \t "+quoteRef.EquipmentType+"\n" +
                                 ":  "+booking.CollectionYard+"\n" +
@@ -593,6 +597,7 @@ namespace DryAgentSystem.Controllers
 
             para = new Paragraph("ALL BUSINESS TRANSACTED WITH LEGEND SHIPPING PTE LTD IS CONDUCTED TO \n SLA SINGAPORE LOGISTICS ASSOCIATION CONDITIONS.", FontFactory.GetFont("Courier", 10));
             para.Alignment = Element.ALIGN_CENTER;
+            para.SpacingBefore = 20f;
             pdfDoc.Add(para);
 
             pdfWriter.CloseStream = false;

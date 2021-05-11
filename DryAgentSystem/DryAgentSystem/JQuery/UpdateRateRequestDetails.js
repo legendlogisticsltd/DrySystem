@@ -319,6 +319,7 @@
         //rowList: [10, 20, 30, 40],
         height: 'auto',
         viewrecords: true,
+        rownumbers: true,
         multiselect: false,
         altRows: true,
         altclass: 'quoteRefDataRow',

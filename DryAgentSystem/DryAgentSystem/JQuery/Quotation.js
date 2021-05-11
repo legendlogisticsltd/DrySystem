@@ -140,6 +140,7 @@
         rowNum: 10,
         rowList: [10, 20, 30, 40],
         height: 'auto',
+        rownumbers: true,
         viewrecords: true,
         multiselect: false,
         altRows: true,

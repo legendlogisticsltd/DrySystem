@@ -7,40 +7,94 @@
 @Scripts.Render("~/bundles/jqueryval")
 @Styles.Render("~/Content/cssjqryUi")
 
+<style>
+    body {
+        background-image: url("/DryAgentSystem/Content/Img/LoginPageBackground.png");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    .box {
+        margin: auto;
+        margin-top: 5vh;
+        left: 50%;
+        width: 37%;
+        height: 450px;
+        border-radius: 20px;
+        background-color: #2A2F32;
+        box-shadow: 0 4px 8px 0 rgba(10, 21, 46, 0.9), 0 6px 20px 0 rgba(10, 21, 46, 0.9);
+    }
+
+    .textboxes {
+        max-width: 75%;
+        margin: auto;
+        height: 10%;
+        font-size: 18px;
+        margin-left: 43px;
+    }
+
+    .LoginLabel {
+        margin: auto;
+        margin-left: 38%;
+        margin-top: 20px;
+        padding-top: 70px;
+        padding-bottom: 15px;
+        font-family: "Times New Roman", Times, serif;
+        color: white;
+    }
+
+    .LoginBtn {
+        width: 40%;
+        margin-left: 30%;
+        border-radius: 20px;
+        margin-top: 20px;
+        height: 10%;
+        font-family: "Times New Roman", Times, serif;
+        transition: 1s;
+    }
+
+    .LoginBtn:hover {
+        background-color: black;
+    }
+
+    .LogoOnBox {
+        position: absolute;
+        width: 8%;
+        height: 17%;
+        border-radius: 120%;
+        margin-top: -55px;
+        margin-left: 11.7%;
+    }
+
+    .Labels {
+        color: white;
+        margin-left: 40px;
+    }
+
+    .ErrorMessages {
+        margin-left: 43px;
+    }
+</style>
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <div class="container">
-            <h2>Login Page</h2>
-            <hr />
 
-            <div class="form-group">
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            </div>
+    <div class="box">
+        <img src="~/Content/Img/logo.png" alt="Logo" class="LogoOnBox">
+        <h2 class="LoginLabel">LOGIN</h2><br>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-                </div>
-            </div>
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label Labels"})
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control textboxes", @autofocus = true, placeholder="Enter the Username" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger ErrorMessages" })<br>
 
-            <div class="form-group">
-                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Login" class="ui-button" />
-                </div>
-            </div>
-        </div>
+        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label Labels" })
+        @Html.PasswordFor(model => model.Password, new { @class = "form-control textboxes", placeholder = "Enter the Password" })
+        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger ErrorMessages" })<br>
+        <input type="submit" value="Login" class="btn btn-primary LoginBtn" />
     </div>
 }

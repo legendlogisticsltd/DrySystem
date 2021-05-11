@@ -16,6 +16,7 @@ namespace DryAgentSystem.Controllers
         public ActionResult Shipment()
         {
             SearchParameters statusdisplay = new SearchParameters();
+            ViewBag.CompanyList = DataContext.GetCompany();
             ViewBag.statuslist = DataContext.GetShipmentStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
             return View();
@@ -25,6 +26,7 @@ namespace DryAgentSystem.Controllers
         [Route("Shipment")]
         public ActionResult Shipment(SearchParameters search, string submit)
         {
+            ViewBag.CompanyList = DataContext.GetCompany();
             ViewBag.statuslist = DataContext.GetBookingStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
             if (submit == "Search")
@@ -62,7 +64,7 @@ namespace DryAgentSystem.Controllers
                             cell = new string[]
                             {
                                 shipmentGrid.JobRef,
-                                shipmentGrid.pzChargeParty,
+                                shipmentGrid.ChargeParty,
                                 shipmentGrid.BookingNo,
                                 shipmentGrid.IDQuoteRef,
                                 shipmentGrid.DischPort,

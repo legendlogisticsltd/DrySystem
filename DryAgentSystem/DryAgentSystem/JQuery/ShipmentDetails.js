@@ -2,7 +2,79 @@
 
     //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    
+
+    $("#blfinalisedDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#blfinalisedDatePicker").val() == "01-01-0001") {
+        $("#blfinalisedDatePicker").datepicker("setDate", new Date());
+    }
+    $("#blfinalisedDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#blfinalisedDatePicker").datepicker().show();
+
+    $("#issueDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#issueDatePicker").val() == "01-01-0001") {
+        $("#issueDatePicker").datepicker("setDate", new Date());
+    }
+    $("#issueDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#issueDatePicker").datepicker().show();
+
+    $("#ladenDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#ladenDatePicker").val() == "01-01-0001") {
+        $("#ladenDatePicker").datepicker("setDate", new Date());
+    }
+    $("#ladenDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#ladenDatePicker").datepicker().show();
+
+    $("#closingDatePicker").datetimepicker().show();
+
+
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
         url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
@@ -88,6 +160,7 @@
         //},
         autowidth: true,
         multiselect: false,
+        rownumbers: true
        
     });
 
@@ -100,11 +173,11 @@
         editurl: 'ProcessTankData',
         onAfterSaveCell: reload,
         datatype: 'json',
-        colNames: ['ID', 'Tank No', 'Seal No', 'Gross Weight', 'Net Weight', 'Measurement','UniversalSerialNr'],
+        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Net Weight', 'Measurement','UniversalSerialNr'],
         colModel: [
             {
                 key: true,
-                //hidden: true,
+                hidden: true,
                 name: 'ID',
                 index: 'ID',
                 editable: false
@@ -112,9 +185,10 @@
             {
                 key: false,
                 //hidden: true,
-                name: 'TankNo',
-                index: 'TankNo',
-                editable: true
+                name: 'ContainerNo',
+                index: 'ContainerNo',
+
+                editable: false
             },
             {
                 key: false,
@@ -163,16 +237,16 @@
 
 
 
-    $('#tankGrid').navGrid('#tankPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: true });
+    $('#tankGrid').navGrid('#tankPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: false });
 
     $('#tankGrid').jqGrid('inlineNav', '#tankPager',
         {
             edit: true,
             editicon: "ui-icon-pencil",
             edittext: "Edit",
-            add: true,
-            addicon: "ui-icon-plus",
-            addtext: "Add",
+            add: false,
+            //addicon: "ui-icon-plus",
+            //addtext: "Add",
             save: true,
             saveicon: "ui-icon-disk",
             savetext: "Save",
@@ -191,7 +265,27 @@
     
     $("#ShipmentDetailsModel_JobRef").attr('readonly', 'readonly');
     $("#BLDetailsModel_PlaceofIssue").attr('readonly', 'readonly');
+    $("#BLDetailsModel_BLTypes").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_Quantity").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_LoadPort").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_DischPort").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_PlaceOfReceipt").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_PlaceOfDelivery").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_ShipmentTerm").attr('readonly', 'readonly');
 
+    if (bltypes == "") {
+        $("#ORIGINAL").hide();
+        $("#NON-NEGOTIABLE").hide();
+        $("#SEAWAY").hide();
+        $("#SURRENDER").hide();
+    }
+    if (blstatus == "ORIGINAL ISSUED"){
+        $("#MANIFEST").show();
+    }
+    else {
+        $("#MANIFEST").hide();
+    }
+    
     if (jobref != "") {
         $("#Save").hide();
         $("#Update").show();
@@ -199,82 +293,27 @@
     else {
         $("#Save").show();
         $("#Update").hide();
+        $("#printbl").hide();
     }
 
-    $("#blfinalisedDatePicker").datepicker({
+    ContainerCount();
 
-        dateFormat: "mm-dd-yy",
-        changeMonth: true,
-        changeYear: true,
-        showOn: 'both',
+    var $s = $("#packageDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#grossweightDropDownList").selectmenu();
+    var $s = $("#netweightDropDownList").selectmenu();
+    var $s = $("#munitDropDownList").selectmenu();
 
-
-
-        //yearRange: "-60:+0"
+    $("#grossweightDropDownList").selectmenu({
+        width: 170
     });
-    if ($("#blfinalisedDatePicker").val() == "01-01-0001") {
-        $("#blfinalisedDatePicker").datepicker("setDate", new Date());
-    }
-    $("#blfinalisedDatePicker").datepicker().next('button').button({
-        icons: {
-            primary: 'ui-icon-calendar'
-        },
-        text: false
+    $("#netweightDropDownList").selectmenu({
+        width: 170
+    });
+    $("#munitDropDownList").selectmenu({
+        width: 170
     });
 
-    $("#blfinalisedDatePicker").datepicker().show();
-
-    $("#issueDatePicker").datepicker({
-
-        dateFormat: "mm-dd-yy",
-        changeMonth: true,
-        changeYear: true,
-        showOn: 'both',
-
-
-
-        //yearRange: "-60:+0"
-    });
-    if ($("#issueDatePicker").val() == "01-01-0001") {
-        $("#issueDatePicker").datepicker("setDate", new Date());
-    }
-    $("#issueDatePicker").datepicker().next('button').button({
-        icons: {
-            primary: 'ui-icon-calendar'
-        },
-        text: false
-    });
-
-    $("#issueDatePicker").datepicker().show();
-
-    $("#ladenDatePicker").datepicker({
-
-        dateFormat: "mm-dd-yy",
-        changeMonth: true,
-        changeYear: true,
-        showOn: 'both',
-
-
-
-        //yearRange: "-60:+0"
-    });
-    if ($("#ladenDatePicker").val() == "01-01-0001") {
-        $("#ladenDatePicker").datepicker("setDate", new Date());
-    }
-    $("#ladenDatePicker").datepicker().next('button').button({
-        icons: {
-            primary: 'ui-icon-calendar'
-        },
-        text: false
-    });
-
-    $("#ladenDatePicker").datepicker().show();
-
-    var $s = $("#PODDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#DischDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#PORDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#bltypeDropDownList").selectmenu();
+    $('#ContainerList').change(ContainerCount);
 });
 
 function MarksAndNoCount() {
@@ -285,4 +324,15 @@ function MarksAndNoCount() {
 function CargoDescriptionCount() {
     var i = document.getElementById("CargoDescription").value.length;
     document.getElementById("CountingCharactersCargo").innerHTML = i;
+}
+
+function ContainerCount() {
+    var count1 = $("#ContainerList :selected").length;
+    document.getElementById("CountingContainers").innerHTML = count1;
+}
+
+function ReloadPage() {
+    setTimeout(function () {
+        window.location.reload(1);
+    }, 1000);
 }

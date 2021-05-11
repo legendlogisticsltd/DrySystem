@@ -39,7 +39,30 @@ namespace DryAgentSystem.Models
         public string JobRef { get; set; }
 
         [Display(Name = "Charge Party")]
-        public string pzChargeParty { get; set; }
+        public string ChargeParty { get; set; }
+
+        [Display(Name = "Invoice No.")]
+        public string InvoiceNo { get; set; }
+
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        [Display(Name = "Quantity")]
+        public string Quantity { get; set; }
+
+        [Display(Name = "Currency")]
+        public string Currency { get; set; }
+
+        [Display(Name = "UnitRate")]
+        public string UnitRate { get; set; }
+
+        [Display(Name = "AmountUSD")]
+        public string AmountUSD { get; set; }
+
+        [Display(Name = "ExRate")]
+        public string ExRate { get; set; }
+
+
 
     }
 }

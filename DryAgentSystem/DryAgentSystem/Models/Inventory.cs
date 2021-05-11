@@ -28,9 +28,9 @@ namespace DryAgentSystem.Models
         public string Remark { get; set; }
         public string StatusTrack { get; set; }
         public DateTime SurveyDate { get; set; }
-        public string TankAVStatus { get; set; }
-        public string TankCOStatus { get; set; }
-        public string TankNo { get; set; }
+        public string ContainerAVStatus { get; set; }
+        public string ContainerCOStatus { get; set; }
+        public string ContainerNo { get; set; }
         public string TankRepoStatus { get; set; }
         public string UniversalSerialNr { get; set; }
         public string User { get; set; }

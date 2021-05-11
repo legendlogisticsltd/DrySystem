@@ -200,6 +200,8 @@
     <Compile Include="Models\AllocateEquipment.cs" />
     <Compile Include="Models\BLDetails.cs" />
     <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\InvoiceDetails.cs" />
     <Compile Include="Models\MailModel.cs" />
     <Compile Include="Models\ShipmentBL.cs" />
     <Compile Include="Models\ShipmentDetails.cs" />
@@ -269,6 +271,8 @@
     <Content Include="Content\Img\BLLegendLogo.png" />
     <Content Include="Content\Img\footer1920.png" />
     <Content Include="Content\Img\LegendLogoWhiteNew.png" />
+    <Content Include="Content\Img\LoginPageBackground.png" />
+    <Content Include="Content\Img\logo.png" />
     <Content Include="Content\Img\logo1.png" />
     <Content Include="Content\Img\LogoOnlyStar.png" />
     <Content Include="Content\Img\printer-fill.svg" />
@@ -329,6 +333,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="JQuery\Invoice.js" />
+    <Content Include="JQuery\InvoiceDetails.js" />
     <Content Include="JQuery\Shipment.js" />
     <Content Include="JQuery\Booking.js" />
     <Content Include="JQuery\BookingTab.js" />
