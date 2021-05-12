@@ -111,6 +111,8 @@ namespace DryAgentSystem.Controllers
                     shipmentnew.ShipmentDetailsModel.Quantity = booking.Quantity;
                     shipmentnew.ShipmentDetailsModel.LDepotTerminal = booking.CollectionYard;
                     shipmentnew.ShipmentDetailsModel.Shipper = booking.Shipper;
+                    shipmentnew.ShipmentDetailsModel.EquipmentType = booking.EquipmentType;
+                    shipmentnew.ShipmentDetailsModel.ClosingDate = booking.CutoffDate;
 
                     TempData["shipmentobj"] = shipmentnew;
                     ModelState.Clear();

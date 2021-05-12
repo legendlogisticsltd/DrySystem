@@ -38,8 +38,8 @@
         margin: auto;
         margin-left: 38%;
         margin-top: 20px;
-        padding-top: 70px;
-        padding-bottom: 15px;
+        padding-top: 15px;
+        padding-bottom: 10px;
         font-family: "Times New Roman", Times, serif;
         color: white;
     }
@@ -59,12 +59,12 @@
     }
 
     .LogoOnBox {
-        position: absolute;
-        width: 8%;
-        height: 17%;
+        position: relative;
+        width: 8vw;
+        height: 17vh;
         border-radius: 120%;
         margin-top: -55px;
-        margin-left: 11.7%;
+        margin-left: 37%;
     }
 
     .Labels {
@@ -95,6 +95,6 @@
         @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label Labels" })
         @Html.PasswordFor(model => model.Password, new { @class = "form-control textboxes", placeholder = "Enter the Password" })
         @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger ErrorMessages" })<br>
-        <input type="submit" value="Login" class="btn btn-primary LoginBtn" />
+        <input type="submit" value="LOGIN" class="btn btn-primary LoginBtn" />
     </div>
 }

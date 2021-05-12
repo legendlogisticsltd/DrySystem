@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using DryAgentSystem.Data;
@@ -15,10 +16,10 @@ namespace DryAgentSystem.Controllers
 
         [HttpGet]
         [Authorize]
-        public void InvoiceDetails(string InvoiceNo)
+        public ActionResult InvoiceDetails(Invoice invoicedetails)
         {
 
-            Invoice invoicedetails = new Invoice();
+
             if (TempData["invoiceobj"] != null)
             {
                 invoicedetails = (Invoice)TempData["invoiceobj"];
@@ -27,16 +28,17 @@ namespace DryAgentSystem.Controllers
             if(String.IsNullOrEmpty(invoicedetails.InvoiceNo))
             {
                 InvoiceDetails(invoicedetails, "Save");
+                //ExportInvoicePDF(invoicedetails.JobRefNo);
                 //call print method here
             }
             else
             {
-                //call print method here
+                //ExportInvoicePDF(invoicedetails.JobRefNo);
             }
-            TempData["UniversalSerialNr"] = invoicedetails.UniversalSerialNr;
-            TempData["InvoiceNo"] = invoicedetails.InvoiceNo;
+            //TempData["UniversalSerialNr"] = invoicedetails.UniversalSerialNr;
+            //TempData["InvoiceNo"] = invoicedetails.InvoiceNo;
 
-            //return View(invoicedetails);
+            return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = invoicedetails.JobRefNo });
         }
 
         [HttpPost]
@@ -51,7 +53,7 @@ namespace DryAgentSystem.Controllers
                     if (!errorLog.IsError)
                     {
                         invoice.InvoiceNo = errorLog.ErrorMessage;
-                        TempData["Message"] = "Invoice successfully created Invoice No. " + invoice.InvoiceNo;
+                        TempData["Message"] = "Invoice successfully created Invoice No. " + invoice.InvoiceNo + ". Please click Print Invoice to view PDF";
                     }
                     else
                     {
@@ -69,54 +71,54 @@ namespace DryAgentSystem.Controllers
 
         }
 
-        public JsonResult GetInvoiceLineItems(string sidx, string sort, int page, int rows)
-        {
-            string universalSerialNr = string.Empty;
-            if (TempData["UniversalSerialNr"] != null)
-            {
-                universalSerialNr = TempData["UniversalSerialNr"].ToString();
-                List<InvoiceDetails> invoicelineitems = new List<InvoiceDetails>();
-                if(TempData["InvoiceNo"] != null)
-                {
-                    invoicelineitems = DataContext.GetInvoiceChargesList(universalSerialNr);
-                }
-                else
-                {
-                    invoicelineitems = DataContext.GetSalesChargesList(universalSerialNr);
-                }
+        //public JsonResult GetInvoiceLineItems(string sidx, string sort, int page, int rows)
+        //{
+        //    string universalSerialNr = string.Empty;
+        //    if (TempData["UniversalSerialNr"] != null)
+        //    {
+        //        universalSerialNr = TempData["UniversalSerialNr"].ToString();
+        //        List<InvoiceDetails> invoicelineitems = new List<InvoiceDetails>();
+        //        if(TempData["InvoiceNo"] != null)
+        //        {
+        //            invoicelineitems = DataContext.GetInvoiceChargesList(universalSerialNr);
+        //        }
+        //        else
+        //        {
+        //            invoicelineitems = DataContext.GetSalesChargesList(universalSerialNr);
+        //        }
                 
-                int totalRecords = invoicelineitems.Count();
-                var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
+        //        int totalRecords = invoicelineitems.Count();
+        //        var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
 
-                var jsonData = new
-                {
-                    total = totalPages,
-                    page,
-                    records = totalRecords,
-                    rows = (from InvoiceDetailsGrid in invoicelineitems
-                            select new
-                            {
-                                InvoiceDetailsGrid.InvoiceNo,
-                                cell = new string[]
-                                {
-                                InvoiceDetailsGrid.ID,
-                                InvoiceDetailsGrid.Description,
-                                InvoiceDetailsGrid.Quantity.ToString(),
-                                InvoiceDetailsGrid.Currency,
-                                InvoiceDetailsGrid.UnitRate.ToString(),
-                                InvoiceDetailsGrid.ExRate.ToString(),
-                                InvoiceDetailsGrid.AmountUSD
-                                }
-                            }).ToArray()
-                };
-                return Json(jsonData, JsonRequestBehavior.AllowGet);
-            }
+        //        var jsonData = new
+        //        {
+        //            total = totalPages,
+        //            page,
+        //            records = totalRecords,
+        //            rows = (from InvoiceDetailsGrid in invoicelineitems
+        //                    select new
+        //                    {
+        //                        InvoiceDetailsGrid.InvoiceNo,
+        //                        cell = new string[]
+        //                        {
+        //                        InvoiceDetailsGrid.ID,
+        //                        InvoiceDetailsGrid.Description,
+        //                        InvoiceDetailsGrid.Quantity.ToString(),
+        //                        InvoiceDetailsGrid.Currency,
+        //                        InvoiceDetailsGrid.UnitRate.ToString(),
+        //                        InvoiceDetailsGrid.ExRate.ToString(),
+        //                        InvoiceDetailsGrid.AmountUSD
+        //                        }
+        //                    }).ToArray()
+        //        };
+        //        return Json(jsonData, JsonRequestBehavior.AllowGet);
+        //    }
             
-            else
-            {
-                return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
-            }
-        }
+        //    else
+        //    {
+        //        return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
         public void ExportInvoicePDF(string jobref)
         {
@@ -174,9 +176,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(invoice.CompanyName +
-                                "\n"+invoice.CompanyAddress+
-                                "\nGSTIN NO: 33AABCU9603R1ZM" +
+            para = new Paragraph(invoice.BillingParty +
+                                "\n"+invoice.BillingPartyAddress+
                                 "\n ", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Colspan = 3;
@@ -425,10 +426,11 @@ namespace DryAgentSystem.Controllers
             para.IndentationLeft = 2f;
             pdfDoc.Add(para);
 
-            table = new PdfPTable(8);
+            table = new PdfPTable(9);
             table.WidthPercentage = 100;
             table.HorizontalAlignment = 1;
             table.DefaultCell.PaddingLeft = 5f;
+            table.SpacingAfter = 5f;
 
             para = new Paragraph("Description", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
@@ -472,14 +474,21 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Ex.Rate in SGD", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
+            para = new Paragraph("GST", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Amount in SGD", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
+            para = new Paragraph("Ex.Rate", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph("Amount in USD", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -495,7 +504,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph("HSN Code", FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -530,6 +539,13 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
+                para = new Paragraph(invoiceDetails[i].TaxPercent.ToString(), FontFactory.GetFont("Arial", 8));
+                para.Alignment = Element.ALIGN_CENTER;
+                cell = new PdfPCell();
+                cell.Border = 0;
+                cell.AddElement(para);
+                table.AddCell(cell);
+
                 para = new Paragraph(invoiceDetails[i].ExRate.ToString(), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
@@ -544,6 +560,76 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
             }
+
+            para = new Paragraph(invoice.Amountinwords, FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.Colspan = 6;
+            cell.Border = 0;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph("GST  7%", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();            
+            cell.Border = 0;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph(":", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();            
+            cell.Border = 0;            
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+
+            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.Colspan = 6;
+            cell.Border = 0;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph("Total", FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.PaddingBottom = 5f;
+            cell.Border = 0;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
+            para = new Paragraph(invoice.AmountinUSDSUM, FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para.Alignment = Element.ALIGN_CENTER;
+            cell = new PdfPCell();
+            cell.PaddingBottom = 5f;
+            cell.Border = 0;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
+            cell.AddElement(para);
+            table.AddCell(cell);
+
             pdfDoc.Add(table);
 
 
@@ -873,6 +959,7 @@ namespace DryAgentSystem.Controllers
             pdfDoc.Add(table);
             */
 
+
             table = new PdfPTable(2);
             table.SetTotalWidth(new float[] { 80, 50 });
             table.LockedWidth = true;
@@ -893,29 +980,39 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("QUOT121233", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_LEFT;
-            cell = new PdfPCell();
-            cell.AddElement(para);
-            table.AddCell(cell);
+            if (invoice.ContainerNo != null)
+            {
+                String[] Containers = invoice.ContainerNo.Split(',');
 
-            para = new Paragraph("20GP", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_LEFT;
-            cell = new PdfPCell();
-            cell.AddElement(para);
-            table.AddCell(cell);
+                for (int i = 0; i < Containers.Count(); i++)
+                {
+                    para = new Paragraph(Containers[i], FontFactory.GetFont("Arial", 8));
+                    para.Alignment = Element.ALIGN_LEFT;
+                    cell = new PdfPCell();
+                    cell.AddElement(para);
+                    table.AddCell(cell);
 
-            para = new Paragraph("QUOT121234", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_LEFT;
-            cell = new PdfPCell();
-            cell.AddElement(para);
-            table.AddCell(cell);
+                    para = new Paragraph(shipment.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
+                    para.Alignment = Element.ALIGN_LEFT;
+                    cell = new PdfPCell();
+                    cell.AddElement(para);
+                    table.AddCell(cell);
+                }
+            }
+            else
+            {
+                para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+                para.Alignment = Element.ALIGN_LEFT;
+                cell = new PdfPCell();
+                cell.AddElement(para);
+                table.AddCell(cell);
 
-            para = new Paragraph("20GP", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_LEFT;
-            cell = new PdfPCell();
-            cell.AddElement(para);
-            table.AddCell(cell);
+                para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+                para.Alignment = Element.ALIGN_LEFT;
+                cell = new PdfPCell();
+                cell.AddElement(para);
+                table.AddCell(cell);
+            }
             pdfDoc.Add(table);
 
             para = new Paragraph("Bank Details", FontFactory.GetFont("Arial", 8, Font.BOLD));

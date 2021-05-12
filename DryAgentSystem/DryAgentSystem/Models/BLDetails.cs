@@ -28,14 +28,14 @@ namespace DryAgentSystem.Models
         [Display(Name = "Cargo Description2")]
         public string CargoDescription2 { get; set; }
 
-        [Display(Name = "Consignee Address BL")]
+        [Display(Name = "Consignee Address")]
         [Required(ErrorMessage = "Please provide Consignee Address")]
         public string ConsigneeAddressBL { get; set; }
 
         [Display(Name = "Consignee Address SI")]
         public string ConsigneeAddressSI { get; set; }
 
-        [Display(Name = "Consignee Name BL")]
+        [Display(Name = "Consignee Name")]
         [Required(ErrorMessage = "Please provide Consignee Name")]
         public string ConsigneeNameBL { get; set; }
 
@@ -67,7 +67,7 @@ namespace DryAgentSystem.Models
         [Display(Name = "Disch Agent Address")]
         public string DischAgentAddress { get; set; }
 
-        [Display(Name = "Disch Agent Name BL")]
+        [Display(Name = "Disch Agent Name")]
         [Required(ErrorMessage = "Please provide Disch Agent Name")]
         public string DischAgentNameBL { get; set; }
 

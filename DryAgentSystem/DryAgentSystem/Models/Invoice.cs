@@ -24,17 +24,17 @@ namespace DryAgentSystem.Models
         [Display(Name = "Address4")]
         public string Address4 { get; set; }
 
-        [Display(Name = "Amount USD SUM")]
-        public string AmountUSDSUM { get; set; }
+        [Display(Name = "Amount in USD SUM")]
+        public string AmountinUSDSUM { get; set; }
 
         [Display(Name = "Amount USD SUM WTax")]
         public string AmountUSDSUMWTax { get; set; }
 
-        [Display(Name = "Company Address")]
-        public string CompanyAddress { get; set; }
+        [Display(Name = "Billing Party Address")]
+        public string BillingPartyAddress { get; set; }
 
-        [Display(Name = "Company Name")]
-        public string CompanyName { get; set; }
+        [Display(Name = "Billing Party")]
+        public string BillingParty { get; set; }
 
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; }
@@ -215,6 +215,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "zgf MBL")]
         public string zgfMBL { get; set; }
+
+        [Display(Name = "Container No")]
+        public String ContainerNo { get; set; }
 
 
         public List<InvoiceDetails> InvoiceDetails { get; set; }

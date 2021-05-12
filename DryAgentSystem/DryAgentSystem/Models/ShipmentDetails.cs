@@ -99,7 +99,10 @@ namespace DryAgentSystem.Models
         public string DischPort { get; set; }
 
         [Display(Name = "DTotal Detention")]
-        public string DTotalDetention { get; set; }
+        public string DTotalDetention { get; set; } 
+        
+        [Display(Name = "Equipment Type")]
+        public string EquipmentType { get; set; }
 
         [Display(Name = "ETA")]
         public string ETA { get; set; }
@@ -132,7 +135,7 @@ namespace DryAgentSystem.Models
         public string GrandTotalSales { get; set; }
 
         [Display(Name = "House BL No.")]
-        [Required(ErrorMessage = "Please provide House BL No.")]
+        //[Required(ErrorMessage = "Please provide House BL No.")]
         public string HBLHAWB { get; set; }
 
         [Display(Name = "ID Agent Disch")]
@@ -322,8 +325,7 @@ namespace DryAgentSystem.Models
         [Display(Name = "Week Nr")]
         public string WeekNr { get; set; }
 
-        [Display(Name = "Equipment Type")]
-        public string EquipmentType { get; set; }
+        public bool InvoiceSave { get; set; }
 
         public IEnumerable<SelectListItem> ContainerList { get; set; }
 

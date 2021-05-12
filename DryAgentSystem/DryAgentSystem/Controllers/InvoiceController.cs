@@ -63,7 +63,7 @@ namespace DryAgentSystem.Controllers
                             {
                                 InvoiceGrid.InvoiceNo,
                                 InvoiceGrid.JobRefNo,
-                                InvoiceGrid.CompanyName,
+                                InvoiceGrid.BillingParty,
                                 InvoiceGrid.LoadPort,
                                 InvoiceGrid.DischargePort,
                                 InvoiceGrid.Status

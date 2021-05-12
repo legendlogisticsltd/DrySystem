@@ -13,12 +13,14 @@
 @Styles.Render("~/Content/JQueryDatetimecss")
 @Styles.Render("~/Content/cssjqryUi")
 @Styles.Render("~/Content/sitecss")
+@Styles.Render("~/Content/BootstrapMultiCss")
 
 <script src="~/JQuery/ShipmentDetails.js"></script>
 <script type="text/javascript">
     var jobref = "@Html.Raw(@Model.ShipmentDetailsModel.JobRef)";
     var bltypes = "@Html.Raw(@Model.BLDetailsModel.BLTypes)";
     var blstatus = "@Html.Raw(@Model.BLDetailsModel.BLStatus)";
+    var invoicesave = "@Html.Raw(@Model.ShipmentDetailsModel.InvoiceSave)";
 </script>
 
 @using (Html.BeginForm("ShipmentDetails", "ShipmentDetails", FormMethod.Post))
@@ -31,18 +33,19 @@
                     <input type="submit" name="submit" id="Update" value="Update" class="btn btn-success" />
                 </div>
                 <div class="col-md-2" style="margin-left: -1px;">
-                    <input type="submit" name="submit" id="Invoice" value="Print Invoice" class="btn btn-info" />
+                    <input type="submit" name="submit" id="Invoice" value="Save Invoice" class="btn btn-info" />
+                    <a href='@Url.Action("ExportInvoicePDF", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice">Print Invoice</a>
                 </div>
                 <div class="col-md-2"></div>
                 <div class="col-md-2">
-                    <a href='@Url.Action("ExportInvoicePDF", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice">Export Invoice</a>
+                    
                 </div>
                 <div class="col-md-3">
                     <a href='@Url.Action("ManifestCargo", "ShipmentDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="MANIFEST">Print Manifest Cargo</a>
                 </div>
                 <div class="col-md-2">
                     <div class="dropdown1">
-                        <button type="button" class="dropbtn1" style="width: 100%;" new { id = "printbl" }><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" />Print BL</button>
+                        <button type="button" class="dropbtn1" style="width: 100%;" new { id="printbl" }><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" />Print BL</button>
                         <div class="dropdown-content1">
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "ORIGINAL",jobref = @Model.ShipmentDetailsModel.JobRef})' ; target="_blank" id="ORIGINAL" onclick="ReloadPage()">Original BL</a>
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "NON-NEGOTIABLE",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="NON-NEGOTIABLE" onclick="ReloadPage()">Non-Negotiable</a>
@@ -92,7 +95,6 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ShipmentDetailsModel.HBLHAWB, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
                         @Html.EditorFor(model => model.ShipmentDetailsModel.HBLHAWB, new { htmlAttributes = new { @class = "form-control" } })
@@ -186,7 +188,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.BLDetailsModel.ConsigneeAddressBL, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik" style="float: right; margin-top: -35px;">*</span>
+                        <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
                         @Html.TextAreaFor(model => model.BLDetailsModel.ConsigneeAddressBL, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Consignee Address" })
@@ -205,7 +207,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.BLDetailsModel.DischAgentNameBL, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik" style="float: right; margin-top: -2px;">*</span>
+                        <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
                         @Html.EditorFor(model => model.BLDetailsModel.DischAgentNameBL, new { htmlAttributes = new { @class = "form-control" } })
@@ -321,7 +323,7 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-4">
-                        @Html.ListBoxFor(model => model.ShipmentDetailsModel.SelectedContainerList, Model.ShipmentDetailsModel.ContainerList, new { id = "ContainerList", style = "width:300px;", size = "8" }) @*, @class = "selectExportList show-tick form-control input-md"*@
+                        @Html.ListBoxFor(model => model.ShipmentDetailsModel.SelectedContainerList, Model.ShipmentDetailsModel.ContainerList, new { id = "ContainerList", @class = "selectContainerList" }) @* style = "width:300px;", size = "8", @class = "selectExportList show-tick form-control input-md"*@
                         <span>Containers Selected : <span id="CountingContainers"></span></span>
                     </div>
                     <div class="col-md-2">
@@ -352,7 +354,7 @@
                     </div>
                     <div class="col-md-3" style="margin-left: 40px;">
                         @Html.LabelFor(model => model.ShipmentDetailsModel.Remark, htmlAttributes: new { @class = "control-label" })
-                    
+
                         @Html.TextAreaFor(model => model.ShipmentDetailsModel.Remark, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Invoice Remarks", maxlength = "300", id = "CargoDescription", onkeyup = "CargoDescriptionCount()" })
                         @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.Remark, "", new { @class = "text-danger" })
                     </div>
@@ -360,7 +362,7 @@
                 <br />
                 <br />
                 <div class="row">
-                    <div class="col-md-2"  style="margin-left: 470px;">
+                    <div class="col-md-2" style="margin-left: 470px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
                             "Select GW. Unit", new { @class = "ui-selectmenu-menu", @id = "grossweightDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.GrossWeightUnit, "", new { @class = "text-danger" })
@@ -385,7 +387,7 @@
                         </div>
                     </div>
                 </div>
-                
+
             </fieldset>
             <br />
             <div class="row">
@@ -455,5 +457,6 @@
     @Html.HiddenFor(model => model.ShipmentDetailsModel.IDQuoteRef)
     @Html.HiddenFor(model => model.ShipmentDetailsModel.LDepotTerminal)
     @Html.HiddenFor(model => model.ShipmentDetailsModel.ChargeParty)
+    @Html.HiddenFor(model => model.ShipmentDetailsModel.EquipmentType)
     @Html.HiddenFor(model => model.BLDetailsModel.TotalGweight)
 }

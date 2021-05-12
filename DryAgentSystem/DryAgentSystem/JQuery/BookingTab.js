@@ -144,7 +144,7 @@
         $("#CRORemarks").attr('readonly', 'readonly');
         $("#paymentDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").prop("disabled", true);
+        $("#cutoffDatePicker").attr('readonly', 'readonly');
         $("#startDatePicker").prop("disabled", true);
         $("#startDatePicker").datepicker({
             "showButtonPanel": false
@@ -194,7 +194,7 @@
         $("#SOC").attr('readonly', 'readonly');
         $("#collectionDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").prop("disabled", true);
+        $("#cutoffDatePicker").attr('readonly', 'readonly');
         $("#startDatePicker").prop("disabled", true);
         $("#endDatePicker").prop("disabled", true);
 

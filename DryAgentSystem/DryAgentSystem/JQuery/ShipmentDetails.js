@@ -2,6 +2,7 @@
 
     //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+   // window.onload = detectPopupBlocker;
 
     $("#blfinalisedDatePicker").datepicker({
 
@@ -262,6 +263,18 @@
         $("#tankGrid").trigger("reloadGrid");
     }
 
+    $('.selectContainerList').multiselect({
+        includeSelectAllOption: true,
+        enableFiltering: true,
+        includeFilterClearBtn: true,
+        enableCaseInsensitiveFiltering: true,
+        buttonWidth: '250px',
+        maxHeight: 200
+    });
+
+    
+    $('.selectContainerList').multiselect('updateButtonText');
+    //$('.selectContainerList').click();
     
     $("#ShipmentDetailsModel_JobRef").attr('readonly', 'readonly');
     $("#BLDetailsModel_PlaceofIssue").attr('readonly', 'readonly');
@@ -272,6 +285,8 @@
     $("#ShipmentDetailsModel_PlaceOfReceipt").attr('readonly', 'readonly');
     $("#ShipmentDetailsModel_PlaceOfDelivery").attr('readonly', 'readonly');
     $("#ShipmentDetailsModel_ShipmentTerm").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_HBLHAWB").attr('readonly', 'readonly');
+    //$("#ExportInvoice").hide();
 
     if (bltypes == "") {
         $("#ORIGINAL").hide();
@@ -279,6 +294,17 @@
         $("#SEAWAY").hide();
         $("#SURRENDER").hide();
     }
+
+    if (invoicesave == "True") {
+
+        $("#ExportInvoice").show();
+        $("#Invoice").hide();
+    }
+    else {
+        $("#ExportInvoice").hide();
+        $("#Invoice").show();
+    }
+
     if (blstatus == "ORIGINAL ISSUED"){
         $("#MANIFEST").show();
     }
@@ -314,6 +340,16 @@
     });
 
     $('#ContainerList').change(ContainerCount);
+
+    $("ContainerList").prop('class', 'selectpicker show-tick form-control');
+    $("ContainerList").attr('data-live-search', true);
+
+    $('.ContainerList').multiselect({
+        buttonWidth: '225px'
+    });
+
+  
+    $('.ContainerList').multiselect('updateButtonText');
 });
 
 function MarksAndNoCount() {
@@ -335,4 +371,20 @@ function ReloadPage() {
     setTimeout(function () {
         window.location.reload(1);
     }, 1000);
+}
+
+function detectPopupBlocker() {
+    var windowUrl = 'about:blank';
+    var windowId = 'TestPopup_' + new Date().getTime();
+    var windowFeatures = 'left=0,top=0,width=400px,height=200px';
+    var windowRef = window.open(windowUrl, windowId, windowFeatures);
+
+    if (!windowRef) {
+        alert('A popup blocker was detected. Please turn it off to use this application.');
+    }
+    else {
+        // No popup blocker was detected...
+        windowRef.close();
+        document.getElementById('pageContent').style.display = 'block';
+    }
 }
