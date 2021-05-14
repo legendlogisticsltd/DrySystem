@@ -426,7 +426,7 @@ namespace DryAgentSystem.Controllers
             para.IndentationLeft = 2f;
             pdfDoc.Add(para);
 
-            table = new PdfPTable(9);
+            table = new PdfPTable(8);
             table.WidthPercentage = 100;
             table.HorizontalAlignment = 1;
             table.DefaultCell.PaddingLeft = 5f;
@@ -434,13 +434,6 @@ namespace DryAgentSystem.Controllers
 
             para = new Paragraph("Description", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
-            cell = new PdfPCell();
-            cell.Border = 0;
-            cell.AddElement(para);
-            table.AddCell(cell);
-
-            para = new Paragraph("HSN Code", FontFactory.GetFont("Arial", 8, Font.BOLD));
-            para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -504,13 +497,6 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
-                para.Alignment = Element.ALIGN_CENTER;
-                cell = new PdfPCell();
-                cell.Border = 0;
-                cell.AddElement(para);
-                table.AddCell(cell);
-
                 para = new Paragraph(shipment.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
@@ -564,7 +550,7 @@ namespace DryAgentSystem.Controllers
             para = new Paragraph(invoice.Amountinwords, FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
-            cell.Colspan = 6;
+            cell.Colspan = 5;
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
@@ -594,7 +580,7 @@ namespace DryAgentSystem.Controllers
             para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
-            cell.Colspan = 6;
+            cell.Colspan = 5;
             cell.Border = 0;
             cell.BorderWidthTop = 1f;
             cell.BorderWidthBottom = 1f;

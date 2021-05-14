@@ -664,7 +664,7 @@ namespace DryAgentSystem.Controllers
 
 
             table = new PdfPTable(4);
-            table.SetTotalWidth(new float[] { 200, 65, 100, 150 });
+            table.SetTotalWidth(new float[] { 250, 15, 100, 150 });
             table.LockedWidth = true;
             table.SpacingBefore = 5f;
             table.SpacingAfter = 5f;

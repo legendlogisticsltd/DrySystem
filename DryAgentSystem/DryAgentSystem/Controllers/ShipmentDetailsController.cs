@@ -303,8 +303,8 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
 
             para = new Paragraph("SHIPPING AGENT REFERENCES (COMPLETE NAME AND ADDRESS)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.ShipperNameBL +
-                "\n" + shipment.BLDetailsModel.ShipperAddressBL +
+            para1 = new Paragraph(shipment.BLDetailsModel.DischAgentNameBL +
+                "\n" + shipment.BLDetailsModel.DischAgentAddress +
                 "\n\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -513,7 +513,17 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph(shipment.BLDetailsModel.TotalGweight, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            /*
+            decimal smd = Convert.ToDecimal(shipment.BLDetailsModel.TotalGweight);
+            double smd2 = Convert.ToDouble(shipment.BLDetailsModel.TotalGweight);
+            float sm3 = float.Parse(shipment.BLDetailsModel.TotalGweight);
+            string sm4 = Math.Round(Convert.ToDouble(shipment.BLDetailsModel.TotalGweight), 2).ToString();
+
+             string ch  = sm3.ToString("0.00");
+             string ch1  = smd2.ToString("0.00");
+            */
+
+            para = new Paragraph(float.Parse(shipment.BLDetailsModel.TotalGweight).ToString("0.00") + " " + shipment.BLDetailsModel.GrossWeightUnit, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Rowspan = 10;
@@ -526,7 +536,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(shipment.BLDetailsModel.TotalContainerMeasurement, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para = new Paragraph(float.Parse(shipment.BLDetailsModel.TotalContainerMeasurement).ToString("0.00") + " " + shipment.BLDetailsModel.MeasurementUnit, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1047,7 +1057,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Gross Weight", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("Gross Weight"+shipment.BLDetailsModel.GrossWeightUnit, FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1061,7 +1071,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Measurement", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("Measurement"+shipment.BLDetailsModel.MeasurementUnit, FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1102,7 +1112,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para = new Paragraph(allocateEquipment[i].GrossWeight, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph(float.Parse(allocateEquipment[i].GrossWeight).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1114,7 +1124,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(allocateEquipment[i].Measurement, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph(float.Parse(allocateEquipment[i].Measurement).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1125,7 +1135,7 @@ namespace DryAgentSystem.Controllers
                 table.AddCell(cell);
             }
 
-            para = new Paragraph("Total Gross Weight    :  "+shipment.BLDetailsModel.TotalGweight, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para = new Paragraph("Total Gross Weight    :  "+float.Parse(shipment.BLDetailsModel.TotalGweight).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_RIGHT;
             cell = new PdfPCell();
             cell.Colspan = 3;
@@ -1141,7 +1151,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Total Measurement    :  "+shipment.BLDetailsModel.TotalContainerMeasurement, FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para = new Paragraph("Total Measurement    :  "+float.Parse(shipment.BLDetailsModel.TotalContainerMeasurement).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;

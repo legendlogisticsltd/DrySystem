@@ -217,7 +217,7 @@ namespace DryAgentSystem.Data
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
-                    string query = "Select Port, PortCode, Country from CountryPort Order By Port";// FETCH FIRST 10 ROWS ONLY";
+                    string query = "Select Port, PortCode, Country from CountryPort Order By Port FETCH FIRST 10 ROWS ONLY";// FETCH FIRST 10 ROWS ONLY";
                     var allports = conn.Query<CountryPort>(query);
                     if (allports != null)
                     {
