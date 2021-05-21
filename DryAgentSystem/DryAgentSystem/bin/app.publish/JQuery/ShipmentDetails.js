@@ -2,7 +2,80 @@
 
     //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    
+   // window.onload = detectPopupBlocker;
+
+    $("#blfinalisedDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#blfinalisedDatePicker").val() == "01-01-0001") {
+        $("#blfinalisedDatePicker").datepicker("setDate", new Date());
+    }
+    $("#blfinalisedDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#blfinalisedDatePicker").datepicker().show();
+
+    $("#issueDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#issueDatePicker").val() == "01-01-0001") {
+        $("#issueDatePicker").datepicker("setDate", new Date());
+    }
+    $("#issueDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#issueDatePicker").datepicker().show();
+
+    $("#ladenDatePicker").datepicker({
+
+        dateFormat: "mm-dd-yy",
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+
+
+
+        //yearRange: "-60:+0"
+    });
+    if ($("#ladenDatePicker").val() == "01-01-0001") {
+        $("#ladenDatePicker").datepicker("setDate", new Date());
+    }
+    $("#ladenDatePicker").datepicker().next('button').button({
+        icons: {
+            primary: 'ui-icon-calendar'
+        },
+        text: false
+    });
+
+    $("#ladenDatePicker").datepicker().show();
+
+    $("#closingDatePicker").datetimepicker().show();
+
+
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
         url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
@@ -74,8 +147,7 @@
         rowList: [10, 20, 30, 40],
         height: 'auto',
         viewrecords: true,
-        altRows: true,
-        altclass: 'quoteRefDataRow',
+        altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         //jsonReader: {
@@ -88,6 +160,7 @@
         //},
         autowidth: true,
         multiselect: false,
+        rownumbers: true
        
     });
 
@@ -98,8 +171,9 @@
         mtype: 'Get',
         url: 'GetTankDetails', //'/QuotationDetails/GetQuoteChargesList'
         editurl: 'ProcessTankData',
+        onAfterSaveCell: reload,
         datatype: 'json',
-        colNames: ['ID', 'Tank No', 'Seal No', 'Gross Weight', 'Net Weight', 'Measurement','UniversalSerialNr'],
+        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Net Weight', 'Measurement','UniversalSerialNr'],
         colModel: [
             {
                 key: true,
@@ -111,9 +185,10 @@
             {
                 key: false,
                 //hidden: true,
-                name: 'TankNo',
-                index: 'TankNo',
-                editable: true
+                name: 'ContainerNo',
+                index: 'ContainerNo',
+
+                editable: false
             },
             {
                 key: false,
@@ -151,7 +226,6 @@
         height: 'auto',
         viewrecords: true,
         altRows: true,
-        altclass: 'quoteRefDataRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         autowidth: true,
@@ -169,9 +243,9 @@
             edit: true,
             editicon: "ui-icon-pencil",
             edittext: "Edit",
-            add: true,
-            addicon: "ui-icon-plus",
-            addtext: "Add",
+            add: false,
+            //addicon: "ui-icon-plus",
+            //addtext: "Add",
             save: true,
             saveicon: "ui-icon-disk",
             savetext: "Save",
@@ -182,12 +256,155 @@
             addParams: { position: "last" }
         });
 
-    $("#blfinalisedDatePicker").datepicker().show();
-    $("#ETADatePicker").datepicker().show();
-    $("#ETDDatePicker").datepicker().show();
-    $("#issueDatePicker").datepicker().show();
-    $("#ladenDatePicker").datepicker().show();
 
+    function reload(rowid, result) {
+        $("#tankGrid").trigger("reloadGrid");
+    }
+
+    $('.selectContainerList').multiselect({
+        includeSelectAllOption: true,
+        enableFiltering: true,
+        includeFilterClearBtn: true,
+        enableCaseInsensitiveFiltering: true,
+        buttonWidth: '250px',
+        numberDisplayed: 1,
+        maxHeight: 200
+    });
+
+    
+    $('.selectContainerList').multiselect('updateButtonText');
+    //$('.selectContainerList').click();
+    
+    $("#ShipmentDetailsModel_JobRef").attr('readonly', 'readonly');
+    $("#BLDetailsModel_PlaceofIssue").attr('readonly', 'readonly');
+    $("#BLDetailsModel_BLTypes").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_Quantity").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_LoadPort").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_DischPort").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_PlaceOfReceipt").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_PlaceOfDelivery").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_ShipmentTerm").attr('readonly', 'readonly');
+    $("#ShipmentDetailsModel_HBLHAWB").attr('readonly', 'readonly');
+    //$("#ExportInvoice").hide();
+
+    if (bltypes == "") {
+        $("#ORIGINAL").hide();
+        $("#NON-NEGOTIABLE").hide();
+        $("#SEAWAY").hide();
+        $("#SURRENDER").hide();
+    }
+
+    if (invoicesave == "True") {
+
+        $("#ORIGINAL").show();
+        $("#NON-NEGOTIABLE").show();
+        $("#SEAWAY").show();
+        $("#SURRENDER").show();
+    }
+    else {
+        $("#ORIGINAL").hide();
+        $("#NON-NEGOTIABLE").hide();
+        $("#SEAWAY").hide();
+        $("#SURRENDER").hide();
+    }
+
+    if (blstatus == "ORIGINAL ISSUED"){
+        $("#MANIFEST").show();
+    }
+    else {
+        $("#MANIFEST").hide();
+    }
+
+    
+
+    $("#SEAWAY").click(function () {
+        
+        if (blseawaystatus == "SEAWAY ISSUED") {
+            alert('You have already printed SEAWAY BL. You cannot print again.\nPlease click Request Re-Print Button to send a request to HQ for allowing you to print again');
+            event.preventDefault();
+        }
+        else {
+            if (confirm('Are you sure you want to Proceed?\nPlease note that you can only print SEAWAY BL once')) {
+                ReloadPage();
+            }
+            else {
+                event.preventDefault();
+            }
+        }
+            
+    });
+
+    $("#ORIGINAL").click(function () {
+        if (blstatus == "ORIGINAL ISSUED") {
+            alert('You have already printed ORIGINAL BL. You cannot print again.\nPlease click Request Re-Print Button to send a request to HQ for allowing you to print again');
+            event.preventDefault();
+        }
+        else {
+            if (confirm('Are you sure you want to Proceed?\nPlease note that you can only print ORIGINAL BL once')) {
+                ReloadPage();
+            }
+            else {
+                event.preventDefault();
+            }
+        }
+    });
+
+    if ((blstatus == "ORIGINAL ISSUED") || (blseawaystatus == "SEAWAY ISSUED")) {
+        $("#RePrint").show();
+    }
+    else {
+        $("#RePrint").hide();
+    }
+
+
+    $("#RePrint").click(function () {
+        alert('Re-Print BL request Sent to HQ Successfully')
+    })
+
+
+    
+    if (jobref != "") {
+        $("#Save").hide();
+        $("#Update").show();
+    }
+    else {
+        $("#Save").show();
+        $("#Update").hide();
+        $("#printbl").hide();
+    }
+
+    //ContainerCount();
+
+    var $s = $("#packageDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#grossweightDropDownList").selectmenu();
+    var $s = $("#netweightDropDownList").selectmenu();
+    var $s = $("#munitDropDownList").selectmenu();
+    var $s = $("#shippernamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#consigneenamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#shipperDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#consigneenameblDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+
+    $("#grossweightDropDownList").selectmenu({
+        width: 170
+    });
+    $("#netweightDropDownList").selectmenu({
+        width: 170
+    });
+    $("#munitDropDownList").selectmenu({
+        width: 170
+    });
+
+    //$('#ContainerList').change(ContainerCount);
+
+    $("ContainerList").prop('class', 'selectpicker show-tick form-control');
+    $("ContainerList").attr('data-live-search', true);
+
+    $('.ContainerList').multiselect({
+        buttonWidth: '225px'
+    });
+
+  
+    $('.ContainerList').multiselect('updateButtonText');
 });
 
 function MarksAndNoCount() {
@@ -198,4 +415,53 @@ function MarksAndNoCount() {
 function CargoDescriptionCount() {
     var i = document.getElementById("CargoDescription").value.length;
     document.getElementById("CountingCharactersCargo").innerHTML = i;
+}
+
+function InvoiceRemarkCount() {
+    var i = document.getElementById("InvoiceRemark").value.length;
+    document.getElementById("CountingCharactersRemarks").innerHTML = i;
+}
+
+//function ContainerCount() {
+//    var count1 = $("#ContainerList :selected").length;
+//    document.getElementById("CountingContainers").innerHTML = count1;
+//}
+
+function ReloadPage() {
+    setTimeout(function () {
+        window.location.reload(1);
+    }, 1000);
+}
+
+function detectPopupBlocker() {
+    var windowUrl = 'about:blank';
+    var windowId = 'TestPopup_' + new Date().getTime();
+    var windowFeatures = 'left=0,top=0,width=400px,height=200px';
+    var windowRef = window.open(windowUrl, windowId, windowFeatures);
+
+    if (!windowRef) {
+        alert('A popup blocker was detected. Please turn it off to use this application.');
+    }
+    else {
+        // No popup blocker was detected...
+        windowRef.close();
+        document.getElementById('pageContent').style.display = 'block';
+    }
+}
+
+function RePrintMethod() {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("MailSend", "ShipmentDetails")',
+        data: {
+            jobref: jobref,
+        },
+        dataType: 'json',
+        success: function (result) {
+
+            alert(result.msg); //You can also not pop up a prompt box.You could code anything what you want               
+        }
+    });
+
 }

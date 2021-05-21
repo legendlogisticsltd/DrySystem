@@ -207,9 +207,9 @@
                         @Html.ValidationMessageFor(model => model.TransshipmentType, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2 forleftalign">
-                        @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel" })
+                        @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel",style= "padding-right: 31px;" })
                     </div>
-                    <div class="col-md-2 forleftalignquantity">
+                    <div class="col-md-2 forleftalign">
                         @Html.EditorFor(model => model.TransshipmentPort, new { htmlAttributes = new { @class = "form-control", @id = "TransshipmentPortText" } })
                         @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger" })
                     </div>

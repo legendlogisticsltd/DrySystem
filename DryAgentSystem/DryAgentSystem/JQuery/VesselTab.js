@@ -96,7 +96,6 @@
         rownumbers: true,
         viewrecords: true,
         altRows: true,
-        altclass: 'quoteRefDataRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         //jsonReader: {

@@ -1,8 +1,185 @@
-﻿
+﻿@model DryAgentSystem.Models.Invoice
+
 @{
     ViewBag.Title = "InvoiceDetails";
     Layout = "~/Views/Shared/DetailLayout.cshtml";
 }
 
-<h2>InvoiceDetails</h2>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+<script src="~/JQuery/InvoiceDetails.js"></script>
+
+
+@using (Html.BeginForm("InvoiceDetails", "InvoiceDetails", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div class="container-fluid">
+    <div class="form_group">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Tax Invoice </h2>
+                <hr />
+            </div>
+        </div>
+        <div>
+            <input type="submit" name="submit" id="Save" value="Save" class="btn btn-success" />
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-5">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.InvoiceNo, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-4">
+                            @Html.EditorFor(model => model.InvoiceNo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.InvoiceNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <br />
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.TextBoxFor(model => model.InvoiceDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "InvoiceDatePicker" })
+                                    @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.DueDate, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-2">
+                                    @Html.TextBoxFor(model => model.DueDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "DueDatePicker" })
+                                    @Html.ValidationMessageFor(model => model.DueDate, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @Html.LabelFor(model => model.CreditTerms, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.CreditTerms, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CreditTerms, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-md-7">
+                                    @Html.LabelFor(model => model.InvoiceMonth, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.EditorFor(model => model.InvoiceMonth, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.InvoiceMonth, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.LabelFor(model => model.Grossweight, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.Grossweight, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Grossweight, "", new { @class = "text-danger" })
+
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.EditorFor(model => model.GrossweightUnit, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.GrossweightUnit, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <br />
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label" })
+                                </div>
+                                <div class="col-md-9">
+                                    @Html.TextAreaFor(model => model.Remarks, new { rows = "4", cols = "29", style = "resize:none;" })
+                                    @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger forplaceholdertext" })
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="col-5">
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-7">
+                            @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                        </div>
+                        <br /> <br />
+                        <div class="row">
+                            <div class="col-md-5">
+                                @Html.LabelFor(model => model.CompanyAddress, htmlAttributes: new { @class = "control-label" })
+
+                            </div>
+                            <div class="col-md-7">
+                                @Html.TextAreaFor(model => model.CompanyAddress, new { rows = "10", cols = "29", style = "resize:none;" })
+                                @Html.ValidationMessageFor(model => model.CompanyAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.UniversalSerialNr)
+</div>
+}
+<br />
+
+<table id="InvoiceDetailsGrid" class="overflow:auto;">
+</table>
+<div id="InvoiceDetailsPager" style="text-align: center;">
+</div>
+
 

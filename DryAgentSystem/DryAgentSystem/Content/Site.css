@@ -834,7 +834,7 @@ height: 200px;
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    margin-left: 29px;
+    min-width: 160px;
 }
 
 .dropdown1 {
@@ -845,7 +845,7 @@ height: 200px;
 .dropdown-content1 {
     display: none;
     position: absolute;
-    margin-left: 10px;
+    margin-left: 2px;
     margin-top: 0px;
     background-color: #f1f1f1;
     min-width: 160px;

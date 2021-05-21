@@ -16,6 +16,9 @@ namespace DryAgentSystem.Models
         
         [Display(Name = "BL Status")]
         public string BLStatus { get; set; }
+        
+        [Display(Name = "BL Seaway Status")]
+        public string BLSeawayStatus { get; set; }
 
         [Display(Name = "BL Finalised Date")]
         [Required(ErrorMessage = "Please provide BL Finalised Date")]

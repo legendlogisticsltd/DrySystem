@@ -50,8 +50,7 @@
         rowList: [10, 20, 30, 40],
         height: 'auto',
         viewrecords: true,
-        altRows: true,
-        altclass: 'InvoiceDataRow',
+        altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
       

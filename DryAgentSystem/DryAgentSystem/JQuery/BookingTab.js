@@ -116,6 +116,11 @@
     $("#TransshipmentTypeYes").prop("disabled", true);
     $("#TransshipmentTypeNo").prop("disabled", true);
     $("#TransshipmentPortText").attr('readonly', 'readonly');
+    $("#RateTypeReefer").prop("disabled", true);
+    $("#RateTypeDry").prop("disabled", true);
+    $("#Temperature").attr('readonly', 'readonly');
+    $("#Humidity").attr('readonly', 'readonly');
+    $("#Ventilation").attr('readonly', 'readonly');
 
     
 
@@ -133,11 +138,6 @@
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
         $("#GrossweightMeasurement").attr('readonly', 'readonly');
-        $("#RateTypeReefer").prop("disabled", true);
-        $("#RateTypeDry").prop("disabled", true);
-        $("#Temperature").attr('readonly', 'readonly');
-        $("#Humidity").attr('readonly', 'readonly');
-        $("#Ventilation").attr('readonly', 'readonly');
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
@@ -170,11 +170,6 @@
             $("#Shipment").hide();
         }
 
-        $("#RateTypeReefer").prop("disabled", true);
-        $("#RateTypeDry").prop("disabled", true);
-        $("#Temperature").attr('readonly', 'readonly');
-        $("#Humidity").attr('readonly', 'readonly');
-        $("#Ventilation").attr('readonly', 'readonly');
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
         $("#ServiceMode").attr('readonly', 'readonly');

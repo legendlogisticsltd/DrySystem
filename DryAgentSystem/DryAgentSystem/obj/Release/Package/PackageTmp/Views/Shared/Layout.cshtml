@@ -41,8 +41,18 @@
                         <li>@Html.ActionLink("RATE REQUEST", "RateRequest", "RateRequest")</li>
                         <li>@Html.ActionLink("QUOTATION", "Quotation", "Quotation")</li>
                         <li>@Html.ActionLink("BOOKING", "Booking", "Booking")</li>
-                        <li>@Html.ActionLink("SHIPMENT", "Shipment", "Shipment")</li>
-                        <li>@Html.ActionLink("INVOICE", "Invoice", "Invoice")</li>
+
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                EXPORT
+                                <i class="fa fa-caret-down"></i>
+                            </button>
+                            <div class="dropdown-content">
+                                @Html.ActionLink("SHIPMENT", "Shipment", "Shipment")
+                                @Html.ActionLink("INVOICE", "Invoice", "Invoice")
+                            </div>
+                        </div>
+
                     }
                 </ul>
                 <ul class="navbar-nav navigationright">
@@ -80,7 +90,7 @@
     <div class="container body-content" id="content">
         @RenderBody()
     </div>
-    
+
 
     <footer class="footer footer_bg_1">
         <div class="footer_top">

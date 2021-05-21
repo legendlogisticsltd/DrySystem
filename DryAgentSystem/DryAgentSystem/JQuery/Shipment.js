@@ -62,7 +62,6 @@
         viewrecords: true,
         multiselect: false,
         altRows: true,
-        altclass: 'shipmentRow',
         loadtext: 'Loading Data please wait ...',
         rownumbers: true,
         emptyrecords: 'No records to display',

@@ -48,9 +48,10 @@
                     @Html.ValidationMessageFor(model => model.JobRef, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
-                    @Html.LabelFor(model => model.pzChargeParty, htmlAttributes: new { @class = "control-label" })
-                    @Html.EditorFor(model => model.pzChargeParty, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.pzChargeParty, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.ChargeParty, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ChargeParty, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                                 "Select Status", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
+                    @Html.ValidationMessageFor(model => model.ChargeParty, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="row">

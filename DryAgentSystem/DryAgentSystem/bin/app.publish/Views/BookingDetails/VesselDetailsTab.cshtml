@@ -59,6 +59,7 @@
             <div class="row">
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.Carrier, htmlAttributes: new { @class = "control-label" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-2 forleftalign">
                     @Html.EditorFor(model => model.Carrier, new { htmlAttributes = new { @class = "form-control" } })
@@ -66,6 +67,7 @@
                 </div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.VesselName, htmlAttributes: new { @class = "control-label" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-2 forleftalign">
                     @Html.EditorFor(model => model.VesselName, new { htmlAttributes = new { @class = "form-control" } })
@@ -74,6 +76,7 @@
 
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.VoyNo, htmlAttributes: new { @class = "control-label", id = "rateLabel" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-2 forleftalign">
                     @Html.EditorFor(model => model.VoyNo, new { htmlAttributes = new { @class = "form-control" } })
@@ -84,6 +87,7 @@
             <div class="row">
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-4 forleftalign">
                     @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
@@ -92,9 +96,10 @@
                 </div>
 
                 @*<div class="col-md-1"></div>*@
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.DischPort, htmlAttributes: new { @class = "control-label" })
-                </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.DischPort, htmlAttributes: new { @class = "control-label" })
+                <span class="RequiredAstrik">*</span>
+            </div>
                 <div class="col-md-4 forleftalign">
                     @Html.DropDownListFor(model => model.DischPort, new SelectList(ViewBag.PortList, "Port", "Port"),
                "Select Port", new { @class = "btn btn-primary dropdown-toggle", @id = "dischportDropDownList" }) @*@class = "ui-selectmenu-menu",*@
@@ -105,6 +110,7 @@
             <div class="row">
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.ETD, htmlAttributes: new { @class = "control-label" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-4 forleftalign">
                     @Html.TextBoxFor(model => model.ETD, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETD" })
@@ -114,6 +120,7 @@
                 @*<div class="col-md-1"></div>*@
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.ETA, htmlAttributes: new { @class = "control-label" })
+                    <span class="RequiredAstrik">*</span>
                 </div>
                 <div class="col-md-4 forleftalign">
                     @Html.TextBoxFor(model => model.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETA" })

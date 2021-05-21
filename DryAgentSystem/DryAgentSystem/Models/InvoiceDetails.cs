@@ -50,13 +50,13 @@ namespace DryAgentSystem.Models
         public string Description { get; set; }
 
         [Display(Name = "Ex Rate")]
-        public int ExRate { get; set; }
+        public decimal ExRate { get; set; }
 
         [Display(Name = "ID")]
         public string ID { get; set; }
 
         [Display(Name = "AmountUSD")]
-        public string AmountUSD { get; set; }
+        public decimal AmountUSD { get; set; }
 
         [Display(Name = "ID Company")]
         public string IDcompany { get; set; }

@@ -25,7 +25,7 @@ namespace DryAgentSystem.Models
         public string Address4 { get; set; }
 
         [Display(Name = "Amount in USD SUM")]
-        public string AmountinUSDSUM { get; set; }
+        public decimal AmountinUSDSUM { get; set; }
 
         [Display(Name = "Amount USD SUM WTax")]
         public string AmountUSDSUMWTax { get; set; }
@@ -91,7 +91,7 @@ namespace DryAgentSystem.Models
         public string HBLHAWB { get; set; }
 
         [Display(Name = "ID")]
-        public string ID { get; set; }
+        public int ID { get; set; }
 
         [Display(Name = "IDCompany")]
         public string IDCompany { get; set; }

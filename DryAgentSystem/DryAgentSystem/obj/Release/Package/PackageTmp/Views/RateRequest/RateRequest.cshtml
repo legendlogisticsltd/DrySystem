@@ -30,20 +30,20 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-1">
+                <input type="submit" name="submit" id="Filter" value="Search" class="btn btn-warning" />
+            </div>
+            <div class="col-md-2">
+                <input type="submit" name="submit" id="Reset" value="Reset" class="btn btn-info"/>
+            </div>
+        </div>
+        <br />
+        <div class="row">
             <div class="col-md-3">
                 @Html.LabelFor(model => model.RateID, htmlAttributes: new { @class = "control-label" })
                 @Html.EditorFor(model => model.RateID, new { htmlAttributes = new { @class = "form-control" } })
             </div>
-            <div class="col-md-1">
-                <br>
-                <input type="submit" name="submit" id="Filter" value="Search" class="btn btn-warning" style="width:100%;margin-top:7px;" />
-            </div>
-            <div class="col-md-1">
-                <br>
-                <input type="submit" name="submit" id="Reset" value="Reset" class="btn btn-info" style="margin-top:7px;" />
-            </div>
         </div>
-        <br>
         <div class="row">
             <div class="col-md-3">
                 @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
@@ -72,7 +72,7 @@
         </div>
     </div>
 </div>
-
+<br />
  }
 
 <div style="overflow:auto;">

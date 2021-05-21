@@ -147,8 +147,7 @@
         rowList: [10, 20, 30, 40],
         height: 'auto',
         viewrecords: true,
-        altRows: true,
-        altclass: 'quoteRefDataRow',
+        altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         //jsonReader: {
@@ -227,7 +226,6 @@
         height: 'auto',
         viewrecords: true,
         altRows: true,
-        altclass: 'quoteRefDataRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         autowidth: true,
@@ -269,6 +267,7 @@
         includeFilterClearBtn: true,
         enableCaseInsensitiveFiltering: true,
         buttonWidth: '250px',
+        numberDisplayed: 1,
         maxHeight: 200
     });
 
@@ -297,12 +296,16 @@
 
     if (invoicesave == "True") {
 
-        $("#ExportInvoice").show();
-        $("#Invoice").hide();
+        $("#ORIGINAL").show();
+        $("#NON-NEGOTIABLE").show();
+        $("#SEAWAY").show();
+        $("#SURRENDER").show();
     }
     else {
-        $("#ExportInvoice").hide();
-        $("#Invoice").show();
+        $("#ORIGINAL").hide();
+        $("#NON-NEGOTIABLE").hide();
+        $("#SEAWAY").hide();
+        $("#SURRENDER").hide();
     }
 
     if (blstatus == "ORIGINAL ISSUED"){
@@ -311,6 +314,54 @@
     else {
         $("#MANIFEST").hide();
     }
+
+    
+
+    $("#SEAWAY").click(function () {
+        
+        if (blseawaystatus == "SEAWAY ISSUED") {
+            alert('You have already printed SEAWAY BL. You cannot print again.\nPlease click Request Re-Print Button to send a request to HQ for allowing you to print again');
+            event.preventDefault();
+        }
+        else {
+            if (confirm('Are you sure you want to Proceed?\nPlease note that you can only print SEAWAY BL once')) {
+                ReloadPage();
+            }
+            else {
+                event.preventDefault();
+            }
+        }
+            
+    });
+
+    $("#ORIGINAL").click(function () {
+        if (blstatus == "ORIGINAL ISSUED") {
+            alert('You have already printed ORIGINAL BL. You cannot print again.\nPlease click Request Re-Print Button to send a request to HQ for allowing you to print again');
+            event.preventDefault();
+        }
+        else {
+            if (confirm('Are you sure you want to Proceed?\nPlease note that you can only print ORIGINAL BL once')) {
+                ReloadPage();
+            }
+            else {
+                event.preventDefault();
+            }
+        }
+    });
+
+    if ((blstatus == "ORIGINAL ISSUED") || (blseawaystatus == "SEAWAY ISSUED")) {
+        $("#RePrint").show();
+    }
+    else {
+        $("#RePrint").hide();
+    }
+
+
+    $("#RePrint").click(function () {
+        alert('Re-Print BL request Sent to HQ Successfully')
+    })
+
+
     
     if (jobref != "") {
         $("#Save").hide();
@@ -322,12 +373,16 @@
         $("#printbl").hide();
     }
 
-    ContainerCount();
+    //ContainerCount();
 
     var $s = $("#packageDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     var $s = $("#grossweightDropDownList").selectmenu();
     var $s = $("#netweightDropDownList").selectmenu();
     var $s = $("#munitDropDownList").selectmenu();
+    var $s = $("#shippernamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#consigneenamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#shipperDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    var $s = $("#consigneenameblDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
 
     $("#grossweightDropDownList").selectmenu({
         width: 170
@@ -339,7 +394,7 @@
         width: 170
     });
 
-    $('#ContainerList').change(ContainerCount);
+    //$('#ContainerList').change(ContainerCount);
 
     $("ContainerList").prop('class', 'selectpicker show-tick form-control');
     $("ContainerList").attr('data-live-search', true);
@@ -362,10 +417,15 @@ function CargoDescriptionCount() {
     document.getElementById("CountingCharactersCargo").innerHTML = i;
 }
 
-function ContainerCount() {
-    var count1 = $("#ContainerList :selected").length;
-    document.getElementById("CountingContainers").innerHTML = count1;
+function InvoiceRemarkCount() {
+    var i = document.getElementById("InvoiceRemark").value.length;
+    document.getElementById("CountingCharactersRemarks").innerHTML = i;
 }
+
+//function ContainerCount() {
+//    var count1 = $("#ContainerList :selected").length;
+//    document.getElementById("CountingContainers").innerHTML = count1;
+//}
 
 function ReloadPage() {
     setTimeout(function () {
@@ -387,4 +447,21 @@ function detectPopupBlocker() {
         windowRef.close();
         document.getElementById('pageContent').style.display = 'block';
     }
+}
+
+function RePrintMethod() {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("MailSend", "ShipmentDetails")',
+        data: {
+            jobref: jobref,
+        },
+        dataType: 'json',
+        success: function (result) {
+
+            alert(result.msg); //You can also not pop up a prompt box.You could code anything what you want               
+        }
+    });
+
 }

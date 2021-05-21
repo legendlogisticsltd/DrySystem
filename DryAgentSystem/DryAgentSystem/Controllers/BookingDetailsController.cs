@@ -411,11 +411,26 @@ namespace DryAgentSystem.Controllers
             table.SetTotalWidth(new float[] { 150, 370 });
             table.LockedWidth = true;
 
+            String TranShipmentPortTempLabel;
+            String TranShipmentPortTempValue;
+
+            if (quoteRef.TransshipmentPort != null)
+            {
+                TranShipmentPortTempLabel = "TRAN-SHIPMENT PORT\n";
+                TranShipmentPortTempValue = ":  " + quoteRef.TransshipmentPort+"\n";
+            }
+            else
+            {
+                TranShipmentPortTempLabel = "";
+                TranShipmentPortTempValue = "";
+            }
+
             para = new Paragraph("BOOKING NO. \n" +
                                 "VESSEL \n" +
                                 "VOYAGE \n" +
                                 "POL \n" +
                                 "POD \n" +
+                                TranShipmentPortTempLabel +
                                 "FINAL DEST \n" +
                                 "ETD "+booking.LoadPort+"\n" +
                                 "ETA "+booking.DischargePort+"\n" +
@@ -429,11 +444,13 @@ namespace DryAgentSystem.Controllers
                                 "RELEASE ORDER NO \n" +
                                 "REMARKS", FontFactory.GetFont("Courier", 10, Font.BOLD));
 
+
             para1 = new Paragraph(":  "+booking.BookingNo+"\n" +
                                 ":  "+vessels[0].VesselName+" \n" +
                                 ":  "+vessels[0].VoyNo+" \n" +
-                                ":  "+booking.LoadPort+" \n" +
-                                ":  "+booking.DischargePort+" \n" +
+                                ":  "+booking.LoadPort+ "\n" +
+                                ":  "+booking.DischargePort+"\n" +
+                                TranShipmentPortTempValue +
                                 ":  "+quoteRef.PlaceOfDelivery+" \n" +
                                 ":  "+vessels[0].ETD.ToString("dd-MM-yyyy") +" \n" +
                                 ":  " +vessels[vessels.Count - 1].ETA.ToString("dd-MM-yyyy") + " \n" +
@@ -797,9 +814,10 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
+            cell.PaddingBottom = 10f;
             cell.Border = 0;
-            cell.BorderWidthTop = 1;
-            cell.BorderWidthBottom = 1;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
             cell.AddElement(para1);
             table.AddCell(cell);
 
@@ -807,9 +825,10 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
+            cell.PaddingBottom = 10f;
             cell.Border = 0;
-            cell.BorderWidthTop = 1;
-            cell.BorderWidthBottom = 1;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
             cell.AddElement(para1);
             table.AddCell(cell);
 
@@ -817,28 +836,31 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
+            cell.PaddingBottom = 10f;
             cell.Border = 0;
-            cell.BorderWidthTop = 1;
-            cell.BorderWidthBottom = 1;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
             cell.AddElement(para1);
             table.AddCell(cell);
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
+            cell.PaddingBottom = 10f;
             cell.Border = 0;
-            cell.BorderWidthTop = 1;
-            cell.BorderWidthBottom = 1;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
             table.AddCell(cell);
 
             para1 = new Paragraph("Remark", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
+            cell.PaddingBottom = 10f;
             cell.PaddingLeft = 45f;
             cell.Border = 0;
-            cell.BorderWidthTop = 1;
-            cell.BorderWidthBottom = 1;
+            cell.BorderWidthTop = 1f;
+            cell.BorderWidthBottom = 1f;
             cell.AddElement(para1);
             table.AddCell(cell);
 

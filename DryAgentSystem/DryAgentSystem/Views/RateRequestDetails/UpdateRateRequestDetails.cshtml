@@ -19,6 +19,7 @@
     var rateCountered = "@Html.Raw(@Model.RateCountered)";
     var transshipmenttype = "@Html.Raw(@Model.TransshipmentType)";
     var ratetype = "@Html.Raw(@Model.RateType)";
+    var principal = "@Html.Raw(@Model.PrincipalRemark)";
 </script>
 
 @using (Html.BeginForm("UpdateRateRequestDetails", "RateRequestDetails", FormMethod.Post))
@@ -239,9 +240,9 @@
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-2 forleftalign">
-                        @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel" })
+                        @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel", style= "padding-right: 31px;" })
                     </div>
-                    <div class="col-md-2 forleftalignquantity">
+                    <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.TransshipmentPort, new SelectList(ViewBag.PortList, "Port", "Port"),
                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "TransshipmentPortText" })
                         @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger" })
@@ -329,7 +330,6 @@
                 <div class="row">
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.UNNo, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.EditorFor(model => model.UNNo, new { htmlAttributes = new { @class = "form-control" } })
@@ -338,7 +338,6 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.IMO, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.EditorFor(model => model.IMO, new { htmlAttributes = new { @class = "form-control" } })
@@ -367,7 +366,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.PrincipalRemark, htmlAttributes: new { @class = "control-label" })                        
+                        @Html.LabelFor(model => model.PrincipalRemark, htmlAttributes: new { @class = "control-label", @id = "PrincipalRemarkLabel" })                        
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.TextAreaFor(model => model.PrincipalRemark, new { rows = "4", cols = "29", style = "resize:none;", placeholder = "Principal's Remarks" })

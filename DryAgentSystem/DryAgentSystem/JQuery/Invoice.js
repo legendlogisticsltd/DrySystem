@@ -57,8 +57,7 @@
         height: 'auto',
         viewrecords: true,
         multiselect: false,
-        altRows: true,
-        altclass: 'InvoiceRow',
+        altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
     });

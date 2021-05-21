@@ -319,9 +319,9 @@
         //rowList: [10, 20, 30, 40],
         height: 'auto',
         viewrecords: true,
+        rownumbers: true,
         multiselect: false,
         altRows: true,
-        altclass: 'quoteRefDataRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display'
     });
@@ -429,4 +429,16 @@
             });
         });
     }
+    if (principal != "") {
+        $("#PrincipalRemark").css('display', 'block');
+        $("#PrincipalRemarkLabel").css('display', 'block');
+    }
+    else {
+        $("#PrincipalRemark").css('display', 'none');
+        $("#PrincipalRemarkLabel").css('display', 'none');
+    }
+
+    $("#companyDropDownList").selectmenu({
+        width: 300
+    });
 });

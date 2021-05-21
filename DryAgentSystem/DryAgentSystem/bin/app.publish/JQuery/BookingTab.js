@@ -87,31 +87,6 @@
     $("#GrossweightMeasurement").attr('readonly', 'readonly');
     
 
-    //$("#cutoffDateTimePicker").datepicker({
-    //    //dateFormat: "mm-dd-yy",
-    //    //changeMonth: true,
-    //    //changeYear: true,
-    //    showOn: 'both',
-    //    controlType: 'select',
-    //    timeFormat: 'hh:mm TT'
-        
-    //    //yearRange: "-60:+0"
-    //});
-
-    //$("#cutoffDateTimePicker").datepicker();
-
-    //$("#cutoffDateTimePicker").datepicker().next('button').button({
-    //    icons: {
-    //        primary: 'ui-icon-calendar'
-    //    },
-    //    text: false
-    //});
-    //$("#cutoffDateTimePicker").datepicker().show();
-
-    //if ($("#cutoffDateTimePicker").val() == "01-01-0001 12:00 AM") {
-    //    $("#cutoffDateTimePicker").datepicker("setDate", new Date());
-    //}
-
     $("#submit").click(function () {
         document.forms[0].submit();
         return false;
@@ -141,6 +116,11 @@
     $("#TransshipmentTypeYes").prop("disabled", true);
     $("#TransshipmentTypeNo").prop("disabled", true);
     $("#TransshipmentPortText").attr('readonly', 'readonly');
+    $("#RateTypeReefer").prop("disabled", true);
+    $("#RateTypeDry").prop("disabled", true);
+    $("#Temperature").attr('readonly', 'readonly');
+    $("#Humidity").attr('readonly', 'readonly');
+    $("#Ventilation").attr('readonly', 'readonly');
 
     
 
@@ -150,6 +130,7 @@
         $("#Save").hide();
         $("#Update").hide();
         $("#Confirm").hide();
+        $("#Shipment").hide();
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
         $("#ServiceMode").attr('readonly', 'readonly');
@@ -157,18 +138,13 @@
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
         $("#GrossweightMeasurement").attr('readonly', 'readonly');
-        $("#RateTypeReefer").prop("disabled", true);
-        $("#RateTypeDry").prop("disabled", true);
-        $("#Temperature").attr('readonly', 'readonly');
-        $("#Humidity").attr('readonly', 'readonly');
-        $("#Ventilation").attr('readonly', 'readonly');
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
         $("#CRORemarks").attr('readonly', 'readonly');
         $("#paymentDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").prop("disabled", true);
+        $("#cutoffDatePicker").attr('readonly', 'readonly');
         $("#startDatePicker").prop("disabled", true);
         $("#startDatePicker").datepicker({
             "showButtonPanel": false
@@ -190,12 +166,10 @@
         $("#Confirm").hide();
         $("#Edit").hide();
         $("#Issue").hide();
+        if (hasshipment == "True") {
+            $("#Shipment").hide();
+        }
 
-        $("#RateTypeReefer").prop("disabled", true);
-        $("#RateTypeDry").prop("disabled", true);
-        $("#Temperature").attr('readonly', 'readonly');
-        $("#Humidity").attr('readonly', 'readonly');
-        $("#Ventilation").attr('readonly', 'readonly');
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
         $("#ServiceMode").attr('readonly', 'readonly');
@@ -215,7 +189,7 @@
         $("#SOC").attr('readonly', 'readonly');
         $("#collectionDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").prop("disabled", true);
+        $("#cutoffDatePicker").attr('readonly', 'readonly');
         $("#startDatePicker").prop("disabled", true);
         $("#endDatePicker").prop("disabled", true);
 
@@ -228,6 +202,7 @@
         $("#PrintBC").hide();
         $("#PrintCRO").hide();
         $("#Issue").hide();
+        $("#Shipment").hide();
     }
 
     else {
@@ -235,6 +210,7 @@
         $("#Confirm").hide();
         $("#Edit").hide();
         $("#Issue").hide();
+        $("#Shipment").hide();
 
         $("#PrintBC").hide();
         $("#PrintCRO").hide();

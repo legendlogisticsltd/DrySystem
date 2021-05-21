@@ -16,29 +16,38 @@ namespace DryAgentSystem.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult InvoiceDetails(Invoice invoicedetails)
+        public void InvoiceDetails(string jobref)
         {
-
-
-            if (TempData["invoiceobj"] != null)
+            ShipmentBL shipment = DataContext.GetShipmentFromJobRef(jobref);
+            Invoice invoicenew = new Invoice();
+            if (ModelState.IsValid)
             {
-                invoicedetails = (Invoice)TempData["invoiceobj"];
-            }
-            invoicedetails.InvoiceNo = DataContext.GetInvoiceFromUSN(invoicedetails.UniversalSerialNr).InvoiceNo;
-            if(String.IsNullOrEmpty(invoicedetails.InvoiceNo))
-            {
-                InvoiceDetails(invoicedetails, "Save");
-                //ExportInvoicePDF(invoicedetails.JobRefNo);
-                //call print method here
+                invoicenew.UniversalSerialNr = shipment.ShipmentDetailsModel.UniversalSerialNr;
+                invoicenew.Grossweight = shipment.BLDetailsModel.TotalGweight;
+                invoicenew.GrossweightUnit = shipment.BLDetailsModel.GrossWeightUnit;
+                invoicenew.BillingParty = shipment.ShipmentDetailsModel.ChargeParty;
+                invoicenew.Remarks = shipment.ShipmentDetailsModel.Remark;
+                invoicenew.JobRefNo = shipment.ShipmentDetailsModel.JobRef;
+
+                ModelState.Clear();
             }
             else
             {
-                //ExportInvoicePDF(invoicedetails.JobRefNo);
+                TempData["Message"] = "Please check the fields, some of the fields are not in correct format";
+                ModelState.Clear();
             }
-            //TempData["UniversalSerialNr"] = invoicedetails.UniversalSerialNr;
-            //TempData["InvoiceNo"] = invoicedetails.InvoiceNo;
 
-            return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = invoicedetails.JobRefNo });
+            invoicenew.InvoiceNo = DataContext.GetInvoiceFromUSN(invoicenew.UniversalSerialNr).InvoiceNo;
+            if(String.IsNullOrEmpty(invoicenew.InvoiceNo))
+            {
+                InvoiceDetails(invoicenew, "Save");
+                ExportInvoicePDF(invoicenew.JobRefNo);
+                
+            }
+            else
+            {
+                ExportInvoicePDF(invoicenew.JobRefNo);
+            }
         }
 
         [HttpPost]
@@ -62,11 +71,11 @@ namespace DryAgentSystem.Controllers
                 }
 
                 ModelState.Clear();
-                //return RedirectToAction("InvoiceDetails", "InvoiceDetails", new { InvoiceNo = invoice.InvoiceNo });
+                
             }
             else
             {
-                //return View(invoice);
+                TempData["Message"] = "Invoice was not saved. Please check and try again";
             }
 
         }
@@ -366,7 +375,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(": "+shipment.ShipmentDetailsModel.Quantity+" x "+shipment.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
+            para1 = new Paragraph(": "+shipment.ShipmentDetailsModel.QuantityLifting+" x "+shipment.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.BorderWidthRight = 0.5f;
@@ -539,7 +548,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(invoiceDetails[i].AmountUSD, FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(invoiceDetails[i].AmountUSD.ToString(), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -606,7 +615,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(invoice.AmountinUSDSUM, FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para = new Paragraph(invoice.AmountinUSDSUM.ToString(), FontFactory.GetFont("Arial", 8,Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;

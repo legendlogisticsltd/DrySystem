@@ -144,7 +144,6 @@
         viewrecords: true,
         multiselect: false,
         altRows: true,
-        altclass: 'ui-priority-secondary',
         loadtext: 'Loading Data please wait ...',
         //caption: 'User Details',
         emptyrecords: 'No records to display',

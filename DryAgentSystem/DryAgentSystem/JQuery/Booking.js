@@ -60,8 +60,7 @@
         rownumbers: true,
         viewrecords: true,
         multiselect: false,
-        altRows: true,
-        altclass: 'bookingRow',
+        altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
         //jsonReader: {
