@@ -108,7 +108,7 @@ namespace DryAgentSystem.Controllers
                     shipmentnew.BLDetailsModel.CargoDescription = booking.CargoType;
                     shipmentnew.ShipmentDetailsModel.UniversalSerialNr = booking.UniversalSerialNr;
                     shipmentnew.ShipmentDetailsModel.IDQuoteRef = booking.QuoteRefID;
-                    shipmentnew.ShipmentDetailsModel.Quantity = booking.Quantity;
+                    shipmentnew.ShipmentDetailsModel.Quantity = booking.Quantity - DataContext.GetQuantityLiftedFromQuoteRef(booking.QuoteRefID);
                     shipmentnew.ShipmentDetailsModel.LDepotTerminal = booking.CollectionYard;
                     shipmentnew.ShipmentDetailsModel.Shipper = booking.Shipper;
                     shipmentnew.ShipmentDetailsModel.EquipmentType = booking.EquipmentType;

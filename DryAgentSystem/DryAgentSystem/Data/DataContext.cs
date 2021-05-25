@@ -351,17 +351,18 @@ namespace DryAgentSystem.Data
                 {
                     var parameters = new DynamicParameters();
                     parameters.Add("Name", username, DbType.String, ParameterDirection.Input);
-                    string query = "Select AGB.CompanyName from AgentAddressBook AGB INNER JOIN UserAccountManagement UM ON " +
+                    string query = "Select AGB.CompanyName, AGB.Address from AgentAddressBook AGB INNER JOIN UserAccountManagement UM ON " +
                         "UM.IDCompany = AGB.IDCompany Where UM.Name = ? Order By CompanyName";
 
-                    var allcompanies = conn.Query<string>(query, parameters);
+                    var allcompanies = conn.Query<CompanyInfo>(query, parameters);
                     if (allcompanies != null)
                     {
                         foreach (var com in allcompanies)
                         {
                             companyname.Add(new SelectListItem
                             {
-                                Text = com
+                                Text = com.CompanyName,
+                                Value = com.Address
                             });
                         }
                     }
@@ -1404,6 +1405,7 @@ namespace DryAgentSystem.Data
                         quoteRef.PODFreeDays = item.PODFreeDays;
                         quoteRef.POLFreeDays = item.POLFreeDays;
                         quoteRef.Quantity = item.Quantity;
+                        quoteRef.QuantityLifted = GetQuantityLiftedFromQuoteRef(QuoteRefID);
                         quoteRef.RateID = item.RateID;
                         UpdateRateRequest ratedetail = GetRateRequestFromRateID(quoteRef.RateID);
                         {
@@ -1581,7 +1583,33 @@ namespace DryAgentSystem.Data
             }
             return rateType;
         }
-        
+
+        public static int GetQuantityLiftedFromQuoteRef(string IDQuoteRef)
+        {
+            int QuantityLifted;
+            try
+            {
+
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("IDQuoteRef", IDQuoteRef, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select COUNT(ContainerNo) AS QuantityLifted FROM AllocateEquipment WHERE IDQuoteRef = ?";
+
+                    QuantityLifted = conn.QueryFirst<int>(query, parameters);
+
+                }
+            }
+
+            catch (Exception)
+            {
+                throw;
+            }
+            return QuantityLifted;
+        }
+
+
         public static string GetJobRefFromUSN(string UniversalSerialNr)
         {
             string JobRef = string.Empty;
@@ -1710,7 +1738,7 @@ namespace DryAgentSystem.Data
                         shipmentRef.ShipmentDetailsModel.Remark = item.Remark;
                         shipmentRef.ShipmentDetailsModel.EquipmentType = item.EquipmentType;
                         shipmentRef.ShipmentDetailsModel.ContainerList = GetContainerList(shipmentRef.ShipmentDetailsModel.LoadPort).Select(x => new SelectListItem { Text = x.ContainerNo, Value = x.ContainerNo });
-                        if(String.IsNullOrEmpty(DataContext.GetInvoiceFromUSN(shipmentRef.ShipmentDetailsModel.UniversalSerialNr).InvoiceNo))
+                        if(String.IsNullOrEmpty(GetInvoiceFromUSN(shipmentRef.ShipmentDetailsModel.UniversalSerialNr).InvoiceNo))
                         {
                             shipmentRef.ShipmentDetailsModel.InvoiceSave = false;
                         }
@@ -1853,10 +1881,10 @@ namespace DryAgentSystem.Data
 
                     parameters.Add("InvoiceNo", invoice.InvoiceNo, DbType.String, ParameterDirection.Input);
                     //parameters.Add("InvoiceDate", invoice.InvoiceDate, DbType.Date, ParameterDirection.Input);
-                    parameters.Add("InvoiceMonth", invoice.InvoiceMonth, DbType.Int16, ParameterDirection.Input);
+                    parameters.Add("InvoiceMonth", DateTime.Today.Month, DbType.Int16, ParameterDirection.Input);
                     //parameters.Add("DueDate", invoice.DueDate, DbType.Date, ParameterDirection.Input);
                     parameters.Add("BillingParty", invoice.BillingParty, DbType.String, ParameterDirection.Input);
-                    parameters.Add("BillingPartyAddress", invoice.BillingPartyAddress, DbType.String, ParameterDirection.Input);
+                    //parameters.Add("BillingPartyAddress", invoice.BillingPartyAddress, DbType.String, ParameterDirection.Input);
                     parameters.Add("Grossweight", invoice.Grossweight, DbType.String, ParameterDirection.Input);
                     parameters.Add("GrossweightUnit", invoice.GrossweightUnit, DbType.String, ParameterDirection.Input);
                     parameters.Add("Remarks", invoice.Remarks, DbType.String, ParameterDirection.Input);
@@ -1868,8 +1896,8 @@ namespace DryAgentSystem.Data
 
 
 
-                    string odbcQuery = "Insert Into SalesInvoiceDRY(InvoiceNo, InvoiceMonth, BillingParty, BillingPartyAddress, Grossweight, " +
-                        "GrossweightUnit, Remarks, UniversalSerialNr, CreatedBy, InvoiceType, JobRefNo, CreditTerms) Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    string odbcQuery = "Insert Into SalesInvoiceDRY(InvoiceNo, InvoiceMonth, BillingParty, Grossweight, " +
+                        "GrossweightUnit, Remarks, UniversalSerialNr, CreatedBy, InvoiceType, JobRefNo, CreditTerms) Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     int rowsAffected = conn.Execute(odbcQuery, parameters);
                     if (rowsAffected > 0)
@@ -2247,7 +2275,7 @@ namespace DryAgentSystem.Data
                         parameters.Add("InvoiceNo", invoice.InvoiceNo, DbType.String, ParameterDirection.Input);
                         parameters.Add("ContainerNo", ContainerNo, DbType.String, ParameterDirection.Input);
                         parameters.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
-                        parameters.Add("IDInvoiceNr", invoice.ID.ToString(), DbType.String, ParameterDirection.Input);
+                        parameters.Add("IDInvoiceNr", invoice.ID, DbType.String, ParameterDirection.Input);
 
                         salesQuery = "Insert Into SalesInvoiceLineItemDRY (Description, UnitRate, Currency, Exrate, Quantity, PaymentTerm, UniversalSerialNr, CompanyName, InvoiceNo, ContainerNo, CreatedBy, IDInvoiceNr) " +
                         "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

@@ -53,6 +53,7 @@ $(function () {
     $("#RateID").attr('readonly', 'readonly');
     $("#Rate").attr('readonly', 'readonly');
     $("#Quantity").attr('readonly', 'readonly');
+    $("#QuantityLifted").attr('readonly', 'readonly');
     $("#RateCountered").attr('readonly', 'readonly');
     $("#EquipmentType").attr('readonly', 'readonly');
     $("#LoadPort").attr('readonly', 'readonly');
@@ -77,8 +78,7 @@ $(function () {
     $("#GrossWtUnit").attr('readonly', 'readonly');
 
 
-
-    if (status == "APPROVED" || status == "approved") {
+    if ((quantity - quantitylifted) > 0) {
         $("#Save").show();
         //$("#Save").prop("disabled", true); //Disabling for now will make it live for April 15 release.
     }

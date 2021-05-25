@@ -115,6 +115,10 @@ namespace DryAgentSystem.Models
         [Display(Name = "Quantity")]
         //[Range(1, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
         public int Quantity { get; set; }
+        
+        [Display(Name = "Quantity Lifted")]
+        //[Range(1, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        public int QuantityLifted { get; set; }
 
         [Display(Name = "Equipment Type")]
         public string EquipmentType { get; set; }

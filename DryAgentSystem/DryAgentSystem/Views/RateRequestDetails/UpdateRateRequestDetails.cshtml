@@ -116,8 +116,8 @@
                         @Html.LabelFor(model => model.GrossWt, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-1" style="margin-left: -70px;">
-                        @Html.EditorFor(model => model.GrossWt, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-2 ForGrossWeightBox">
+                        @Html.EditorFor(model => model.GrossWt, new { htmlAttributes = new { @class = "form-control", style = "width: 89%;" } })
                         @Html.ValidationMessageFor(model => model.GrossWt, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1 forleftaligngrossunit">

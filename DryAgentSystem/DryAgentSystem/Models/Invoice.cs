@@ -91,7 +91,7 @@ namespace DryAgentSystem.Models
         public string HBLHAWB { get; set; }
 
         [Display(Name = "ID")]
-        public int ID { get; set; }
+        public string ID { get; set; }
 
         [Display(Name = "IDCompany")]
         public string IDCompany { get; set; }

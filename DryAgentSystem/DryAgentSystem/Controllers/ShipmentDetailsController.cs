@@ -190,15 +190,26 @@ namespace DryAgentSystem.Controllers
             }
         }
 
-        //public void SaveShippingInstruction(string ShipperNameSI, string ShipperAddressSI, string ConsigneeNameSI, string ConsigneeAddressSI, string UniversalSerialNr)
-        //{
-        //    BLDetails bLDetails = new BLDetails();
-        //    bLDetails.ShipperNameSI = ShipperNameSI;
-        //    bLDetails.ShipperAddressSI = ShipperAddressSI;
-        //    bLDetails.ConsigneeNameSI = ConsigneeNameSI;
-        //    bLDetails.ConsigneeAddressSI = ConsigneeAddressSI;
-            
-        //}
+        public JsonResult selectAdd(string name)
+        {
+            List<SelectListItem> companies = DataContext.GetCompany();
+            return Json(companies.Where(x => x.Text == name), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ShippingInstruction(string ShipperNameSI, string ShipperAddressSI, string ConsigneeNameSI, string ConsigneeAddressSI, string UniversalSerialNr)
+        {
+            BLDetails bLDetails = new BLDetails();
+            bLDetails.ShipperNameSI = ShipperNameSI;
+            bLDetails.ShipperAddressSI = ShipperAddressSI;
+            bLDetails.ConsigneeNameSI = ConsigneeNameSI;
+            bLDetails.ConsigneeAddressSI = ConsigneeAddressSI;
+            bLDetails.UniversalSerialNr = UniversalSerialNr;
+            ErrorLog errorLog = DataContext.SaveShippingInstruction(bLDetails);
+            //PrintBL("ShippingInstruction", "");
+
+            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+
+        }
 
 
         public void PrintBL(string PrintName, String jobref)
@@ -1769,13 +1780,13 @@ namespace DryAgentSystem.Controllers
                 smtp.EnableSsl = true;
                 smtp.Send(mail);
 
-                //return Json(new { success = true, msg = "Successful operation" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = true, msg = "Mail Request sent successfully" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                //return Json(new { success = false, msg = "UnSuccessful operation" }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, msg = "Mail Request not sent. Please try again." }, JsonRequestBehavior.AllowGet);
             }
-            return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = jobref });
+            //return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = jobref });
         }
     }
 }

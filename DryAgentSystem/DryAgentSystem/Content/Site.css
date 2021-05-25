@@ -809,8 +809,12 @@ height: 200px;
     color: #362b36;
 }
 
+.ForGrossWeightBox {
+    margin-left: -70px;
+}
+
 .forleftaligngrossunit {
-    margin-left: -30px;
+    margin-left: -50px;
 }
 
 .forUpdateText {
@@ -943,4 +947,32 @@ height: 200px;
 
 .RequiredAstrik {
     color: red;
+}
+
+#shippernamesiDropDownList {
+    z-index: 10002 !important;
+}
+
+.ForShippingInstructionButton {
+    text-align: center;
+    margin: auto;
+    width: 250px;
+}
+
+.ForDropdownTheme {
+    width: 100%;
+    background-color: #D7EBF9;
+    color: #0099CF;
+    font-weight: bold;
+    border-width: 0.5px;
+    border-radius: 7px;
+}
+
+.ForDropdownTheme:hover {
+    background-color: #0099CC;
+}
+
+option{
+    background-color: white;
+    color: black;
 }

@@ -25,7 +25,7 @@ namespace DryAgentSystem.Controllers
                 invoicenew.UniversalSerialNr = shipment.ShipmentDetailsModel.UniversalSerialNr;
                 invoicenew.Grossweight = shipment.BLDetailsModel.TotalGweight;
                 invoicenew.GrossweightUnit = shipment.BLDetailsModel.GrossWeightUnit;
-                invoicenew.BillingParty = shipment.ShipmentDetailsModel.ChargeParty;
+                invoicenew.BillingParty = shipment.ShipmentDetailsModel.Shipper;
                 invoicenew.Remarks = shipment.ShipmentDetailsModel.Remark;
                 invoicenew.JobRefNo = shipment.ShipmentDetailsModel.JobRef;
 

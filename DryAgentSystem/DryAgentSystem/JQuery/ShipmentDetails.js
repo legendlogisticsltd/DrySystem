@@ -379,10 +379,10 @@
     var $s = $("#grossweightDropDownList").selectmenu();
     var $s = $("#netweightDropDownList").selectmenu();
     var $s = $("#munitDropDownList").selectmenu();
-    var $s = $("#shippernamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#consigneenamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#shipperDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#consigneenameblDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#shippernamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#consigneenamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#shipperDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#consigneenameblDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
 
     $("#grossweightDropDownList").selectmenu({
         width: 170
@@ -394,7 +394,29 @@
         width: 170
     });
 
-    //$('#ContainerList').change(ContainerCount);
+    $('#shipperDropDownList').change(function () {
+        var selected_val = $('#shipperDropDownList').find(":selected").attr('value');
+        var address = $('#ShipmentDetailsModel_ShipperAddress');
+        get_add(selected_val, address);
+    });
+
+    $('#consigneenamesiDropDownList').change(function () {
+        var selected_val = $('#consigneenamesiDropDownList').find(":selected").attr('value');
+        var address = $('#BLDetailsModel_ConsigneeAddressSI');
+        get_add(selected_val, address);
+    });
+
+    $('#shippernamesiDropDownList').change(function () {
+        var selected_val = $('#shippernamesiDropDownList').find(":selected").attr('value');
+        var address = $('#BLDetailsModel_ShipperAddressSI');
+        get_add(selected_val, address);
+    });
+
+    $('#consigneenameblDropDownList').change(function () {
+        var selected_val = $('#consigneenameblDropDownList').find(":selected").attr('value');
+        var address = $('#BLDetailsModel_ConsigneeAddressBL');
+        get_add(selected_val, address);
+    });
 
     $("ContainerList").prop('class', 'selectpicker show-tick form-control');
     $("ContainerList").attr('data-live-search', true);
@@ -453,7 +475,7 @@ function RePrintMethod() {
     debugger;
     $.ajax({
         type: "POST",
-        url: '@Url.Action("MailSend", "ShipmentDetails")',
+        url: 'MailSend',
         data: {
             jobref: jobref,
         },
@@ -461,6 +483,50 @@ function RePrintMethod() {
         success: function (result) {
 
             alert(result.msg); //You can also not pop up a prompt box.You could code anything what you want               
+        }
+    });
+}
+
+function get_add(selected_val, address) {
+    
+
+    $.ajax({
+        type: "GET",
+        url: 'selectAdd',
+        contentType: "application/json; charset=utf-8",
+        data: { name: selected_val },
+        dataType: "json",
+        success: function (data) {
+            if (data.length > 0) {
+                address.val(data[0].Value);
+            }
+            else {
+                address.val('');
+            }
+        }
+    });
+}
+
+function shipping() {
+    debugger;
+    var ShipperNameSI = $('#shippernamesiDropDownList').find(":selected").attr('value');
+    var ShipperAddressSI = $('#BLDetailsModel_ShipperAddressSI').val();
+    var ConsigneeNameSI = $('#shippernamesiDropDownList').find(":selected").attr('value');
+    var ConsigneeAddressSI = $('#BLDetailsModel_ConsigneeAddressSI').val();
+    var UniversalSerialNr = usn;
+    $.ajax({
+        type: "POST",
+        url: 'ShippingInstruction',
+        data: {
+            ShipperNameSI: ShipperNameSI,
+            ShipperAddressSI: ShipperAddressSI,
+            ConsigneeNameSI: ConsigneeNameSI,
+            ConsigneeAddressSI: ConsigneeAddressSI,
+            UniversalSerialNr: UniversalSerialNr
+        },
+        dataType: "json",
+        success: function (result) {
+             //You can also not pop up a prompt box.You could code anything what you want               
         }
     });
 

@@ -199,6 +199,7 @@
     <Compile Include="Models\AgencyLocalChargesModel.cs" />
     <Compile Include="Models\AllocateEquipment.cs" />
     <Compile Include="Models\BLDetails.cs" />
+    <Compile Include="Models\CompanyInfo.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetails.cs" />
