@@ -2,8 +2,7 @@
 
     //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-   // window.onload = detectPopupBlocker;
-
+   
     $("#blfinalisedDatePicker").datepicker({
 
         dateFormat: "mm-dd-yy",
@@ -167,13 +166,13 @@
 
     $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: false, search: false, refresh: true });
 
-    $tankGrid = $('#tankGrid').jqGrid({
+    $containerGrid = $('#containerGrid').jqGrid({
         mtype: 'Get',
-        url: 'GetTankDetails', //'/QuotationDetails/GetQuoteChargesList'
-        editurl: 'ProcessTankData',
+        url: 'GetContainerDetails', //'/QuotationDetails/GetQuoteChargesList'
+        editurl: 'ProcessContainerData',
         onAfterSaveCell: reload,
         datatype: 'json',
-        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Net Weight', 'Measurement','UniversalSerialNr'],
+        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Unit', 'Net Weight', 'Unit', 'Measurement', 'Unit', 'UniversalSerialNr'],
         colModel: [
             {
                 key: true,
@@ -198,17 +197,59 @@
             {
                 key: false,
                 name: 'GrossWeight',
-                editable: true
+                editable: true,
+                formatter: 'number',
+                formatoptions: {
+                    decimalPlaces: 2
+                },
+            },
+            {
+                key: false,
+                name: 'GrossWeightUnit',
+                editable: true,
+                edittype: 'select',
+                formatter: 'select',
+                editoptions: {
+                    value: 'KGS:KGS;MT:MT;CBM:CBM;LTR:LTR;GRM:GRM'
+                }
             },
             {
                 key: false,
                 name: 'NettWeight',
-                editable: true
+                editable: true,
+                formatter: 'number',
+                formatoptions: {
+                    decimalPlaces: 2
+                },
+            },
+            {
+                key: false,
+                name: 'NetWeightUnit',
+                editable: true,
+                edittype: 'select',
+                formatter: 'select',
+                editoptions: {
+                    value: 'KGS:KGS;MT:MT;CBM:CBM;LTR:LTR;GRM:GRM'
+                }
             },
             {
                 key: false,
                 name: 'Measurement',
-                editable: true
+                editable: true,
+                formatter: 'number',
+                formatoptions: {
+                    decimalPlaces: 2
+                },
+            },
+            {
+                key: false,
+                name: 'MeasurementUnit',
+                editable: true,
+                edittype: 'select',
+                formatter: 'select',
+                editoptions: {
+                    value: 'CBM:CBM;M3:M3'
+                }
             },
             {
                 key: false,
@@ -220,7 +261,7 @@
         responsive: true,
         gridview: true,
         autoencode: true,
-        pager: '#tankPager',
+        pager: '#containerPager',
         rowNum: 10,
         rowList: [10, 20, 30, 40],
         height: 'auto',
@@ -236,9 +277,9 @@
 
 
 
-    $('#tankGrid').navGrid('#tankPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: false });
+    $('#containerGrid').navGrid('#containerPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: false });
 
-    $('#tankGrid').jqGrid('inlineNav', '#tankPager',
+    $('#containerGrid').jqGrid('inlineNav', '#containerPager',
         {
             edit: true,
             editicon: "ui-icon-pencil",
@@ -258,7 +299,7 @@
 
 
     function reload(rowid, result) {
-        $("#tankGrid").trigger("reloadGrid");
+        $("#containerGrid").trigger("reloadGrid");
     }
 
     $('.selectContainerList').multiselect({
@@ -362,8 +403,8 @@
     })
 
 
-    
-    if (jobref != "") {
+
+    if (housebl != "") {
         $("#Save").hide();
         $("#Update").show();
     }
@@ -375,24 +416,7 @@
 
     //ContainerCount();
 
-    var $s = $("#packageDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#grossweightDropDownList").selectmenu();
-    var $s = $("#netweightDropDownList").selectmenu();
-    var $s = $("#munitDropDownList").selectmenu();
-    //var $s = $("#shippernamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
-    //var $s = $("#consigneenamesiDropDownList").selectmenu();//.selectmenu("menuWidget").addClass("overflow");
-    //var $s = $("#shipperDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    //var $s = $("#consigneenameblDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    $("#grossweightDropDownList").selectmenu({
-        width: 170
-    });
-    $("#netweightDropDownList").selectmenu({
-        width: 170
-    });
-    $("#munitDropDownList").selectmenu({
-        width: 170
-    });
+    
 
     $('#shipperDropDownList').change(function () {
         var selected_val = $('#shipperDropDownList').find(":selected").attr('value');
@@ -415,6 +439,18 @@
     $('#consigneenameblDropDownList').change(function () {
         var selected_val = $('#consigneenameblDropDownList').find(":selected").attr('value');
         var address = $('#BLDetailsModel_ConsigneeAddressBL');
+        get_add(selected_val, address);
+    });
+
+    $('#notifypartynameDropDownList').change(function () {
+        var selected_val = $('#notifypartynameDropDownList').find(":selected").attr('value');
+        var address = $('#BLDetailsModel_NotifyPartyAddress');
+        get_add(selected_val, address);
+    });
+
+    $('#dischagentnameblDropDownList').change(function () {
+        var selected_val = $('#dischagentnameblDropDownList').find(":selected").attr('value');
+        var address = $('#ShipmentDetailsModel_DischAgentAddress');
         get_add(selected_val, address);
     });
 
@@ -455,29 +491,13 @@ function ReloadPage() {
     }, 1000);
 }
 
-function detectPopupBlocker() {
-    var windowUrl = 'about:blank';
-    var windowId = 'TestPopup_' + new Date().getTime();
-    var windowFeatures = 'left=0,top=0,width=400px,height=200px';
-    var windowRef = window.open(windowUrl, windowId, windowFeatures);
-
-    if (!windowRef) {
-        alert('A popup blocker was detected. Please turn it off to use this application.');
-    }
-    else {
-        // No popup blocker was detected...
-        windowRef.close();
-        document.getElementById('pageContent').style.display = 'block';
-    }
-}
-
 function RePrintMethod() {
     debugger;
     $.ajax({
         type: "POST",
         url: 'MailSend',
         data: {
-            jobref: jobref,
+            housebl: housebl,
         },
         dataType: 'json',
         success: function (result) {
@@ -511,7 +531,7 @@ function shipping() {
     debugger;
     var ShipperNameSI = $('#shippernamesiDropDownList').find(":selected").attr('value');
     var ShipperAddressSI = $('#BLDetailsModel_ShipperAddressSI').val();
-    var ConsigneeNameSI = $('#shippernamesiDropDownList').find(":selected").attr('value');
+    var ConsigneeNameSI = $('#consigneenamesiDropDownList').find(":selected").attr('value');
     var ConsigneeAddressSI = $('#BLDetailsModel_ConsigneeAddressSI').val();
     var UniversalSerialNr = usn;
     $.ajax({
@@ -529,5 +549,45 @@ function shipping() {
              //You can also not pop up a prompt box.You could code anything what you want               
         }
     });
-
 }
+
+function allocate() {
+    debugger;
+    //var SelectedContainerList = $("#ContainerList :selected").
+    var SelectedContainerListArray="";
+    $("#ContainerList :selected").each(function (i,selected) {
+        SelectedContainerListArray += $(selected).text() + ",";
+        selected.remove();
+    });
+    
+    var Quantity = $('#ShipmentDetailsModel_Quantity').val();
+    var LoadPort = $('#ShipmentDetailsModel_LoadPort').val();
+    var DischPort = $('#ShipmentDetailsModel_DischPort').val();
+    var LDepotTerminal = $('#ShipmentDetailsModel_LDepotTerminal').val();
+    var UniversalSerialNr = usn;
+    $.ajax({
+        type: "GET",
+        url: 'AllocateContainers',
+        data: {
+            SelectedContainerListArray: SelectedContainerListArray,
+            Quantity: Quantity,
+            LoadPort: LoadPort,
+            DischPort: DischPort,
+            LDepotTerminal: LDepotTerminal,
+            UniversalSerialNr: UniversalSerialNr
+        },
+        dataType: "json",
+        success: function (data) {
+            debugger;
+            $("#ContainerList").multiselect('rebuild');
+            //if (data.length > 0) {
+            //    $("#ContainerList").appendTo(data[0].Value);
+            //}
+            //else {
+            //    $("#ContainerList").appendTo('');
+            //}
+            $('#tankGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
+        }
+    });
+}
+

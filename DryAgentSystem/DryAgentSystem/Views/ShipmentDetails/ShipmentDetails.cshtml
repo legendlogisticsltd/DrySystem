@@ -17,13 +17,19 @@
 
 <script src="~/JQuery/ShipmentDetails.js"></script>
 <script type="text/javascript">
-    var jobref = "@Html.Raw(@Model.ShipmentDetailsModel.JobRef)";
+    var housebl = "@Html.Raw(@Model.ShipmentDetailsModel.HBLHAWB)";
     var bltypes = "@Html.Raw(@Model.BLDetailsModel.BLTypes)";
     var blstatus = "@Html.Raw(@Model.BLDetailsModel.BLStatus)";
     var blseawaystatus = "@Html.Raw(@Model.BLDetailsModel.BLSeawayStatus)";
     var invoicesave = "@Html.Raw(@Model.ShipmentDetailsModel.InvoiceSave)";
     var usn = "@Html.Raw(@Model.ShipmentDetailsModel.UniversalSerialNr)";
 </script>
+
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
 
 @using (Html.BeginForm("ShipmentDetails", "ShipmentDetails", FormMethod.Post))
 {
@@ -35,7 +41,7 @@
                     <input type="submit" name="submit" id="Update" value="Update" class="btn btn-success" />
                 </div>
                 <div class="col-md-2" style="margin-left: -1px;">
-                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice">Print Invoice</a>
+                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice" onclick="ReloadPage()">Print Invoice</a>
                 </div>
 
                 <div class="col-md-3">
@@ -219,7 +225,7 @@
                     </div>
                     <div class="col-md-3">
                         @Html.DropDownListFor(model => model.BLDetailsModel.PkgType, new SelectList(ViewBag.pktypeList, "Text", "Text"),
-                            "Select Package Type", new { @class = "ui-selectmenu-menu", @id = "packageDropDownList" })
+                            "Select Package Type", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "packageDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.PkgType, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -269,7 +275,8 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
-                        @Html.EditorFor(model => model.BLDetailsModel.NotifyPartyName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownListFor(model => model.BLDetailsModel.NotifyPartyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "notifypartynameDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.NotifyPartyName, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2"></div>
@@ -278,7 +285,8 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
-                        @Html.EditorFor(model => model.BLDetailsModel.DischAgentNameBL, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownListFor(model => model.BLDetailsModel.DischAgentNameBL, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischagentnameblDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.DischAgentNameBL, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -395,7 +403,8 @@
                         @*<span>  Containers Selected : <span id="CountingContainers"></span></span>*@
                     </div>
                     <div class="col-md-2">
-                        <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />
+                       @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
+                        <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()"/>
                     </div>
                 </div>
             </fieldset>
@@ -430,29 +439,29 @@
                 </div>
                 <br />
                 <br />
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-2" style="margin-left: 470px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select GW. Unit", new { @class = "ui-selectmenu-menu", @id = "grossweightDropDownList" })
+                            "Select GW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "grossweightDropDownList", style="width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.GrossWeightUnit, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2" style="margin-left: 20px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.NetWtUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select NW. Unit", new { @class = "ui-selectmenu-menu", @id = "netweightDropDownList" })
+                            "Select NW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "netweightDropDownList", style = "width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.NetWtUnit, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2" style="margin-left: 25px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.MeasurementUnit, new SelectList(ViewBag.munitlist, "Text", "Text"),
-                            "Select M. Unit", new { @class = "ui-selectmenu-menu", @id = "munitDropDownList" })
+                            "Select M. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "munitDropDownList", style = "width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.MeasurementUnit, "", new { @class = "text-danger" })
                     </div>
-                </div>
+                </div>*@
                 <br />
                 <div class="row">
                     <div class="col-md-12">
-                        <table id="tankGrid" class="overflow:auto;">
+                        <table id="containerGrid" class="overflow:auto;">
                         </table>
-                        <div id="tankPager">
+                        <div id="containerPager">
                         </div>
                     </div>
                 </div>

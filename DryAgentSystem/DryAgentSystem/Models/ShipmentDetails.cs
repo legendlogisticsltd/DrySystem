@@ -330,6 +330,7 @@ namespace DryAgentSystem.Models
         public IEnumerable<SelectListItem> ContainerList { get; set; }
 
         public List<string> SelectedContainerList { get; set; }
+        public string SelectedContainerListArray { get; set; }
 
         public ShipmentDetails()
         {

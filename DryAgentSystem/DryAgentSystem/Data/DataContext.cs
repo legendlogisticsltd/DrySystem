@@ -285,7 +285,8 @@ namespace DryAgentSystem.Data
 
 
 
-                    string query = "Select DepotName from DepotDetails WHERE Port = ? AND IDDepot = ? Order By DepotName";
+                    //string query = "Select DepotName from DepotDetails WHERE Port = ? AND IDDepot = ? Order By DepotName";
+                    string query = "Select CompanyName from AgentAddressBook WHERE PortOfBusiness = ? AND IDCompany = ? Order By CompanyName";
                     var allports = conn.Query<string>(query, parameters);
 
 
@@ -324,7 +325,8 @@ namespace DryAgentSystem.Data
 
 
 
-                    string query = "Select Address,Email,PhoneNo from DepotDetails WHERE Port = ? AND IDDepot = ? AND DepotName = ?";
+                    //string query = "Select Address,Email,PhoneNo from DepotDetails WHERE Port = ? AND IDDepot = ? AND DepotName = ?";
+                    string query = "Select CustomAddress AS Address,Email,PhoneNo from AgentAddressBook WHERE PortOfBusiness = ? AND IDCompany = ? AND CompanyName = ?";
                     var DepoDetails = conn.Query<Booking>(query, parameters);
                     foreach (var item in DepoDetails)
                     {
@@ -1623,7 +1625,7 @@ namespace DryAgentSystem.Data
 
                     string query = "Select JobRef from BookingConfirmation where UniversalSerialNr = ?";
 
-                    JobRef = conn.QueryFirst<String>(query, parameters);
+                    JobRef = conn.QueryFirstOrDefault<String>(query, parameters);
 
                 }
             }
@@ -1674,6 +1676,41 @@ namespace DryAgentSystem.Data
                     parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
                     string query = "Select JobRef from ShipmentDetailDRY where UniversalSerialNr = ?";
+
+                    var ShipmentData = conn.Query<ShipmentDetails>(query, parameters);
+
+                    if (ShipmentData.Count() == 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+
+                }
+            }
+
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        
+        public static bool CheckShipmentfromBL(string UniversalSerialNr)
+        {
+
+
+            try
+            {
+
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string query = "Select JobRef from BLDetail where UniversalSerialNr = ?";
 
                     var ShipmentData = conn.Query<ShipmentDetails>(query, parameters);
 
@@ -1749,7 +1786,7 @@ namespace DryAgentSystem.Data
                     }
 
                     var parameterbl = new DynamicParameters();
-                    parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRef", JobRef, DbType.String, ParameterDirection.Input);
 
                     string querybl = "Select * from BLDetail where JobRef = ?";
 
@@ -1830,12 +1867,13 @@ namespace DryAgentSystem.Data
                     var parameters = new DynamicParameters();
                     parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string query = "Select UniversalSerialNr, InvoiceNo, AmountinUSDSUM, InvoiceDate, LoadPort, DischargePort, ETD, ETA , InvoiceMonth, CreditTerms, DueDate, BillingParty, BillingPartyAddress, Grossweight, GrossweightUnit, ContainerNo, Remarks, JobRefNo from SalesInvoiceDry where UniversalSerialNr = ?";
+                    string query = "Select UniversalSerialNr, InvoiceNo, InvoiceType, AmountinUSDSUM, InvoiceDate, LoadPort, DischargePort, ETD, ETA , InvoiceMonth, CreditTerms, DueDate, BillingParty, BillingPartyAddress, Grossweight, GrossweightUnit, ContainerNo, Remarks, JobRefNo from SalesInvoiceDry where UniversalSerialNr = ? AND InvoiceType = 'EXPORT'";
 
                     var InvoiceData = conn.Query<Invoice>(query, parameters);
                     foreach (var item in InvoiceData)
                     {
                         invoiceRef.InvoiceNo = item.InvoiceNo;
+                        invoiceRef.InvoiceType = item.InvoiceType;
                         invoiceRef.InvoiceDate = item.InvoiceDate;
                         invoiceRef.InvoiceMonth = item.InvoiceMonth;
                         invoiceRef.DueDate = item.DueDate;
@@ -2017,15 +2055,25 @@ namespace DryAgentSystem.Data
                     parameterbl.Add("NetWtUnit", shipmentRef.BLDetailsModel.NetWtUnit, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("MeasurementUnit", shipmentRef.BLDetailsModel.MeasurementUnit, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
-                    parameterbl.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("JobRefFull", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
 
-                    string odbcQuerybl = "Insert Into BLDetail (ShipperNameBL, ConsigneeNameBL, ShipperAddressBL, ConsigneeAddressBL, NotifyPartyName, DischAgentNameBL, NotifyPartyAddress, DischAgentAddress, " +
+                    string odbcQuerybl = "";
+                    if (CheckShipmentfromBL(shipmentRef.ShipmentDetailsModel.UniversalSerialNr))
+                    {
+                        odbcQuerybl = "Update BLDetail  SET ShipperNameBL = ?, ConsigneeNameBL = ?, ShipperAddressBL = ?, ConsigneeAddressBL = ?, NotifyPartyName = ?, DischAgentNameBL = ?, NotifyPartyAddress = ?, DischAgentAddress = ?, " +
+                        "LoadPort = ?, PlaceofReceipt = ?, DischPort = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
+                        "NoofOriginalBLissued = ?, NoOfPkgs = ?, PkgType = ?, GrossWeightUnit = ?, NetWtUnit = ?, MeasurementUnit = ?, UniversalSerialNr = ?, JobRefFull = ?, ModifiedBy = ? WHERE JobRef = ? ";
+                    }
+                    else
+                    {
+                        odbcQuerybl = "Insert Into BLDetail (ShipperNameBL, ConsigneeNameBL, ShipperAddressBL, ConsigneeAddressBL, NotifyPartyName, DischAgentNameBL, NotifyPartyAddress, DischAgentAddress, " +
                         "LoadPort, PlaceofReceipt, DischPort, PlaceofDelivery, MarksandNo, CargoDescription, LadenOnBoard, HBLFreightPayment, BLFinalisedDate, DateofIssue, MBLFreightPayment, " +
-                        "NoofOriginalBLissued, NoOfPkgs, PkgType, GrossWeightUnit, NetWtUnit, MeasurementUnit, UniversalSerialNr, JobRef, JobRefFull, CreatedBy) " +
+                        "NoofOriginalBLissued, NoOfPkgs, PkgType, GrossWeightUnit, NetWtUnit, MeasurementUnit, UniversalSerialNr, JobRefFull, CreatedBy, JobRef) " +
                         "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
+                    }
+                    
                     int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
                     SendShipmentCharges(shipmentRef.ShipmentDetailsModel.UniversalSerialNr);
                     if (rowsAffectedbl > 0)
@@ -2344,9 +2392,9 @@ namespace DryAgentSystem.Data
             }
             return vessels;
         }
-        public static List<AllocateEquipment> GetTanksDetails(string UniversalSerialNr)
+        public static List<AllocateEquipment> GetAllocateEquipmentDetails(string UniversalSerialNr)
         {
-            List<AllocateEquipment> tanks = new List<AllocateEquipment>();
+            List<AllocateEquipment> allocateEquipment = new List<AllocateEquipment>();
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
@@ -2354,20 +2402,23 @@ namespace DryAgentSystem.Data
                     var parameters = new DynamicParameters();
                     parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string query = "Select ID, ContainerNo, SealNo, GrossWeight, NettWeight, Measurement, UniversalSerialNr" +
+                    string query = "Select ID, ContainerNo, SealNo, GrossWeight, GrossWeightUnit, NettWeight, NetWeightUnit, Measurement, MeasurementUnit, UniversalSerialNr" +
                         " From AllocateEquipment where UniversalSerialNr = ?";
 
-                    var tankData = conn.Query<AllocateEquipment>(query, parameters);
-                    foreach (var item in tankData)
+                    var allocateEquipmentData = conn.Query<AllocateEquipment>(query, parameters);
+                    foreach (var item in allocateEquipmentData)
                     {
-                        tanks.Add(new AllocateEquipment
+                        allocateEquipment.Add(new AllocateEquipment
                         {
                             ID = item.ID,
                             ContainerNo = item.ContainerNo,
                             SealNo = item.SealNo,
                             GrossWeight = item.GrossWeight,
+                            GrossWeightUnit = item.GrossWeightUnit,
                             NettWeight = item.NettWeight,
+                            NetWeightUnit = item.NetWeightUnit,
                             Measurement = item.Measurement,
+                            MeasurementUnit = item.MeasurementUnit,
                             UniversalSerialNr = item.UniversalSerialNr
                         });
                     }
@@ -2378,7 +2429,7 @@ namespace DryAgentSystem.Data
 
                 throw ex;
             }
-            return tanks;
+            return allocateEquipment;
         }
 
         public static List<string> GetContainerNo(string UniversalSerialNr)
@@ -2513,7 +2564,7 @@ namespace DryAgentSystem.Data
             }
             return errorLog;
         }
-        public static ErrorLog UpdateTank(AllocateEquipment tank)
+        public static ErrorLog UpdateAllocateEquipment(AllocateEquipment allocateEquipment)
         {
             string username = HttpContext.Current.User.Identity.Name;
             try
@@ -2521,19 +2572,19 @@ namespace DryAgentSystem.Data
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
-                    //parameters.Add("ContainerNo", tank.ContainerNo, DbType.String, ParameterDirection.Input);
-                    //parameters.Add("DateATA", vessel.DateATA, DbType.Date, ParameterDirection.Input); //Change field name to DischargePort
-                    //parameters.Add("DateSOB", vessel.DateSOB, DbType.Date, ParameterDirection.Input);
-                    parameters.Add("SealNo", tank.SealNo, DbType.String, ParameterDirection.Input);
-                    parameters.Add("GrossWeight", tank.GrossWeight, DbType.Int32, ParameterDirection.Input);
-                    parameters.Add("NettWeight", tank.NettWeight, DbType.Int32, ParameterDirection.Input);
-                    parameters.Add("Measurement", tank.Measurement, DbType.Int32, ParameterDirection.Input);
-                    parameters.Add("UniversalSerialNr", tank.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    parameters.Add("SealNo", allocateEquipment.SealNo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("GrossWeight", allocateEquipment.GrossWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("GrossWeightUnit", allocateEquipment.GrossWeightUnit, DbType.String, ParameterDirection.Input);
+                    parameters.Add("NettWeight", allocateEquipment.NettWeight, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("NetWeightUnit", allocateEquipment.NetWeightUnit, DbType.String, ParameterDirection.Input);
+                    parameters.Add("Measurement", allocateEquipment.Measurement, DbType.Int32, ParameterDirection.Input);
+                    parameters.Add("MeasurementUnit", allocateEquipment.MeasurementUnit, DbType.String, ParameterDirection.Input);
+                    parameters.Add("UniversalSerialNr", allocateEquipment.UniversalSerialNr, DbType.String, ParameterDirection.Input);
                     parameters.Add("ModifyUser", username, DbType.String, ParameterDirection.Input);
-                    parameters.Add("ID", tank.ID, DbType.String, ParameterDirection.Input);
+                    parameters.Add("ID", allocateEquipment.ID, DbType.String, ParameterDirection.Input);
 
-                    string odbcQuery = "Update AllocateEquipment Set SealNo = ?, GrossWeight = ?, " +
-                           "NettWeight = ?, Measurement = ?, UniversalSerialNr = ?, ModifyUser = ? " +
+                    string odbcQuery = "Update AllocateEquipment Set SealNo = ?, GrossWeight = ?,  GrossWeightUnit = ?, " +
+                           "NettWeight = ?, NetWeightUnit = ?, Measurement = ?, MeasurementUnit = ?, UniversalSerialNr = ?, ModifyUser = ? " +
                            "Where ID = ?";
 
                     int rowsAffected = conn.Execute(odbcQuery, parameters);
@@ -2555,7 +2606,7 @@ namespace DryAgentSystem.Data
             return errorLog;
         }
 
-        public static ErrorLog DeleteTank(string ID, string UniversalSerialNr)
+        public static ErrorLog DeleteAllocateEquipment(string ID, string UniversalSerialNr)
         {
             string username = HttpContext.Current.User.Identity.Name;
             try
@@ -2941,7 +2992,7 @@ namespace DryAgentSystem.Data
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
-                    if (CheckShipmentfromUSN(bLDetails.UniversalSerialNr))
+                    if (CheckShipmentfromBL(bLDetails.UniversalSerialNr))
                     {
                         var parameters = new DynamicParameters();
                         parameters.Add("ShipperNameSI", bLDetails.ShipperNameSI, DbType.String, ParameterDirection.Input);
@@ -3099,16 +3150,16 @@ namespace DryAgentSystem.Data
             }
             return errorLog;
         }
-        public static ErrorLog DeleteVessel(string universalSerialNr, string vesselID)
+        public static ErrorLog DeleteVessel(string vesselID)
         {
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
-                    parameters.Add("UniversalSerialNr", universalSerialNr, DbType.String, ParameterDirection.Input);
+                    //parameters.Add("UniversalSerialNr", universalSerialNr, DbType.String, ParameterDirection.Input);
                     parameters.Add("ID", vesselID, DbType.String, ParameterDirection.Input);
-                    string query = "DELETE FROM VesselScheduleDry Where UniversalSerialNr = ? and ID = ?";
+                    string query = "DELETE FROM VesselScheduleDry Where ID = ?";
                     int rowsAffected = conn.Execute(query, parameters);
                     if (rowsAffected > 0)
                     {
@@ -3128,6 +3179,7 @@ namespace DryAgentSystem.Data
             }
             return errorLog;
         }
+
         public static List<Inventory> GetContainerList(string loadPort)
         {
             List<Inventory> inventories = new List<Inventory>();
@@ -3138,7 +3190,7 @@ namespace DryAgentSystem.Data
                     var parameters = new DynamicParameters();
                     parameters.Add("ActiveLPort", loadPort, DbType.String, ParameterDirection.Input);
 
-                    string query = "Select ContainerNo, UniversalSerialNr From Inventory where ActiveLPort = ? and StatusTrack IN ('NEW','AVAILABLE','POST AVAILABLE')";
+                    string query = "Select ContainerNo, UniversalSerialNr From Inventory where ActiveLPort = ? and StatusTrack IN ('new','available','post available')";
 
                     var inventoryList = conn.Query<Inventory>(query, parameters);
                     foreach (var item in inventoryList)
@@ -3789,13 +3841,19 @@ namespace DryAgentSystem.Data
             return agentCostLi;
         }
 
-        private static List<string> ConvertToList(string agentCostLi)
+        public static List<string> ConvertToList(string agentCostLi)
         {
+            
             List<string> selectedChargeList = new List<string>();
             if (!string.IsNullOrEmpty(agentCostLi))
             {
                 selectedChargeList = agentCostLi.Split(',').ToList();
+                
+                selectedChargeList.RemoveAll(s => string.IsNullOrEmpty(s));
+                
             }
+
+            
 
             return selectedChargeList;
         }

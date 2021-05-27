@@ -15,6 +15,11 @@
 @*@Styles.Render("~/Content/bootstrapcss")*@
 
 <script src="~/JQuery/BookingDetails.js"></script>
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
 
 
 @*<script type="text/javascript">
@@ -25,10 +30,10 @@
     <div id="tabs">
         <ul>
             <li>
-                <a href="#booking">Booking</a>
+                <a href="#booking" id="bookingtab">Booking</a>
             </li>
             <li>
-                <a href="#vessel">Vessel</a>
+                <a href="#vessel" id="vesseltab">Vessel</a>
             </li>
         </ul>
         <div id="booking">

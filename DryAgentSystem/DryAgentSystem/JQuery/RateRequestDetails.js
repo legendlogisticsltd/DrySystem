@@ -56,23 +56,7 @@
     });
     $("#endDatePicker").datepicker().show();
 
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#TransshipmentPortText").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#loadplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#shipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#equipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#agencyDropDownList").selectmenu();
+    
 
     $("#Status").val("DRAFT");
     $("#Status").attr('readonly', 'readonly');
@@ -129,9 +113,6 @@
         $('#TransshipmentPortLabel').css('display', 'block');
         $("#TransshipmentPortText").selectmenu("widget").show();
     }
-
-    
-    
 
     $("#RateTypeReefer").click(function () {
         $('#TemperatureLabel').css('display', 'block');
@@ -225,10 +206,6 @@
     else {
         $("#RateTypeDry").prop("checked", true);
     }
-
-    $("#companyDropDownList").selectmenu({
-        width: 300
-    });
 
 });
 

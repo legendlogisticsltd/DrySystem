@@ -173,9 +173,4 @@
         }
     }
 
-    var $s = $("#statusDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
 });

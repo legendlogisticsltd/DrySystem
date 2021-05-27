@@ -2,6 +2,7 @@
     padding-bottom: 0px;
 }
 
+
 .obiz {
     font-size: 15px;
 }
@@ -975,4 +976,8 @@ height: 200px;
 option{
     background-color: white;
     color: black;
+}
+
+label {
+    margin-top: 6px;
 }

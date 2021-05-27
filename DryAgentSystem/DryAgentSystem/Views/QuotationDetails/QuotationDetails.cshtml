@@ -20,6 +20,12 @@
     var quantitylifted = "@Html.Raw(Model.QuantityLifted)";
 </script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 @using (Html.BeginForm("QuotationDetails", "QuotationDetails", FormMethod.Post))
 {
     @Html.AntiForgeryToken()

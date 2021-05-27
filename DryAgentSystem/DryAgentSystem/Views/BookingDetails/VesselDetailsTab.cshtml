@@ -8,6 +8,12 @@
 @*@Styles.Render("~/Content/cssjqryUi")*@
 <script src="~/JQuery/VesselTab.js"></script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 <h2>Vessel Details</h2>
 
 
@@ -34,15 +40,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-2">
-                    <input type="submit" name="submit" id="CreateVessel" value="Create" class="btn btn-success forButtonWidth" />
+                    <input type="button" name="submit" id="CreateVessel" value="Create" class="btn btn-success forButtonWidth"/>
                 </div>
                 <div class="col-md-2">
-                    <input type="submit" name="submit" id="UpdateVessel" value="Update" class="btn btn-info forButtonWidth" />
+                    <input type="button" name="submit" id="UpdateVessel" value="Update" class="btn btn-info forButtonWidth"/>
                 </div>
-                <div class="col-md-2">
-                    <input type="submit" name="submit" id="DeleteVessel" value="Delete" class="btn btn-danger forButtonWidth" />
-                </div>
-
             </div>
             <br />
             <br />
@@ -91,7 +93,7 @@
                 </div>
                 <div class="col-md-4 forleftalign">
                     @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                    "Select Port", new { @class = "btn btn-primary dropdown-toggle", @id = "loadportDropDownList" }) @*@class = "ui-selectmenu-menu",*@
+                    "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadportDropDownList" }) 
                     @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
                 </div>
 
@@ -102,7 +104,7 @@
             </div>
                 <div class="col-md-4 forleftalign">
                     @Html.DropDownListFor(model => model.DischPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-               "Select Port", new { @class = "btn btn-primary dropdown-toggle", @id = "dischportDropDownList" }) @*@class = "ui-selectmenu-menu",*@
+               "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischportDropDownList" })
             @Html.ValidationMessageFor(model => model.DischPort, "", new { @class = "text-danger" })
         </div>
         </div>

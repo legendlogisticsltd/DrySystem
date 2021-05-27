@@ -22,6 +22,12 @@
     var principal = "@Html.Raw(@Model.PrincipalRemark)";
 </script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 @using (Html.BeginForm("UpdateRateRequestDetails", "RateRequestDetails", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -133,7 +139,7 @@
                     </div>
                     <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                        "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList", style = "width: 300px" })
                         @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -145,7 +151,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.AgencyType, new SelectList(ViewBag.AgencyList, "Value", "Text"),
-                       "Select Agency Type", new { @class = "ui-selectmenu-menu", @id = "agencyDropDownList" })
+                       "Select Agency Type", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "agencyDropDownList" })
                         @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
@@ -166,7 +172,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.EquipmentType, new SelectList(ViewBag.equipmentlist, "Text", "Text"),
-                        "Select Equipment", new { @class = "ui-selectmenu-menu", @id = "equipmentDropDownList" })
+                        "Select Equipment", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "equipmentDropDownList" })
                         @Html.ValidationMessageFor(model => model.EquipmentType, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
@@ -176,7 +182,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.ShipmentTerm, new SelectList(ViewBag.shipmentlist, "Text", "Text"),
-                             "Select Shipment Term", new { @class = "ui-selectmenu-menu", @id = "shipmentDropDownList" })
+                             "Select Shipment Term", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shipmentDropDownList" })
                         @Html.ValidationMessageFor(model => model.ShipmentTerm, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -188,7 +194,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                       "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadportDropDownList" })
+                       "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadportDropDownList" })
                         @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
                     </div>
 
@@ -199,7 +205,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.DischargePort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                       "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischportDropDownList" })
+                       "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischportDropDownList" })
                         @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -211,7 +217,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.PlaceOfReceipt, new SelectList(ViewBag.PortList, "Port", "Port"),
-                       "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischplantDropDownList" })
+                       "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischplantDropDownList" })
                         @Html.ValidationMessageFor(model => model.PlaceOfReceipt, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
@@ -221,7 +227,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.PlaceOfDelivery, new SelectList(ViewBag.PortList, "Port", "Port"),
-                       "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadplantDropDownList" })
+                       "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadplantDropDownList" })
                         @Html.ValidationMessageFor(model => model.PlaceOfDelivery, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -244,7 +250,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.TransshipmentPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                       "Select Port", new { @class = "ui-selectmenu-menu", @id = "TransshipmentPortText" })
+                       "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "TransshipmentPortText" })
                         @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger" })
                     </div>
                 </div>

@@ -38,14 +38,11 @@ namespace DryAgentSystem.Controllers
             {
                 shiprefdetails.ShipmentDetailsModel.ClosingDate = DateTime.Today;
             }
-            //if(TempData["invoicesave"] != null)
-            //{
-            //    shiprefdetails.ShipmentDetailsModel.InvoiceSave = (bool)TempData["invoicesave"];
-            //}
-            //else
-            //{
-            //    shiprefdetails.ShipmentDetailsModel.InvoiceSave = false;
-            //}
+            
+            if(shiprefdetails.ShipmentDetailsModel.JobRef == null)
+            {
+                shiprefdetails.ShipmentDetailsModel.JobRef = DataContext.GetJobRefFromUSN(shiprefdetails.ShipmentDetailsModel.UniversalSerialNr);
+            }
 
             return View(shiprefdetails);
         }
@@ -98,42 +95,6 @@ namespace DryAgentSystem.Controllers
                     TempData["Message"] = "Please check your fields, some of the fields are not in correct format";
                 }
                 return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = shipment.ShipmentDetailsModel.JobRef});
-            }
-            if (submit == "Allocate Containers")
-            {
-                var tankData = DataContext.GetTanksDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
-                int totalRecords = tankData.Count() + shipment.ShipmentDetailsModel.SelectedContainerList.Count;
-
-                if (totalRecords<=shipment.ShipmentDetailsModel.Quantity)
-                {
-                    ErrorLog errorLog = DataContext.CreateTank(shipment.ShipmentDetailsModel);
-                    if (!errorLog.IsError)
-                    {
-                        TempData["message"] = "Containers are Allocated successfully";
-                    }
-                    else
-                    {
-                        TempData["message"] = errorLog.ErrorMessage;
-                    }
-                }
-                else
-                {
-                    TempData["Message"] = "No. of Allocated containers " + totalRecords + " cannot be more than quantity " + shipment.ShipmentDetailsModel.Quantity + ".\n Please reduce the no. of containers and try again";
-                }
-                
-                if (shipment.ShipmentDetailsModel.ContainerList == null)
-                {
-                    shipment.ShipmentDetailsModel.ContainerList = DataContext.GetContainerList(shipment.ShipmentDetailsModel.LoadPort).Select(x => new SelectListItem { Text = x.ContainerNo, Value = x.ContainerNo });
-                }
-                TempData["shipmentobj"] = shipment;
-                return ShipmentDetails(shipment.ShipmentDetailsModel.JobRef);
-            }
-            if(submit == "Print Shipping Instruction")
-            {
-                shipment.BLDetailsModel.UniversalSerialNr = shipment.ShipmentDetailsModel.UniversalSerialNr;
-                ErrorLog errorLog = DataContext.SaveShippingInstruction(shipment.BLDetailsModel);
-                PrintBL("ShippingInstruction", errorLog.ErrorMessage);
-                return RedirectToAction("ShipmentDetails", "ShipmentDetails", new { JobRef = shipment.ShipmentDetailsModel.JobRef });
             }
             
             else
@@ -196,14 +157,8 @@ namespace DryAgentSystem.Controllers
             return Json(companies.Where(x => x.Text == name), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult ShippingInstruction(string ShipperNameSI, string ShipperAddressSI, string ConsigneeNameSI, string ConsigneeAddressSI, string UniversalSerialNr)
+        public JsonResult ShippingInstruction(BLDetails bLDetails)
         {
-            BLDetails bLDetails = new BLDetails();
-            bLDetails.ShipperNameSI = ShipperNameSI;
-            bLDetails.ShipperAddressSI = ShipperAddressSI;
-            bLDetails.ConsigneeNameSI = ConsigneeNameSI;
-            bLDetails.ConsigneeAddressSI = ConsigneeAddressSI;
-            bLDetails.UniversalSerialNr = UniversalSerialNr;
             ErrorLog errorLog = DataContext.SaveShippingInstruction(bLDetails);
             //PrintBL("ShippingInstruction", "");
 
@@ -211,12 +166,43 @@ namespace DryAgentSystem.Controllers
 
         }
 
+        public JsonResult AllocateContainers(ShipmentDetails shipment)
+        {
+            var containerData = DataContext.GetAllocateEquipmentDetails(shipment.UniversalSerialNr);
+            shipment.SelectedContainerList = DataContext.ConvertToList(shipment.SelectedContainerListArray);
+            int totalRecords = containerData.Count() + shipment.SelectedContainerList.Count;
+            string message = "";
+            if (totalRecords <= shipment.Quantity)
+            {
+                ErrorLog errorLog = DataContext.CreateTank(shipment);
+                if (!errorLog.IsError)
+                {
+                    message = "Containers are Allocated successfully";
+                }
+                else
+                {
+                    message = errorLog.ErrorMessage;
+                }
+            }
+            else
+            {
+                message = "No. of Allocated containers " + totalRecords + " cannot be more than quantity " + shipment.Quantity + ".\n Please reduce the no. of containers and try again";
+            }
+
+            if (shipment.ContainerList == null)
+            {
+                shipment.ContainerList = DataContext.GetContainerList(shipment.LoadPort).Select(x => new SelectListItem { Text = x.ContainerNo, Value = x.ContainerNo });
+            }
+            //TempData["shipmentobj"] = shipment;
+            return Json(shipment.ContainerList, JsonRequestBehavior.AllowGet);
+        }
+
 
         public void PrintBL(string PrintName, String jobref)
         {
             DataContext.ChangeBLType(PrintName, jobref);
             ShipmentBL shipment = DataContext.GetShipmentFromJobRef(jobref);
-            List<AllocateEquipment> allocateEquipment = DataContext.GetTanksDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
+            List<AllocateEquipment> allocateEquipment = DataContext.GetAllocateEquipmentDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
 
 
             Document pdfDoc = new Document(PageSize.A4, 40, 40, 20, 20);
@@ -1275,15 +1261,15 @@ namespace DryAgentSystem.Controllers
             Response.End();
         }
 
-        public JsonResult GetTankDetails(string sidx, string sort, int page, int rows)
+        public JsonResult GetContainerDetails(string sidx, string sort, int page, int rows)
         {
             string universalSerialNr = string.Empty;
-            if (TempData["UniversalSerialNr"] != null)
+            if (Session["UniversalSerialNr"] != null)
             {
-                universalSerialNr = TempData["UniversalSerialNr"].ToString();
+                universalSerialNr = Session["UniversalSerialNr"].ToString();
 
-                var tankData = DataContext.GetTanksDetails(universalSerialNr);
-                int totalRecords = tankData.Count();
+                var containerData = DataContext.GetAllocateEquipmentDetails(universalSerialNr);
+                int totalRecords = containerData.Count();
                 var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
 
                 var jsonData = new
@@ -1291,19 +1277,22 @@ namespace DryAgentSystem.Controllers
                     total = totalPages,
                     page,
                     records = totalRecords,
-                    rows = (from tankGrid in tankData
+                    rows = (from containerGrid in containerData
                             select new
                             {
-                                tankGrid.ID,
+                                containerGrid.ID,
                                 cell = new string[]
                                 {
-                                    tankGrid.ID,
-                                    tankGrid.ContainerNo,
-                                    tankGrid.SealNo,
-                                    tankGrid.GrossWeight,
-                                    tankGrid.NettWeight,
-                                    tankGrid.Measurement,
-                                    tankGrid.UniversalSerialNr
+                                    containerGrid.ID,
+                                    containerGrid.ContainerNo,
+                                    containerGrid.SealNo,
+                                    containerGrid.GrossWeight,
+                                    containerGrid.GrossWeightUnit,
+                                    containerGrid.NettWeight,
+                                    containerGrid.NetWeightUnit,
+                                    containerGrid.Measurement,
+                                    containerGrid.MeasurementUnit,
+                                    containerGrid.UniversalSerialNr
                                 }
                             }).ToArray()
                 };
@@ -1317,17 +1306,22 @@ namespace DryAgentSystem.Controllers
         }
 
         [HttpPost]
-        public void ProcessTankData(FormCollection postData)
+        public void ProcessContainerData(FormCollection postData)
         {
             //Creating new product object based on postData
-            AllocateEquipment tankallocate = new AllocateEquipment();
-            tankallocate.ContainerNo = postData["ContainerNo"];
-            tankallocate.SealNo = postData["SealNo"];
-            tankallocate.GrossWeight = postData["GrossWeight"];
-            tankallocate.NettWeight = postData["NettWeight"];
-            tankallocate.Measurement = postData["Measurement"];
-            tankallocate.ID = postData["ID"];
-            tankallocate.UniversalSerialNr = Session["UniversalSerialNr"].ToString();
+            AllocateEquipment allocateEquipment = new AllocateEquipment
+            {
+                ContainerNo = postData["ContainerNo"],
+                SealNo = postData["SealNo"],
+                GrossWeight = postData["GrossWeight"],
+                GrossWeightUnit = postData["GrossWeightUnit"],
+                NettWeight = postData["NettWeight"],
+                NetWeightUnit = postData["NetWeightUnit"],
+                Measurement = postData["Measurement"],
+                MeasurementUnit = postData["MeasurementUnit"],
+                ID = postData["ID"],
+                UniversalSerialNr = Session["UniversalSerialNr"].ToString()
+            };
 
             if (postData["oper"] == "edit")
             {
@@ -1338,7 +1332,7 @@ namespace DryAgentSystem.Controllers
                     if (ModelState.IsValid)
                     {
 
-                        ErrorLog errorLog = DataContext.UpdateTank(tankallocate);
+                        ErrorLog errorLog = DataContext.UpdateAllocateEquipment(allocateEquipment);
                         if (!errorLog.IsError)
                         {
                             TempData["message"] = "Tank Allocation is created successfully";
@@ -1367,7 +1361,7 @@ namespace DryAgentSystem.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        ErrorLog errorLog = DataContext.DeleteTank(tankallocate.ID, tankallocate.UniversalSerialNr);
+                        ErrorLog errorLog = DataContext.DeleteAllocateEquipment(allocateEquipment.ID, allocateEquipment.UniversalSerialNr);
                         if (!errorLog.IsError)
                         {
                             TempData["message"] = "Tank Allocation is created successfully";
@@ -1394,7 +1388,7 @@ namespace DryAgentSystem.Controllers
         public void ManifestCargo(string jobref) {
 
             ShipmentBL shipment = DataContext.GetShipmentFromJobRef(jobref);
-            List<AllocateEquipment> allocateEquipment = DataContext.GetTanksDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
+            List<AllocateEquipment> allocateEquipment = DataContext.GetAllocateEquipmentDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
 
             Document pdfDoc = new Document(PageSize.A4, 20, 20, 20, 20);
             PdfWriter pdfWriter = PdfWriter.GetInstance(pdfDoc, Response.OutputStream);

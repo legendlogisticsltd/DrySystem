@@ -149,20 +149,20 @@ namespace DryAgentSystem.Controllers
         {
             ViewBag.PortList = DataContext.GetCountryPorts();
             string bookingid = Session["BookingID"].ToString();
-            if (submit == "Create")
-            {
-                vessel.UniversalSerialNr = Session["UniversalSerialNr"].ToString();
-                CreateVessel(vessel);
-                Session["UniversalSerialNr"] = null;
-            }
-            if (submit == "Update")
-            {
-                UpdateVessel(vessel);
-            }
-            if (submit == "Delete")
-            {
-                DeleteVessel(vessel.UniversalSerialNr, vessel.ID);
-            }
+            //if (submit == "Create")
+            //{
+            //    vessel.UniversalSerialNr = Session["UniversalSerialNr"].ToString();
+            //    CreateVessel(vessel);
+            //    Session["UniversalSerialNr"] = null;
+            //}
+            //if (submit == "Update")
+            //{
+            //    UpdateVessel(vessel);
+            //}
+            //if (submit == "Delete")
+            //{
+            //    DeleteVessel(vessel.UniversalSerialNr, vessel.ID);
+            //}
             //return View(vessel);
             return RedirectToAction("BookingDetails", "BookingDetails", new { BookingID = bookingid });
         }
@@ -170,9 +170,9 @@ namespace DryAgentSystem.Controllers
         public JsonResult GetVesselDetails(string sidx, string sort, int page, int rows)
         {
             string universalSerialNr = string.Empty;
-            if (TempData["UniversalSerialNr"] != null)
+            if (Session["UniversalSerialNr"] != null)
             {
-                universalSerialNr = TempData["UniversalSerialNr"].ToString();
+                universalSerialNr = Session["UniversalSerialNr"].ToString();
 
                 var vesselData = DataContext.GetVesselsDetails(universalSerialNr);
                 int totalRecords = vesselData.Count();
@@ -214,9 +214,9 @@ namespace DryAgentSystem.Controllers
         }
 
         
-        public string CreateVessel(Vessel vessel)
+        public JsonResult CreateVessel(Vessel vessel)
         {
-            
+            string message = "";
             try
             {
                 if (ModelState.IsValid )
@@ -224,29 +224,29 @@ namespace DryAgentSystem.Controllers
                     ErrorLog errorLog = DataContext.CreateVessel(vessel);
                     if (!errorLog.IsError)
                     {
-                        TempData["message"] = "Vessel Schedule is created successfully";
+                        message = "Vessel Schedule is created successfully";
                     }
                     else
                     {
-                        TempData["message"] = errorLog.ErrorMessage;
+                        message = errorLog.ErrorMessage;
                     }
                 }
                 else
                 {
-                    TempData["message"] = "Vessel Schedule is not created";
+                    message = "Vessel Schedule is not created";
                 }
             }
             catch (Exception ex)
             {
-                TempData["message"] = string.Format("Error occured: {0}", ex.Message);
+                message = string.Format("Error occured: {0}", ex.Message);
                 throw;
             }
-            return TempData["message"].ToString();
+            return Json(new { success = true, msg = message }, JsonRequestBehavior.AllowGet);
         }
 
-        public string UpdateVessel(Vessel vessel)
+        public JsonResult UpdateVessel(Vessel vessel)
         {
-            
+            string message = "";
             try
             {
                 if (ModelState.IsValid)
@@ -254,54 +254,60 @@ namespace DryAgentSystem.Controllers
                     ErrorLog errorLog = DataContext.UpdateVessel(vessel);
                     if (!errorLog.IsError)
                     {
-                        TempData["message"] = "Vessel Schedule successfully updated";
+                        message = "Vessel Schedule successfully updated";
                     }
                     else
                     {
-                        TempData["message"] = errorLog.ErrorMessage;
+                        message = errorLog.ErrorMessage;
                     }
-                    TempData["message"] = "Saved Vessel Data Successfully";
+                    message = "Saved Vessel Data Successfully";
                 }
                 else
                 {
-                    TempData["message"] = "Vessel Schedule not updated. Please check and try again";
+                    message = "Vessel Schedule not updated. Please check and try again";
                 }
             }
             catch (Exception ex)
             {
-                TempData["message"] = string.Format("Error occured: {0}", ex.Message);
+                message = string.Format("Error occured: {0}", ex.Message);
                 throw;
             }
-            return TempData["message"].ToString();
+            return Json(new { success = true, msg = message }, JsonRequestBehavior.AllowGet);
         }
 
-        public string DeleteVessel(string universalSerialNr, string vesselID)
+        public string DeleteVessel(FormCollection postData)
         {
-            
-            try
+            Vessel vessel = new Vessel();
+            string vesselID = postData["ID"];
+
+            if (postData["oper"] == "del")
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    ErrorLog errorLog = DataContext.DeleteVessel(universalSerialNr, vesselID);
-                    if (!errorLog.IsError)
+                    if (ModelState.IsValid)
                     {
-                        TempData["message"] = "Vessel Schedule successfully deleted";
+                        ErrorLog errorLog = DataContext.DeleteVessel(vesselID);
+                        if (!errorLog.IsError)
+                        {
+                            TempData["message"] = "Vessel Schedule successfully deleted";
+                        }
+                        else
+                        {
+                            TempData["message"] = errorLog.ErrorMessage;
+                        }
                     }
                     else
                     {
-                        TempData["message"] = errorLog.ErrorMessage;
+                        TempData["message"] = "Vessel Schedule deletion not successful";
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    TempData["message"] = "Vessel Schedule deletion not successful";
+                    TempData["message"] = string.Format("Error occured: {0}", ex.Message);
+                    throw;
                 }
             }
-            catch (Exception ex)
-            {
-                TempData["message"] = string.Format("Error occured: {0}", ex.Message);
-                throw;
-            }
+            
             return TempData["message"].ToString();
         }
 

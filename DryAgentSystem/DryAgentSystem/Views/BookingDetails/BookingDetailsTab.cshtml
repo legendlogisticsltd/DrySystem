@@ -14,6 +14,12 @@
     var hasshipment = "@Html.Raw(@Model.hasshipment)";
 </script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 @using (Html.BeginForm("BookingDetailsTab", "BookingDetails", FormMethod.Post, new { id = "BookingDetailForm" }))
 {
     @Html.AntiForgeryToken()
@@ -409,7 +415,7 @@
                     </div>
                     <div class="col-md-2 forleftalign">
                         @Html.DropDownListFor(model => model.CollectionYard, new SelectList(ViewBag.CollectionList, "Text", "Text"),
-                            "Select Collection Yard", new { @class = "ui-selectmenu-menu", @id = "collectionDropDownList" })
+                            "Select Collection Yard", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "collectionDropDownList" })
                         @Html.ValidationMessageFor(model => model.CollectionYard, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -436,7 +442,7 @@
                         </div>
                         <div class="col-md-2 forleftalign">
                             @Html.DropDownListFor(model => model.PaymentTerms, new SelectList(ViewBag.PaymentList, "Text", "Text"),
-                           "Select Payment Terms", new { @class = "ui-selectmenu-menu", @id = "paymentDropDownList" })
+                           "Select Payment Terms", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "paymentDropDownList" })
                             @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
                         </div>*@
                 </div>

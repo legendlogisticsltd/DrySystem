@@ -6,6 +6,7 @@
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
         url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
+        editurl: 'DeleteVessel',
         datatype: 'json',
         colNames: ['ID', 'Vessel Name', 'Voy No', 'Load Port', 'Discharge Port', 'ETD POL', 'ETA POD', 'Carrier', 'UniversalSerialNr', 'CarrierBookingRefNo'],
         colModel: [
@@ -148,7 +149,7 @@
     });
 
 
-    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: false, search: false, refresh: true });
+    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: true });
 
 
     $("#ETA").datepicker({
@@ -304,5 +305,49 @@
 
     }
 
+    $('#CreateVessel').click(function () {
+        var url = 'CreateVessel';
+        vesselentry(url);
+    });
 
+    $('#UpdateVessel').click(function () {
+        var url = 'UpdateVessel';
+        vesselentry(url);
+    });
 });
+
+function vesselentry(url) {
+    debugger;
+    var LoadPort = $('#loadportDropDownList').find(":selected").attr('value');
+    var CarrierBookingRefNo = $('#CarrierBookingRefNo').val();
+    var Carrier = $('#Carrier').val();
+    var VesselName = $('#VesselName').val();
+    var VoyNo = $('#VoyNo').val();
+    var DischPort = $('#dischportDropDownList').find(":selected").attr('value');
+    var ETA = $('#ETA').val();
+    var ETD = $('#ETD').val();
+    var UniversalSerialNr = $('#UniversalSerialNr').val();
+    var ID = $('#ID').val();
+    
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {
+            LoadPort: LoadPort,
+            CarrierBookingRefNo: CarrierBookingRefNo,
+            Carrier: Carrier,
+            VesselName: VesselName,
+            VoyNo: VoyNo,
+            DischPort: DischPort,
+            ETA: ETA,
+            ETD: ETD,
+            UniversalSerialNr: UniversalSerialNr,
+            ID: ID,
+        },
+        dataType: "json",
+        success: function (result) {
+            alert(result.msg);//You can also not pop up a prompt box.You could code anything what you want   
+            $('#vesselGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
+        }
+    });
+}

@@ -62,7 +62,7 @@ namespace DryAgentSystem.Controllers
                     if (!errorLog.IsError)
                     {
                         invoice.InvoiceNo = errorLog.ErrorMessage;
-                        TempData["Message"] = "Invoice successfully created Invoice No. " + invoice.InvoiceNo + ". Please click Print Invoice to view PDF";
+                        //TempData["Message"] = "Invoice successfully created Invoice No. " + invoice.InvoiceNo + ". Please click Print Invoice to view PDF";
                     }
                     else
                     {
