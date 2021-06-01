@@ -280,7 +280,9 @@
         $("#VesselName").attr('readonly', 'readonly');
         $("#VoyNo").attr('readonly', 'readonly');
         $("#ETD").prop("disabled", true);
+        $("#ETD").datepicker().next('button').hide();
         $("#ETA").prop("disabled", true);
+        $("#ETA").datepicker().next('button').hide();
         //$("#DateSOB").prop("disabled", true);
         //$("#DateATA").prop("disabled", true);
         $("#loadportDropDownList").prop("disabled", true);
@@ -297,7 +299,9 @@
         $("#VesselName").attr('readonly', 'readonly');
         $("#VoyNo").attr('readonly', 'readonly');
         $("#ETD").prop("disabled", true);
+        $("#ETD").datepicker().next('button').hide();
         $("#ETA").prop("disabled", true);
+        $("#ETA").datepicker().next('button').hide();
         //$("#DateSOB").prop("disabled", true);
         //$("#DateATA").prop("disabled", true);
         $("#loadportDropDownList").prop("disabled", true);
@@ -316,8 +320,7 @@
     });
 });
 
-function vesselentry(url) {
-    debugger;
+function vesselentry(url) {    
     var LoadPort = $('#loadportDropDownList').find(":selected").attr('value');
     var CarrierBookingRefNo = $('#CarrierBookingRefNo').val();
     var Carrier = $('#Carrier').val();

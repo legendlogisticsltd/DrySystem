@@ -144,12 +144,12 @@
         $("#CRORemarks").attr('readonly', 'readonly');
         $("#paymentDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").attr('readonly', 'readonly');
+        $("#pickupDatePicker").datepicker().next('button').hide();
+        $("#cutoffDatePicker").prop("disabled", true);
         $("#startDatePicker").prop("disabled", true);
-        $("#startDatePicker").datepicker({
-            "showButtonPanel": false
-        });
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#AddressAttn").attr('readonly', 'readonly');
         $("#AddressFax").attr('readonly', 'readonly');
         $("#AddressTel").attr('readonly', 'readonly');
@@ -189,9 +189,12 @@
         $("#SOC").attr('readonly', 'readonly');
         $("#collectionDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").attr('readonly', 'readonly');
+        $("#pickupDatePicker").datepicker().next('button').hide();
+        $("#cutoffDatePicker").prop("disabled", true);
         $("#startDatePicker").prop("disabled", true);
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
+        $("#endDatePicker").datepicker().next('button').hide();
 
 
     }

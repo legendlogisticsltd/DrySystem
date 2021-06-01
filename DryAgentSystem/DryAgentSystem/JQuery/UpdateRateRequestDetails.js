@@ -90,7 +90,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").attr('readonly', 'readonly');
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").attr('readonly', 'readonly');
+        $("#endDatePicker").datepicker().next('button').hide();
 
         $("#POLFreeDays").attr('readonly', 'readonly');
         $("#PODFreeDays").attr('readonly', 'readonly');
@@ -134,11 +136,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").prop("disabled", true);
-        $("#startDatePicker").datepicker({
-            "showButtonPanel": false
-        });
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
-
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#POLFreeDays").prop("disabled", true);
         $("#PODFreeDays").prop("disabled", true);
 
@@ -184,8 +184,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").prop("disabled", true);
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
-
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#POLFreeDays").prop("disabled", true);
         $("#PODFreeDays").prop("disabled", true);
 
@@ -252,12 +253,12 @@
 
     $('.selectExportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectImportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $("#Fetch").click(function () {      
@@ -312,21 +313,21 @@
 
 
     $('#TransshipmentPortLabel').css('visibility', 'hidden');
-    $("#TransshipmentPortText").selectmenu("widget").hide();
+    $("#TransshipmentPortText").hide();
 
     $("#TransshipmentTypeYes").click(function () {
         $('#TransshipmentPortLabel').css('visibility', 'visible');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     });
 
     $("#TransshipmentTypeNo").click(function () {
         $('#TransshipmentPortLabel').css('visibility', 'hidden');
-        $("#TransshipmentPortText").selectmenu("widget").hide();
+        $("#TransshipmentPortText").hide();
     });
 
     if ((transshipmenttype == "Yes") || (transshipmenttype == "YES")) {
         $('#TransshipmentPortLabel').css('visibility', 'visible');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     }
 
     $("#RateTypeReefer").click(function () {

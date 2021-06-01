@@ -1,0 +1,22 @@
+﻿@model DryAgentSystem.Models.BLDetails
+
+<div class="container">
+    <div class="form_group">
+        @*<div class="row">
+                <div class="col-md-12">
+                    <h2>Import Document</h2>
+                    <hr />
+                </div>
+            </div>*@
+        <div class="row">
+            <div class="col-md-1">
+                @*<input type="submit" name="submit" id="BtnCAN" value="Create CAN" class="btn btn-warning" />*@
+                <a href='@Url.Action("CreateCAN", "ImportDocument", new { JobRefId = Model.JobRef })' ; class="btn btn-outline-info CROalign" id="PrintCRO" target="_blank" style="margin-left:50px;">Create CAN</a>
+            </div>
+            <div class="col-md-1">
+                @*<input type="submit" name="submit" id="BtnCAN" value="Create CAN" class="btn btn-warning" />*@
+                <a href='@Url.Action("CreateImportInvoice", "ImportDocument", new { JobRefId = Model.JobRef })' ; class="btn btn-outline-info CROalign" id="PrintCRO" target="_blank" style="margin-left:50px;">Create Import Invoice</a>
+            </div>
+        </div>
+    </div>
+</div>

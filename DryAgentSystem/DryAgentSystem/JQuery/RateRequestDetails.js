@@ -66,7 +66,7 @@
 
     $('.selectExportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectExportList').multiselect('selectAll', false);
@@ -74,7 +74,7 @@
 
     $('.selectImportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectImportList').multiselect('selectAll', false);
@@ -95,23 +95,23 @@
     
 
     //$('#TransshipmentPortLabel').css('visibility', 'hidden');
-    $("#TransshipmentPortText").selectmenu("widget").hide();
+    $("#TransshipmentPortText").hide();
 
     $("#TransshipmentTypeYes").click(function () {
         $('#TransshipmentPortLabel').css('display', 'block');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
        
        
     });
 
     $("#TransshipmentTypeNo").click(function () {
         $('#TransshipmentPortLabel').css('display', 'none');
-        $("#TransshipmentPortText").selectmenu("widget").hide();
+        $("#TransshipmentPortText").hide();
     });
 
     if ((transshipmenttype == "Yes") || (transshipmenttype == "YES")) {
         $('#TransshipmentPortLabel').css('display', 'block');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     }
 
     $("#RateTypeReefer").click(function () {

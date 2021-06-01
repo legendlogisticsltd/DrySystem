@@ -1,0 +1,336 @@
+﻿@model DryAgentSystem.Models.AgentAddressBook
+
+@{
+    ViewBag.Title = "AgentAddressBookDetails";
+    Layout = "~/Views/Shared/DetailLayout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@*@Scripts.Render("~/bundles/jqueryui")*@
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/bootstrap")
+@Styles.Render("~/Content/cssjqryUi")
+@Styles.Render("~/Content/sitecss")
+
+
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+
+
+@*@Styles.Render("~/Content/bootstrapcss")*@
+
+@using (Html.BeginForm("AgentAddressBookDetails", "AgentAddressBookDetails", FormMethod.Post, new { id = "AddressBookForm" }))
+{
+    @Html.AntiForgeryToken()
+    <script src="~/JQuery/AgentAddressBookDetails.js"></script>
+    <style>
+        body {
+            /*background: -moz-linear-gradient(top, rgba(3,55,158,1) 0%, rgba(3,55,158,1) 13%, rgba(2,204,204,1) 100%);
+        background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(3,55,158,1)), color-stop(13%, rgba(3,55,158,1)), color-stop(100%, rgba(2,204,204,1)));
+        background: -webkit-linear-gradient(top, rgba(3,55,158,1) 0%, rgba(3,55,158,1) 13%, rgba(2,204,204,1) 100%);
+        background: -o-linear-gradient(top, rgba(3,55,158,1) 0%, rgba(3,55,158,1) 13%, rgba(2,204,204,1) 100%);
+        background: -ms-linear-gradient(top, rgba(3,55,158,1) 0%, rgba(3,55,158,1) 13%, rgba(2,204,204,1) 100%);
+        background: linear-gradient(to bottom, rgba(3,55,158,1) 0%, rgba(3,55,158,1) 13%, rgba(2,204,204,1) 100%);*/
+            font-size: 14px;
+            background: url('../Image/bg6.jpg') center center no-repeat;
+            background-size: cover;
+            /*background-attachment: fixed;*/
+        }
+        .bg-grey {
+            background: #2A2F32;
+            border: 1px solid #2a2f32;
+        }
+        fieldset {
+            padding: 10px 15px;
+            margin: 0 0 30px 0;
+            border: 1px solid #efefef;
+            border: 1px solid #ecf4ff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-control {
+            padding: .275rem .75rem;
+            font-size: 14px;
+            max-width: none;
+            height: auto !important;
+        }
+
+        #CountryDropDownList-button {
+            background: #fff;
+            color: #495057;
+            font-size: 14px;
+            font-weight: 500;
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            line-height: 1.5;
+            padding: .275rem .75rem;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .btn-w120 {
+            width: 120px;
+        }
+
+        .h100px {
+            height: 100px !important;
+        }
+
+        label {
+            margin-bottom: 0;
+        }
+        #content {
+            padding: 0px 0px 50px 0px;
+        }
+    </style>
+    <div class="addrbkform-wrap">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <fieldset class="my-1 bg-grey text-white">
+                        <div class="col-md-12 text-center">
+                            <h4> Address Book</h4>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 form-group">
+                                <label>Company Name: <span class="txt-red">*</span></label>
+                                @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", required = "required", @style = "text-transform:uppercase" } })
+                                @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+
+                            <div class="forleftalign,top , alert-danger collapse" id="CompanyNamealert">
+                                This Company name already exists
+                            </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label>Address: <span class="txt-red">*</span></label>
+                                @Html.TextAreaFor(model => model.Address, new { @class = "form-control", required = "required" })
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger forplaceholdertext" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Country: <span class="txt-red">*</span></label>
+                                @Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.PortList, "Country", "Country"),
+                                "Select Country", new { @class = "ui-selectmenu-menu", @id = "CountryDropDownList", required = "required" })
+                                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                                @*@Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.PortList, "Country", "Country"),
+                                "Select Country", new { @class = "ui-selectmenu-menu", @id = "CountryDropDownList", style = "width: 300px" })
+                                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })*@
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Zipcode: <span class="txt-red">*</span></label>
+                                @Html.EditorFor(model => model.Zipcode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.Zipcode, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Phone No: <span class="txt-red">*</span></label>
+                                @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+
+                                <div class="forleftalign,top , alert-danger collapse" id="PhoneNumberalert">
+                                    Please enter valid phone number
+                                </div>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Email: </label>
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+
+                                <div class="forleftalign,top ,,alert alert-danger collapse" id="Emailalert">
+                                    Please enter valid Email id
+                                </div>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label>Website: </label>
+                                @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Remark: </label>
+                                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control h100px" })
+                                @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-6 form-group" id="custADDText" style="display:none">
+                                <label>Custom Address: </label>
+                                @Html.TextAreaFor(model => model.CustomAddress, new { @class = "form-control h100px" })
+                                @Html.ValidationMessageFor(model => model.CustomAddress, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="col-md-12 form-group text-center">
+                                @*<button type="submit" id="Save" value="Save" class="btn btn-primary btn-sm mx-2 btn-w120">Save</button>*@
+                                <input type="submit" name="submit" id="Save" value="Save" class="btn btn-primary btn-sm mx-2 btn-w120" />
+                                <input type="button" name="CustomAdd" id="CustomAdd" value="Custom Address" class="btn btn-primary btn-sm mx-2 btn-w120" />
+
+                                @*<button type="submit" id="CustomAdd" value="Custom Address" class="btn btn-primary btn-sm mx-2 btn-w120">Custom Address</button>*@
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+    @*@using (Html.BeginForm("AgentAddressBookDetails", "AgentAddressBookDetails", FormMethod.Post, new { id = "AddressBookForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+           <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <h2> Address Book</h2>
+                        </div>
+                        <div class="col-md-2">
+
+                            <input type="submit" name="submit" id="Save" value="Save" class="btn btn-success" style="width:135px" /> style="width:150px"
+                        </div>
+                        &nbsp;&nbsp;
+                        <div class="col-md-2">
+                            <input type="button" name="CustomAdd" id="CustomAdd" value="Custom Address" class="btn btn-success" style="width:140px" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <h3 class="text-success">@TempData["Message"]</h3>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Company Name</label>
+                                </div>
+                                <div class="col-md-6">
+                                    @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", style = "width: 300px" } })
+                                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+
+                                    <div class="forleftalign,top , alert-danger collapse" id="CompanyNamealert">
+                                        This Company name is already exist
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-md-2">
+                                    <label>Address</label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.TextAreaFor(model => model.Address, new { rows = "3", cols = "50", style = "resize:none; ", required = "required" })
+                                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger forplaceholdertext" })
+
+                                </div>
+                            </div>
+                          <br/>
+                            <div class="row">
+                                <div class="col-md-2 ">
+                                    <label>Country</label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.PortList, "Country", "Country"),
+                                    "Select Country", new { @class = "ui-selectmenu-menu", @id = "CountryDropDownList", style = "width:50px" })
+                                    @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Zipcode</label>
+                                </div>
+
+                                <div class=" col-md-2 ">
+                                    @Html.EditorFor(model => model.Zipcode, new { htmlAttributes = new { @class = "form-control", style = "width: 215px" } })
+                                    @Html.ValidationMessageFor(model => model.Zipcode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Phone No.</label>
+                                    @Html.LabelFor(model => model.PhoneNo)
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control", style = "width: 215px" } })
+                                    @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
+                                    <br>
+                                    <div class="forleftalign,top , alert-danger collapse" id="PhoneNumberalert">
+                                        Please enter valid phone number
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Email</label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", style = "width: 300px" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    <br>
+                                    <div class="forleftalign,top ,,alert alert-danger collapse" id="Emailalert">
+                                        Please enter valid Email
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label>Website</label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control", style = "width: 300px" } })
+                                    @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <br />
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <img src="~/Image/bg3.jpg" height="350" width="500" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label>Remark</label>
+                        </div>
+
+                        <div class="col-md-2">
+                            @Html.TextAreaFor(model => model.Remark, new { rows = "6", cols = "50", style = "resize:none;" })
+                            @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-2"></div>
+
+                        <div class="col-md-2" id="custADD" style="display:none">
+                            <label>Custom Address</label>
+                        </div>
+
+                        <div class="col-md-1" id="custADDText" style="display:none">
+                            @Html.TextAreaFor(model => model.CustomAddress, new { rows = "6", cols = "500", style = "resize:none;", placeholder = "Add Custom Address Here" })
+                            @Html.ValidationMessageFor(model => model.CustomAddress, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    @Html.HiddenFor(model => model.Address)
+                    @Html.HiddenFor(model => model.Country)
+                    @Html.HiddenFor(model => model.Zipcode)
+                    @Html.HiddenFor(model => model.PhoneNo)
+                </div>*@
+
+

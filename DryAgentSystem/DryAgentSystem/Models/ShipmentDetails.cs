@@ -105,13 +105,13 @@ namespace DryAgentSystem.Models
         public string EquipmentType { get; set; }
 
         [Display(Name = "ETA")]
-        public string ETA { get; set; }
+        public DateTime ETA { get; set; }
 
         [Display(Name = "ETA IGM")]
         public string ETAIGM { get; set; }
 
         [Display(Name = "ETD")]
-        public string ETD { get; set; }
+        public DateTime ETD { get; set; }
 
         [Display(Name = "Feeder Service Priority FRT")]
         public int FeederServicePriorityFRT { get; set; }
@@ -326,6 +326,24 @@ namespace DryAgentSystem.Models
         public string WeekNr { get; set; }
 
         public bool InvoiceSave { get; set; }
+
+        [Display(Name = "Disch Agent Name BL")]
+        public string DischAgentNameBL { get; set; }
+
+        [Display(Name = "Load Agent")]
+        public string LoadAgent { get; set; }
+
+        [Display(Name = "Shipper Name BL")]
+        public string ShipperNameBL { get; set; }
+
+        [Display(Name = "Status")]
+        public string DischargePlanStatus { get; set; }
+
+        [Display(Name = "ATA")]
+        public DateTime ATA { get; set; }
+
+        [Display(Name = "Discharge Plan Id")]
+        public int IDNo { get; set; }
 
         public IEnumerable<SelectListItem> ContainerList { get; set; }
 

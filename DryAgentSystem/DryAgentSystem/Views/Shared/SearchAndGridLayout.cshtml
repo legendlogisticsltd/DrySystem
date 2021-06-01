@@ -61,6 +61,25 @@
                                 <li>@Html.ActionLink("HOME", "Home", "Home")</li>
                                 break;
 
+                            case "ImportDocument":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                <li>@Html.ActionLink("DISCHARGE PLAN", "DischargePlan", "DischargePlan")</li>
+                                break;
+
+                            case "DischargePlan":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                <li>@Html.ActionLink("IMPORT", "ImportDocument", "ImportDocument")</li>
+                                break;
+
+                            case "DeliveryOrder":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                break;
+
+                            case "AgentAddressBook":
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
+                                <li>@Html.ActionLink("ADD NEW", "AgentAddressBookDetails", "AgentAddressBookDetails")</li>
+                                break;
+
                             default:
                                 Layout = "~/Views/Shared/Layout.cshtml";
                                 break;

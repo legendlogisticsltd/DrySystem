@@ -50,13 +50,13 @@ namespace DryAgentSystem.Models
         public string Description { get; set; }
 
         [Display(Name = "Ex Rate")]
-        public decimal ExRate { get; set; }
+        public double ExRate { get; set; }
 
         [Display(Name = "ID")]
         public string ID { get; set; }
 
         [Display(Name = "AmountUSD")]
-        public decimal AmountUSD { get; set; }
+        public double AmountUSD { get; set; }
 
         [Display(Name = "ID Company")]
         public string IDcompany { get; set; }
@@ -131,19 +131,19 @@ namespace DryAgentSystem.Models
         public string TankNo1 { get; set; }
 
         [Display(Name = "Tax Amount")]
-        public string TaxAmount { get; set; }
+        public double TaxAmount { get; set; }
 
         [Display(Name = "Tax Percent")]
         public int TaxPercent { get; set; }
 
         [Display(Name = "Unit Rate")]
-        public int UnitRate { get; set; }
+        public double UnitRate { get; set; }
 
         [Display(Name = "Unit Rate Cost Delete")]
         public int UnitRateCostDelete { get; set; }
 
         [Display(Name = "Unit Rate USD")]
-        public string UnitRateUSD { get; set; }
+        public double UnitRateUSD { get; set; }
 
         [Display(Name = "Universal Serial Nr")]
         public string UniversalSerialNr { get; set; }

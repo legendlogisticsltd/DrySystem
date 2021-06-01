@@ -56,6 +56,17 @@
                             case "InvoiceDetails":
                                 <li>@Html.ActionLink("Invoice", "Invoice", "Invoice")</li>
                                 break;
+                            case "DischargePlanDetails":
+                                <li>@Html.ActionLink("IMPORT", "ImportDocument", "ImportDocument")</li>
+                                <li>@Html.ActionLink("DISCHARGE PLAN", "DischargePlan", "DischargePlan")</li>
+                                break;
+                            case "DeliveryOrderDetails":
+                                <li>@Html.ActionLink("DELIVERY ORDER", "DeliveryOrder", "DeliveryOrder")</li>
+                                break;
+                            case "AgentAddressBookDetails": 
+                                <li> @Html.ActionLink("ADD NEW", "AgentAddressBookDetails", "AgentAddressBookDetails") </li>
+                                <li>@Html.ActionLink("ADDRESS BOOK", "AgentAddressBook", "AgentAddressBook")</li>
+                                break;
                             default:
                                 Layout = "~/C/Shared/Layout.cshtml";
                                 break;

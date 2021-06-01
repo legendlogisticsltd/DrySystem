@@ -1,0 +1,153 @@
+﻿@model DryAgentSystem.Models.DischargePlan
+
+@{
+    ViewBag.Title = "UpdateDischargePlan";
+    Layout = "~/Views/Shared/DetailLayout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqueryval")
+@Scripts.Render("~/bundles/BootstrapMultiJs")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+@Styles.Render("~/Content/BootstrapMultiCss")
+<script src="~/JQuery/UpdateDischargePlanDetails.js"></script>
+
+<script type="text/javascript">
+    var status = "@Html.Raw(@Model.DischargePlanStatus)";
+    var invoiceStatus = "@Html.Raw(@Model.Status)";
+</script>
+
+@using (Html.BeginForm("UpdateDischargePlanDetails", "DischargePlanDetails", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Modify Discharge Plan</h2>
+        </div>
+        <div class="col-md-3"></div>
+        <div class="col-md-2">
+            @Html.LabelFor(model => model.JobRef, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.JobRef, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <div class="row" style="margin-top:7px;">
+        <div class="col-md-7">
+            <input type="submit" name="submit" id="Save" value="Save" class="btn btn-success mr-2" />
+            <input type="button" id="Confirm" value="Confirm" class="btn btn-success mr-2" onclick="location.href='@Url.Action("Confirmation", "DischargePlanDetails", new { idNo = Model.IDNo })';" />
+
+            <a href='@Url.Action("CreateCAN", "ImportDocument", new { JobRefId = Model.JobRef })' ; class="btn btn-outline-info mr-2 CROalign" id="PrintCRO" target="_blank">Print CAN</a>
+            @*<input type="button" id="PrintCRO" value="Create CAN" onclick="location.href='@Url.Action("CreateCAN", "ImportDocument", new { JobRefId = Model.JobRef })' ;" class="btn btn-outline-info mr-2 CROalign" />*@
+            <a href='@Url.Action("CreateImportInvoice", "ImportDocument", new { JobRefId = Model.JobRef })' ; class="btn btn-outline-info CROalign importInvoice" id="PrintIInvoice" target="_blank">Print Import Invoice</a>
+            @*<input type="button" id="PrintIInvoice" value="Create Import Invoice" onclick="location.href='@Url.Action("CreateImportInvoice", "ImportDocument", new { JobRefId = Model.JobRef })';" class="btn btn-outline-info CROalign" />*@
+        </div>
+         <div class="col-md-2">
+            @Html.LabelFor(model => model.DischargePlanStatus, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.DischargePlanStatus, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <hr />
+
+    <div class="form-group">
+        <h3 class="text-success">@TempData["Message"]</h3>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @*@Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                  "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadportDropDownList" })*@
+            @Html.EditorFor(model => model.LoadPort, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.DischPort, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @*@Html.DropDownListFor(model => model.DischPort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                   "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischportDropDownList" })*@
+            @Html.EditorFor(model => model.DischPort, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.DischPort, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.ETD, htmlAttributes: new { @class = "control-label" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.TextBoxFor(model => model.ETD, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETDDatePicker" })
+            @Html.ValidationMessageFor(model => model.ETD, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.ETA, htmlAttributes: new { @class = "control-label", style = "margin-top: 11px;" })
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.TextBoxFor(model => model.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
+            @Html.ValidationMessageFor(model => model.ETA, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.ATA)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.TextBoxFor(model => model.ATA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ATADatePicker" })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.Quantity)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.PlaceOfDelivery)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.PlaceOfDelivery, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.PlaceOfReceipt)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.PlaceOfReceipt, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.LoadFT)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.LoadFT, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+        <div class="col-md-3">
+            @Html.LabelFor(model => model.DischFT)
+        </div>
+        <div class="col-md-3 forleftalign">
+            @Html.EditorFor(model => model.DischFT, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+
+        @Html.HiddenFor(model => model.LoadPort)
+        @Html.HiddenFor(model => model.DischPort)
+        @Html.HiddenFor(model => model.ETA)
+        @Html.HiddenFor(model => model.ATA)
+        @Html.HiddenFor(model => model.ModifyDate)
+        @Html.HiddenFor(model => model.IDNo)
+    </div>
+    <br>
+</div>
+}

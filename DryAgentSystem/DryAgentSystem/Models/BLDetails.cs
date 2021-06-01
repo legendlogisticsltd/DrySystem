@@ -90,7 +90,7 @@ namespace DryAgentSystem.Models
         public string GrossWeightUnit { get; set; }
 
         [Display(Name = "Total Gweight")]
-        public string TotalGweight { get; set; }
+        public double TotalGweight { get; set; }
 
         [Display(Name = "HBL Freight Payment")]
         [Required(ErrorMessage = "Please provide HBL Freight Payment")]
@@ -196,10 +196,10 @@ namespace DryAgentSystem.Models
         public string TankList { get; set; }
 
         [Display(Name = "Total Container Measurement")]
-        public string TotalContainerMeasurement { get; set; }
+        public double TotalContainerMeasurement { get; set; }
 
         [Display(Name = "Total NetWt")]
-        public string TotalNetWt { get; set; }
+        public double TotalNetWt { get; set; }
 
         [Display(Name = "Universal Serial Nr")]
         public string UniversalSerialNr { get; set; }
@@ -208,6 +208,7 @@ namespace DryAgentSystem.Models
         public string Vessel { get; set; }
 
         [Display(Name = "VesselDetails")]
-        public string VesselDetails { get; set; }        
+        public string VesselDetails { get; set; }
+        public string EquipmentType { get; set; }
     }
 }

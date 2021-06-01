@@ -1,0 +1,97 @@
+﻿@model DryAgentSystem.Models.DischargePlan
+
+@{
+    ViewBag.Title = "DeliveryOrderDetails";
+    Layout = "~/Views/Shared/DetailLayout.cshtml";
+}
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+<script src="~/JQuery/DeliveryOrderDetails.js"></script>
+
+
+<div class="form-group">
+    <h3 class="text-success">@ViewBag.Message</h3>
+</div>
+
+<div class="container">
+    <div class="form_group">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Print Delivery Order</h2>
+            </div>
+            <div class="col-md-3"></div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.JobRef, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.EditorFor(model => model.JobRef, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <div class="row" style="margin-top:7px;">
+            <div class="col-md-7">
+                <a class="btn btn-outline-info mr-2 CROalign" id="PrintContainers">Print DO</a>
+            </div>
+            <div class="col-md-2">
+                @Html.LabelFor(model => model.VesselName, htmlAttributes: new { @class = "control-label" })
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.EditorFor(model => model.VesselName, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <h3 class="text-success">@TempData["message"]</h3>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.DishTo)
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.EditorFor(model => model.DishTo, new { htmlAttributes = new { @class = "form-control" } })
+                <br/>
+                <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishToalert">
+                    To is a mandatory field
+                </div>
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.DishAttn)
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.EditorFor(model => model.DishAttn, new { htmlAttributes = new { @class = "form-control" } })
+                <br />
+                <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishAttnalert">
+                    Attention is a mandatory field
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.ETA)
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.TextBoxFor(model => model.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
+            </div>
+            <div class="col-md-3">
+                @Html.LabelFor(model => model.ATA)
+            </div>
+            <div class="col-md-3 forleftalign">
+                @Html.TextBoxFor(model => model.ATA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ATADatePicker" })
+            </div>
+        </div>
+        <br />
+    </div>
+</div>
+
+
+<div style="overflow:auto;">
+    <table id="deliveryOrderGrid">
+    </table>
+    <div id="deliveryPager" style="text-align: center;">
+    </div>
+</div>
+

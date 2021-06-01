@@ -30,7 +30,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TypeScriptToolsVersion>4.0</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +42,19 @@
     <WarningLevel>4</WarningLevel>
     <FilesToIncludeForPublish>AllFilesInTheProject</FilesToIncludeForPublish>
     <LegacyPublishPropertiesPageEnabled>true</LegacyPublishPropertiesPageEnabled>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -178,8 +191,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AgentAddressBookController.cs" />
+    <Compile Include="Controllers\AgentAddressBookDetailsController.cs" />
     <Compile Include="Controllers\BookingController.cs" />
+    <Compile Include="Controllers\DeliveryOrderController.cs" />
+    <Compile Include="Controllers\DeliveryOrderDetailsController.cs" />
+    <Compile Include="Controllers\DischargePlanController.cs" />
+    <Compile Include="Controllers\DischargePlanDetailsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImportDocumentController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceDetailsController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -197,15 +217,26 @@
     </Compile>
     <Compile Include="Models\AgencyLocalCharges.cs" />
     <Compile Include="Models\AgencyLocalChargesModel.cs" />
+    <Compile Include="Models\AgentAddressBook.cs" />
     <Compile Include="Models\AllocateEquipment.cs" />
     <Compile Include="Models\BLDetails.cs" />
     <Compile Include="Models\CompanyInfo.cs" />
+    <Compile Include="Models\DeliveryDetails.cs" />
+    <Compile Include="Models\DevAllocateEquipment.cs" />
+    <Compile Include="Models\DischargePlan.cs" />
+    <Compile Include="Models\DOJsonData.cs" />
+    <Compile Include="Models\DryShipmentSellLi.cs" />
+    <Compile Include="Models\ImportInvoiceDetails.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\InvoiceDetails.cs" />
     <Compile Include="Models\MailModel.cs" />
+    <Compile Include="Models\MovementRecord.cs" />
+    <Compile Include="Models\SalesInvoiceDry.cs" />
+    <Compile Include="Models\SalesInvoiceLineItemDry.cs" />
     <Compile Include="Models\ShipmentBL.cs" />
     <Compile Include="Models\ShipmentDetails.cs" />
+    <Compile Include="Models\UpdateDischargePlan.cs" />
     <Compile Include="Models\Vessel.cs" />
     <Compile Include="Models\ErrorLog.cs" />
     <Compile Include="Models\CountryPort.cs" />
@@ -270,6 +301,7 @@
     <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\Img\BLLegendLogo.png" />
+    <Content Include="Content\Img\caret-down-square-fill.svg" />
     <Content Include="Content\Img\footer1920.png" />
     <Content Include="Content\Img\LegendLogoWhiteNew.png" />
     <Content Include="Content\Img\LoginPageBackground.png" />
@@ -334,6 +366,16 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Image\bg3.jpg" />
+    <Content Include="Image\bg4.jpg" />
+    <Content Include="Image\bg6.jpg" />
+    <Content Include="JQuery\AgentAddressBook.js" />
+    <Content Include="JQuery\AgentAddressBookDetails.js" />
+    <Content Include="JQuery\DeliveryOrder.js" />
+    <Content Include="JQuery\DeliveryOrderDetails.js" />
+    <Content Include="JQuery\DischargePlan.js" />
+    <Content Include="JQuery\DischargePlanDetails.js" />
+    <Content Include="JQuery\ImportDocument.js" />
     <Content Include="JQuery\Invoice.js" />
     <Content Include="JQuery\InvoiceDetails.js" />
     <Content Include="JQuery\Shipment.js" />
@@ -344,6 +386,8 @@
     <Content Include="JQuery\QuotationDetails.js" />
     <Content Include="JQuery\RateRequestDetails.js" />
     <Content Include="JQuery\RateRequest.js" />
+    <Content Include="JQuery\UpdateAddressBookDetails.js" />
+    <Content Include="JQuery\UpdateDischargePlanDetails.js" />
     <Content Include="JQuery\UpdateRateRequestDetails.js" />
     <Content Include="JQuery\ShipmentDetails.js" />
     <Content Include="JQuery\VesselTab.js" />
@@ -519,7 +563,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
-    <Content Include="Views\Home\Home.cshtml" />
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Shared\SearchAndGridLayout.cshtml" />
     <Content Include="Views\Shared\DetailLayout.cshtml" />
@@ -548,11 +591,23 @@
     <Folder Include="fonts\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Image\bg4.webp" />
     <None Include="packages.config" />
     <Content Include="Views\Shipment\Shipment.cshtml" />
     <Content Include="Views\ShipmentDetails\ShipmentDetails.cshtml" />
     <Content Include="Views\Invoice\Invoice.cshtml" />
     <Content Include="Views\InvoiceDetails\InvoiceDetails.cshtml" />
+    <Content Include="Views\AgentAddressBookDetails\AgentAddressBookDetails.cshtml" />
+    <Content Include="Views\AgentAddressBookDetails\UpdateAgentAddressDetails.cshtml" />
+    <Content Include="Views\AgentAddressBook\AgentAddressBook.cshtml" />
+    <Content Include="Views\DeliveryOrderDetails\DeliveryOrderDetails.cshtml" />
+    <Content Include="Views\DeliveryOrder\DeliveryOrder.cshtml" />
+    <Content Include="Views\DischargePlanDetails\DischargePlanDetails.cshtml" />
+    <Content Include="Views\DischargePlanDetails\UpdateDischargePlanDetails.cshtml" />
+    <Content Include="Views\DischargePlan\DischargePlan.cshtml" />
+    <Content Include="Views\ImportDocument\BLDetails.cshtml" />
+    <Content Include="Views\ImportDocument\ImportDocument.cshtml" />
+    <Content Include="Views\Home\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

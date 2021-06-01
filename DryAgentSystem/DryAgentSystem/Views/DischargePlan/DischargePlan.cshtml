@@ -1,0 +1,83 @@
+﻿@model DryAgentSystem.Models.SearchParameters
+
+@{
+    ViewBag.Title = "DischargePlan";
+    Layout = "~/Views/Shared/SearchAndGridLayout.cshtml";
+}
+
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+<script src="~/JQuery/DischargePlan.js"></script>
+
+
+<div class="form-group">
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <h3 class="text-success">@ViewBag.Message</h3>
+</div>
+
+@using (Html.BeginForm("DischargePlan", "DischargePlan", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="form_group">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Discharge Plan</h2>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.JobRef, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.JobRef, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-md-1">
+                    <br>
+                    <input type="submit" name="submit" id="Filter" value="Search" class="btn btn-warning" style="width:100%;margin-top:7px;" />
+                </div>
+                <div class="col-md-1">
+                    <br>
+                    <input type="submit" name="submit" id="Reset" value="Reset" class="btn btn-info" style="margin-top:7px;" />
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statuslist, "Text", "Text"),
+                                 "Select Status", new { @class = "ui-selectmenu-menu", @id = "statusDropDownList" })
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+                @*<div class="col-md-3">
+                    @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                  "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
+                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                </div>*@
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadportDropDownList" })
+                    @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.DischargePort, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.DischargePort, new SelectList(ViewBag.PortList, "Port", "Port"),
+                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischportDropDownList" })
+                    @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<div style="overflow:auto;">
+    <table id="shipmentGrid">
+    </table>
+    <div id="shipmentPager" style="text-align: center;">
+    </div>
+</div>

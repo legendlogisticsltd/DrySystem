@@ -617,7 +617,7 @@ namespace DryAgentSystem.Controllers
 
             DateTime dateTime = DateTime.Now;
             chunk = new Chunk("Prepared By", FontFactory.GetFont("Courier", 10));
-            para = new Paragraph(chunk + "    :  "+ Session["Name"] + "                     "+dateTime.ToString("dd-MM-yyyy h:mm tt"), FontFactory.GetFont("Courier", 10, Font.BOLD));
+            para = new Paragraph(chunk + "    :  "+ HttpContext.User.Identity.Name + "                     "+dateTime.ToString("dd-MM-yyyy h:mm tt"), FontFactory.GetFont("Courier", 10, Font.BOLD));
             pdfDoc.Add(para);
 
             para = new Paragraph("ALL BUSINESS TRANSACTED WITH LEGEND SHIPPING PTE LTD IS CONDUCTED TO \n SLA SINGAPORE LOGISTICS ASSOCIATION CONDITIONS.", FontFactory.GetFont("Courier", 10));
@@ -693,7 +693,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingAfter = 5f;
 
             chunk = new Chunk("To,", FontFactory.GetFont("Courier", 9, Font.BOLD));
-            para = new Paragraph(booking.CollectionYard+"\n"+booking.Address+"\nPhone No: "+booking.PhoneNo+"\nEmail id: "+booking.Email, FontFactory.GetFont("Courier", 9));
+            para = new Paragraph(booking.Address+"\nPhone No: "+booking.PhoneNo+"\nEmail id: "+booking.Email, FontFactory.GetFont("Courier", 9));   //booking.CollectionYard+"\n"+
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;

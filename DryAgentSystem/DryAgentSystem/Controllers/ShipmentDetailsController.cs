@@ -200,7 +200,10 @@ namespace DryAgentSystem.Controllers
 
         public void PrintBL(string PrintName, String jobref)
         {
-            DataContext.ChangeBLType(PrintName, jobref);
+            if (PrintName != "ShippingInstruction")
+            {
+                DataContext.ChangeBLType(PrintName, jobref);
+            }
             ShipmentBL shipment = DataContext.GetShipmentFromJobRef(jobref);
             List<AllocateEquipment> allocateEquipment = DataContext.GetAllocateEquipmentDetails(shipment.ShipmentDetailsModel.UniversalSerialNr);
 
@@ -580,7 +583,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(allocateEquipment[i].GrossWeight).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph(allocateEquipment[i].GrossWeight.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -591,7 +594,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(allocateEquipment[i].Measurement).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph(allocateEquipment[i].Measurement.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1194,7 +1197,7 @@ namespace DryAgentSystem.Controllers
                     cell.AddElement(para1);
                     table.AddCell(cell);
 
-                    para = new Paragraph(float.Parse(allocateEquipment[i + 7].GrossWeight).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                    para = new Paragraph(allocateEquipment[i + 7].GrossWeight.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                     para.Alignment = Element.ALIGN_CENTER;
                     cell = new PdfPCell();
                     cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1206,7 +1209,7 @@ namespace DryAgentSystem.Controllers
                     cell.AddElement(para);
                     table.AddCell(cell);
 
-                    para = new Paragraph(float.Parse(allocateEquipment[i + 7].Measurement).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                    para = new Paragraph(allocateEquipment[i + 7].Measurement.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                     para.Alignment = Element.ALIGN_CENTER;
                     cell = new PdfPCell();
                     cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1217,7 +1220,7 @@ namespace DryAgentSystem.Controllers
                     table.AddCell(cell);
                 }
 
-                para = new Paragraph("Total Gross Weight    :  " + float.Parse(shipment.BLDetailsModel.TotalGweight).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("Total Gross Weight    :  " + shipment.BLDetailsModel.TotalGweight.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_RIGHT;
                 cell = new PdfPCell();
                 cell.Colspan = 3;
@@ -1233,7 +1236,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph("Total Measurement    :  " + float.Parse(shipment.BLDetailsModel.TotalContainerMeasurement).ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("Total Measurement    :  " + shipment.BLDetailsModel.TotalContainerMeasurement.ToString("0.00"), FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -1286,11 +1289,11 @@ namespace DryAgentSystem.Controllers
                                     containerGrid.ID,
                                     containerGrid.ContainerNo,
                                     containerGrid.SealNo,
-                                    containerGrid.GrossWeight,
+                                    containerGrid.GrossWeight.ToString(),
                                     containerGrid.GrossWeightUnit,
-                                    containerGrid.NettWeight,
+                                    containerGrid.NettWeight.ToString(),
                                     containerGrid.NetWeightUnit,
-                                    containerGrid.Measurement,
+                                    containerGrid.Measurement.ToString(),
                                     containerGrid.MeasurementUnit,
                                     containerGrid.UniversalSerialNr
                                 }
@@ -1313,11 +1316,11 @@ namespace DryAgentSystem.Controllers
             {
                 ContainerNo = postData["ContainerNo"],
                 SealNo = postData["SealNo"],
-                GrossWeight = postData["GrossWeight"],
+                GrossWeight = Convert.ToDouble(postData["GrossWeight"]),
                 GrossWeightUnit = postData["GrossWeightUnit"],
-                NettWeight = postData["NettWeight"],
+                NettWeight = Convert.ToDouble(postData["NettWeight"]),
                 NetWeightUnit = postData["NetWeightUnit"],
-                Measurement = postData["Measurement"],
+                Measurement = Convert.ToDouble(postData["Measurement"]),
                 MeasurementUnit = postData["MeasurementUnit"],
                 ID = postData["ID"],
                 UniversalSerialNr = Session["UniversalSerialNr"].ToString()
@@ -1335,16 +1338,16 @@ namespace DryAgentSystem.Controllers
                         ErrorLog errorLog = DataContext.UpdateAllocateEquipment(allocateEquipment);
                         if (!errorLog.IsError)
                         {
-                            TempData["message"] = "Tank Allocation is created successfully";
+                            
                         }
                         else
                         {
-                            TempData["message"] = errorLog.ErrorMessage;
+                            
                         }
                     }
                     else
                     {
-                        TempData["message"] = "Tank Allocation is not created";
+                        TempData["message"] = "Container Allocation is not created";
                     }
                 }
                 catch (Exception ex)
@@ -1364,7 +1367,7 @@ namespace DryAgentSystem.Controllers
                         ErrorLog errorLog = DataContext.DeleteAllocateEquipment(allocateEquipment.ID, allocateEquipment.UniversalSerialNr);
                         if (!errorLog.IsError)
                         {
-                            TempData["message"] = "Tank Allocation is created successfully";
+                            
                         }
                         else
                         {
@@ -1373,7 +1376,7 @@ namespace DryAgentSystem.Controllers
                     }
                     else
                     {
-                        TempData["message"] = "Tank Allocation is not created";
+                        TempData["message"] = "Container Allocation is not deleted";
                     }
                 }
                 catch (Exception ex)
@@ -1573,13 +1576,13 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Name of the Master", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(":", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1599,7 +1602,7 @@ namespace DryAgentSystem.Controllers
             line = new Paragraph(new Chunk(new iTextSharp.text.pdf.draw.LineSeparator(0.0F, 100.0F, BaseColor.BLACK, Element.ALIGN_LEFT, 2)));
             pdfDoc.Add(line);
 
-            table = new PdfPTable(9);
+            table = new PdfPTable(8);
             table.WidthPercentage = 100;
             table.HorizontalAlignment = 1;
             table.SpacingAfter = 10f;
@@ -1608,12 +1611,12 @@ namespace DryAgentSystem.Controllers
             table.DefaultCell.PaddingTop = 5f;
             table.DefaultCell.PaddingBottom = 10f;
 
-            para = new Paragraph("Line No", FontFactory.GetFont("Arial", 8, Font.BOLD));
-            cell = new PdfPCell();
-            cell.PaddingTop = 5f;
-            cell.PaddingBottom = 5f;
-            cell.AddElement(para);
-            table.AddCell(para);
+            //para = new Paragraph("Line No", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            //cell = new PdfPCell();
+            //cell.PaddingTop = 5f;
+            //cell.PaddingBottom = 5f;
+            //cell.AddElement(para);
+            //table.AddCell(para);
 
             para = new Paragraph("BL No & Date", FontFactory.GetFont("Arial", 8, Font.BOLD));
             cell = new PdfPCell();
@@ -1659,12 +1662,12 @@ namespace DryAgentSystem.Controllers
             table.AddCell(para);
 
             //Data
-            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
-            cell = new PdfPCell();
-            cell.PaddingTop = 5f;
-            cell.PaddingBottom = 5f;
-            cell.AddElement(para);
-            table.AddCell(para);
+            //para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+            //cell = new PdfPCell();
+            //cell.PaddingTop = 5f;
+            //cell.PaddingBottom = 5f;
+            //cell.AddElement(para);
+            //table.AddCell(para);
 
             para = new Paragraph(jobref +
                     "\n"+shipment.BLDetailsModel.BLFinalisedDate.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 8));

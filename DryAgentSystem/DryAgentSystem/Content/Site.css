@@ -20,11 +20,11 @@
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
-input,
+/*input,
 select,
 textarea {
     max-width: 280px;
-}
+}*/
 
 #navigationbar {
     background-color: #0a152e;
@@ -422,16 +422,17 @@ textarea {
 /* header////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 .control-label {
-    font-size: 15px !important;
+    font-size: 14px !important;
 }
 
 input {
-    font-size: 15px; /*!important;*/
+    font-size: 14px; /*!important;*/
 }
 
 .form-control {
-    height: calc(1.5em + .90rem + 2px) !important;
-    font-size: 15px;
+    /*height: calc(1.5em + .90rem + 2px) !important;*/
+    font-size: 14px;
+    max-width: none;
 }
 
 /* line 1, ../../Arafath/CL/january 2020/237. Real Estate/HTML/scss/_footer.scss */
@@ -460,6 +461,77 @@ input {
     padding-top: 55px;
     padding-bottom: 55px;
 }
+
+/*24-5-2021 softlabs*/
+fieldset.fieldset {
+    padding: 15px !important;
+    margin: 0 0 30px 0;
+    background: #fff !important;
+    border: 1px solid #efefef;
+    border: 1px solid #ecf4ff !important;
+    box-shadow: 0 4px 4px 0 rgb(0 0 0 / 10%);
+    -webkit-box-shadow: 0 4px 4px 0 rgb(0 0 0 / 10%);
+}
+
+    fieldset.fieldset legend {
+        width: auto !important;
+        padding: 5px 8px;
+        margin: 0;
+        font-size: 16px !important;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: #0065f7;
+        background: #ecf4ff;
+    }
+
+.ui-selectmenu-button.ui-selectmenu-button-closed {
+    width: 100% !important;
+    height: calc(1.5em + .90rem + 2px) !important;
+    padding: 0.375rem 0.4rem;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+
+.btn-w120 {
+    width: 120px;
+}
+
+.h100px {
+    height: 100px !important;
+}
+
+.input-group-text {
+    padding: 0.275rem 0.75rem;
+}
+
+.ui-datepicker.form-control,
+.ui-selectmenu-button.ui-button {
+    width: 100% !important;
+}
+
+.ui-datepicker-trigger.ui-widget.ui-button {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    background: transparent;
+    border: 0;
+}
+
+    .ui-datepicker-trigger.ui-widget.ui-button:focus {
+        outline: none;
+    }
+
+.ui-state-active .ui-icon, .ui-button:active .ui-icon {
+    background-image: url(images/ui-icons_3d80b3_256x240.png) !important;
+}
+/*24-5-2021 softlabs*/
 
 @media (max-width: 767px) {
     /* line 12, ../../Arafath/CL/january 2020/237. Real Estate/HTML/scss/_footer.scss */
@@ -908,6 +980,8 @@ height: 200px;
 .dropdown-content {
     display: none;
     position: absolute;
+    margin-left: -30px;
+    border-radius: 5px;
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

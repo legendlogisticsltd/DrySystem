@@ -55,6 +55,7 @@ namespace DryAgentSystem.Controllers
                     bookingnew.PODFreeDays = quote.PODFreeDays;
                     bookingnew.POLFreeDays = quote.POLFreeDays;
                     bookingnew.Quantity = quote.Quantity;
+                    bookingnew.GTotalSalesCal = quote.GTotalSalesCal;
                     bookingnew.Rate = quote.Rate;
                     bookingnew.RateCountered = quote.RateCountered;
                     bookingnew.Grossweight = quote.GrossWt;

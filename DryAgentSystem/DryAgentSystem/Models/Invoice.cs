@@ -28,7 +28,7 @@ namespace DryAgentSystem.Models
         public decimal AmountinUSDSUM { get; set; }
 
         [Display(Name = "Amount USD SUM WTax")]
-        public string AmountUSDSUMWTax { get; set; }
+        public string AmountinUSDSUMWTax { get; set; }
 
         [Display(Name = "Billing Party Address")]
         public string BillingPartyAddress { get; set; }
@@ -82,7 +82,7 @@ namespace DryAgentSystem.Models
         public DateTime ETD { get; set; }
 
         [Display(Name = "Gross Weight")]
-        public string Grossweight { get; set; }
+        public double Grossweight { get; set; }
 
         [Display(Name = "Gross Weight Unit")]
         public string GrossweightUnit { get; set; }

@@ -38,8 +38,6 @@
             <div class="row">
                 <div class="col-md-4">
                     <h2>Modify Rate Request</h2>
-
-
                 </div>
                 <div class="col-md-4"></div>
                 <div class="col-md-1">
@@ -139,7 +137,7 @@
                     </div>
                     <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList", style = "width: 300px" })
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList" })
                         @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -149,7 +147,7 @@
                         @Html.LabelFor(model => model.AgencyType)
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.AgencyType, new SelectList(ViewBag.AgencyList, "Value", "Text"),
                        "Select Agency Type", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "agencyDropDownList" })
                         @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
@@ -170,7 +168,7 @@
                         @Html.LabelFor(model => model.EquipmentType, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.EquipmentType, new SelectList(ViewBag.equipmentlist, "Text", "Text"),
                         "Select Equipment", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "equipmentDropDownList" })
                         @Html.ValidationMessageFor(model => model.EquipmentType, "", new { @class = "text-danger" })
@@ -180,7 +178,7 @@
                         @Html.LabelFor(model => model.ShipmentTerm, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.ShipmentTerm, new SelectList(ViewBag.shipmentlist, "Text", "Text"),
                              "Select Shipment Term", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shipmentDropDownList" })
                         @Html.ValidationMessageFor(model => model.ShipmentTerm, "", new { @class = "text-danger" })
@@ -192,18 +190,17 @@
                         @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadportDropDownList" })
                         @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
                     </div>
-
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.DischargePort, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.DischargePort, new SelectList(ViewBag.PortList, "Port", "Port"),
                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischportDropDownList" })
                         @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
@@ -215,7 +212,7 @@
                         @Html.LabelFor(model => model.PlaceOfReceipt, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.PlaceOfReceipt, new SelectList(ViewBag.PortList, "Port", "Port"),
                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischplantDropDownList" })
                         @Html.ValidationMessageFor(model => model.PlaceOfReceipt, "", new { @class = "text-danger" })
@@ -225,7 +222,7 @@
                         @Html.LabelFor(model => model.PlaceOfDelivery, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.PlaceOfDelivery, new SelectList(ViewBag.PortList, "Port", "Port"),
                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadplantDropDownList" })
                         @Html.ValidationMessageFor(model => model.PlaceOfDelivery, "", new { @class = "text-danger" })
@@ -234,7 +231,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label", style="margin-top: 0px;" })
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-2">
@@ -257,7 +254,7 @@
                 <br>
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label", style="margin-top: 0px;" })
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-2">
@@ -298,16 +295,16 @@
                         @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-4 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.EffectiveDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "startDatePicker" })
                         @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
                     </div>
-
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ValidityDate, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-4 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.ValidityDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "endDatePicker" })
                         @Html.ValidationMessageFor(model => model.ValidityDate, "", new { @class = "text-danger" })
                     </div>
@@ -318,7 +315,7 @@
                         @Html.LabelFor(model => model.POLFreeDays, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.POLFreeDays, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.POLFreeDays, "", new { @class = "text-danger" })
                     </div>
@@ -327,7 +324,7 @@
                         @Html.LabelFor(model => model.PODFreeDays, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.PODFreeDays, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.PODFreeDays, "", new { @class = "text-danger" })
                     </div>
@@ -337,7 +334,7 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.UNNo, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.UNNo, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.UNNo, "", new { @class = "text-danger" })
                     </div>
@@ -345,7 +342,7 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.IMO, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.IMO, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.IMO, "", new { @class = "text-danger" })
                     </div>
@@ -356,16 +353,16 @@
                         @Html.LabelFor(model => model.CargoType, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "29", style = "resize:none;", placeholder = "If DG cargo, indicate DG details - UN No., class, and packing group" })
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "34", style = "resize:none;", placeholder = "If DG cargo, indicate DG details - UN No., class, and packing group" })
                         @Html.ValidationMessageFor(model => model.CargoType, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "29", style = "resize:none;", placeholder = "Add Slot Cost here in format (Slot Cost: USD fi/fo)" })
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "34", style = "resize:none;", placeholder = "Add Slot Cost here in format (Slot Cost: USD fi/fo)" })
                         @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -375,7 +372,7 @@
                         @Html.LabelFor(model => model.PrincipalRemark, htmlAttributes: new { @class = "control-label", @id = "PrincipalRemarkLabel" })                        
                     </div>
                     <div class="col-md-2 forleftalign">
-                        @Html.TextAreaFor(model => model.PrincipalRemark, new { rows = "4", cols = "29", style = "resize:none;", placeholder = "Principal's Remarks" })
+                        @Html.TextAreaFor(model => model.PrincipalRemark, new { rows = "4", cols = "34", style = "resize:none;", placeholder = "Principal's Remarks" })
                         @Html.ValidationMessageFor(model => model.PrincipalRemark, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -391,7 +388,7 @@
                         @Html.Label("Export Charges:")
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.ListBoxFor(model => model.SelectedExportLocalCharges, Model.ExportLocalCharges, new { id = "ExportChargesList", @class = "selectExportList show-tick form-control input-md" })
                     </div>
                     <div class="col-md-1"></div>
@@ -399,7 +396,7 @@
                         @Html.Label("Import Charges:")
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.ListBoxFor(model => model.SelectedImportLocalCharges, Model.ImportLocalCharges, new { id = "ImportChargesList", @class = "selectImportList show-tick form-control input-md" })
                     </div>
                 </div>

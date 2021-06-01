@@ -44,15 +44,28 @@
 
                         <div class="dropdown">
                             <button class="dropbtn">
-                                EXPORT
-                                <i class="fa fa-caret-down"></i>
+                                EXPORT  <img src="~/Content/Img/caret-down-square-fill.svg" alt="down" style="background-color:white; width: 15px; height: 15px;" />
                             </button>
                             <div class="dropdown-content">
                                 @Html.ActionLink("SHIPMENT", "Shipment", "Shipment")
-                                @Html.ActionLink("INVOICE", "Invoice", "Invoice")
+                                @*@Html.ActionLink("INVOICE", "Invoice", "Invoice")*@
                             </div>
                         </div>
 
+                        <div class="dropdown">
+                            <button class="dropbtn">
+                                @*@Html.ActionLink("IMPORT", "ImportDocument", "ImportDocument")*@
+                                IMPORT  <img src="~/Content/Img/caret-down-square-fill.svg" alt="down" style="background-color:white; width: 15px; height: 15px;"/>
+                            </button>
+                            <div class="dropdown-content">
+                                @Html.ActionLink("DISCHARGE PLAN", "DischargePlan", "DischargePlan")
+                                @Html.ActionLink("DELIVERY ORDER", "DeliveryOrder", "DeliveryOrder")
+                            </div>
+                        </div>
+
+                        @*<li>@Html.ActionLink("IMPORT", "ImportDocument", "ImportDocument")</li>*@
+                        @*<li>@Html.ActionLink("DELIVERY ORDER", "DeliveryOrder", "DeliveryOrder")</li>*@
+                        <li>@Html.ActionLink("ADDRESS BOOK", "AgentAddressBook", "AgentAddressBook")</li>
                     }
                 </ul>
                 <ul class="navbar-nav navigationright">

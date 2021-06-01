@@ -351,6 +351,37 @@
 
     if (blstatus == "ORIGINAL ISSUED"){
         $("#MANIFEST").show();
+        $("#ShipmentDetailsModel_MBLMAWB").attr('readonly', 'readonly');
+        $("#ShipmentDetailsModel_CustomerRef").attr('readonly', 'readonly');
+        $("#BLDetailsModel_NoOfPkgs").attr('readonly', 'readonly');
+        $("#packageDropDownList").prop("disabled", true);
+        $("#shipperDropDownList").prop("disabled", true);
+        $("#consigneenameblDropDownList").prop("disabled", true);
+        $("#ShipmentDetailsModel_ShipperAddress").attr('readonly', 'readonly');
+        $("#BLDetailsModel_ConsigneeAddressBL").attr('readonly', 'readonly');
+        $("#notifypartynameDropDownList").prop("disabled", true);
+        $("#dischagentnameblDropDownList").prop("disabled", true);
+        $("#BLDetailsModel_NotifyPartyAddress").attr('readonly', 'readonly');
+        $("#ShipmentDetailsModel_DischAgentAddress").attr('readonly', 'readonly');
+        $("#closingDatePicker").prop("disabled", true);
+        $("#blfinalisedDatePicker").prop("disabled", true);
+        $("#blfinalisedDatePicker").datepicker().next('button').hide();
+        $("#ladenDatePicker").prop("disabled", true);
+        $("#ladenDatePicker").datepicker().next('button').hide();
+        $("#issueDatePicker").prop("disabled", true);
+        $("#issueDatePicker").datepicker().next('button').hide();
+        $("#MarksAndNo").attr('readonly', 'readonly');
+        $("#CargoDescription").attr('readonly', 'readonly');
+        $("#InvoiceRemark").attr('readonly', 'readonly');
+        $("#NoofOriginalBLissuedZero").prop("disabled", true);
+        $("#NoofOriginalBLissuedOne").prop("disabled", true);
+        $("#NoofOriginalBLissuedThree").prop("disabled", true);
+        $("#HBLPrepaidType").prop("disabled", true);
+        $("#HBLCollectType").prop("disabled", true);
+        $("#MBLPrepaidTypeYes").prop("disabled", true);
+        $("#MBLCollectType").prop("disabled", true);
+        $("#Allocate").hide();
+        $("#Update").hide();
     }
     else {
         $("#MANIFEST").hide();
@@ -412,6 +443,7 @@
         $("#Save").show();
         $("#Update").hide();
         $("#printbl").hide();
+        $("#ExportInvoice").hide();
     }
 
     //ContainerCount();
@@ -492,7 +524,6 @@ function ReloadPage() {
 }
 
 function RePrintMethod() {
-    debugger;
     $.ajax({
         type: "POST",
         url: 'MailSend',
@@ -527,8 +558,7 @@ function get_add(selected_val, address) {
     });
 }
 
-function shipping() {
-    debugger;
+function shipping() {    
     var ShipperNameSI = $('#shippernamesiDropDownList').find(":selected").attr('value');
     var ShipperAddressSI = $('#BLDetailsModel_ShipperAddressSI').val();
     var ConsigneeNameSI = $('#consigneenamesiDropDownList').find(":selected").attr('value');
@@ -552,7 +582,6 @@ function shipping() {
 }
 
 function allocate() {
-    debugger;
     //var SelectedContainerList = $("#ContainerList :selected").
     var SelectedContainerListArray="";
     $("#ContainerList :selected").each(function (i,selected) {
@@ -577,8 +606,7 @@ function allocate() {
             UniversalSerialNr: UniversalSerialNr
         },
         dataType: "json",
-        success: function (data) {
-            debugger;
+        success: function (data) {            
             $("#ContainerList").multiselect('rebuild');
             //if (data.length > 0) {
             //    $("#ContainerList").appendTo(data[0].Value);
@@ -586,7 +614,7 @@ function allocate() {
             //else {
             //    $("#ContainerList").appendTo('');
             //}
-            $('#tankGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
+            $('#containerGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
         }
     });
 }

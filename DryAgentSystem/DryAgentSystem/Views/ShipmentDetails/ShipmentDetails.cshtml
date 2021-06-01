@@ -481,7 +481,7 @@
                     @Html.LabelFor(model => model.BLDetailsModel.LadenOnBoard, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.LadenOnBoard, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ladenDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.LadenOnBoard, "", new { @class = "text-danger" })
                 </div>
@@ -491,15 +491,16 @@
                     @Html.LabelFor(model => model.BLDetailsModel.BLFinalisedDate, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.BLFinalisedDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "blfinalisedDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.BLFinalisedDate, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-1"></div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.BLDetailsModel.DateofIssue, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.DateofIssue, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "issueDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.DateofIssue, "", new { @class = "text-danger" })
                 </div>

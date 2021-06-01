@@ -19,18 +19,18 @@ namespace DryAgentSystem.Models
         public string SealNo { get; set; }
 
         [Display(Name = "Gross Weight")]
-        public string GrossWeight { get; set; }
+        public double GrossWeight { get; set; }
         public string GrossWeightUnit { get; set; }
 
         [Display(Name = "Net Weight")]
-        public string NettWeight { get; set; }
+        public double NettWeight { get; set; }
         public string NetWeightUnit { get; set; }
 
         [Display(Name = "Universal Serial Nr")]
         public string UniversalSerialNr { get; set; }
 
         [Display(Name = "Measurement")]
-        public string Measurement { get; set; }
+        public double Measurement { get; set; }
         public string MeasurementUnit { get; set; }
 
         public IEnumerable<SelectListItem> ContainerList { get; set; }

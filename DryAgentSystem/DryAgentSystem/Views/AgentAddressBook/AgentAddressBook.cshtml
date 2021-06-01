@@ -1,0 +1,64 @@
+﻿@model DryAgentSystem.Models.SearchParameters
+@{
+    ViewBag.Title = "AgentAddressBook";
+    Layout = "~/Views/Shared/SearchAndGridLayout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/jqgrid")
+@Styles.Render("~/Content/cssjqryUi")
+<script src="~/JQuery/AgentAddressBook.js"></script>
+
+
+<div class="form-group">
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <h3 class="text-success">@ViewBag.Message</h3>
+</div>
+
+@using (Html.BeginForm("AgentAddressBook", "AgentAddressBook", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container">
+        <div class="form_group">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Agent Address Book</h2>
+                    <hr />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1">
+                    <input type="submit" name="submit" id="Search" value="Search" class="btn btn-warning" />
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" name="submit" id="Reset" value="Reset" class="btn btn-info" />
+                </div>
+            </div>
+            <br>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.CompanyID, htmlAttributes: new { @class = "control-label" })
+                    @Html.EditorFor(model => model.CompanyID, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+
+                <div class="col-md-3">
+
+                    @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                  "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList" })
+                    @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div style="overflow:auto;">
+    <table id="AgentAddressBookDataGrid">
+    </table>
+    <div id="AgentAddressBookDataPager" style="text-align: center;">
+    </div>
+</div>

@@ -25,7 +25,7 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Gross Weight")]
         //[Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
-        public decimal GrossWt { get; set; }
+        public double GrossWt { get; set; }
 
         [Display(Name = "Gross Weight Unit")]
         public string GrossWtUnit { get; set; }
@@ -110,7 +110,7 @@ namespace DryAgentSystem.Models
         public string StatusDIS { get; set; }
 
         [Display(Name = "Grand Total Sales")]
-        public decimal GTotalSalesCal { get; set; }
+        public double GTotalSalesCal { get; set; }
 
         [Display(Name = "Quantity")]
         //[Range(1, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
@@ -137,10 +137,10 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Rate (USD)")]
         //[Range(0.00001,int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
-        public decimal Rate { get; set; }
+        public double Rate { get; set; }
 
         [Display(Name = "Rate Countered")]
-        public decimal RateCountered { get; set; }
+        public double RateCountered { get; set; }
 
         [Display(Name = "Rate ID")]
         public string RateID { get; set; }
@@ -161,9 +161,9 @@ namespace DryAgentSystem.Models
         public string ID { get; set; }
         public string RateID { get; set; }
         public string Description { get; set; }
-        public decimal UnitRate { get; set; }
+        public double UnitRate { get; set; }
         public string Currency { get; set; }
-        public decimal Exrate { get; set; }
+        public double Exrate { get; set; }
         public string PayBy { get; set; }
         public string PaymentTerm { get; set; }
         public string PayMode { get; set; }

@@ -78,19 +78,19 @@ namespace DryAgentSystem.Models
         public DateTime ModifiedDate { get; set; }
 
         [Display(Name = "Grand Total Sales")]
-        public decimal GTotalSalesCal { get; set; }
+        public double GTotalSalesCal { get; set; }
 
         [Display(Name = "Grand Total Cost")]
-        public decimal GTotalCostCal { get; set; }
+        public double GTotalCostCal { get; set; }
 
         [Display(Name = "Total Selling")]
-        public decimal TotalSalesItemCal { get; set; }
+        public double TotalSalesItemCal { get; set; }
 
         [Display(Name = "Profit & Loss Calculation")]
-        public decimal PNLCal { get; set; }
+        public double PNLCal { get; set; }
 
         [Display(Name = "Total Other Revenue")]
-        public decimal TotalXRevItemCal { get; set; }
+        public double TotalXRevItemCal { get; set; }
 
         //[Display(Name = "Valid From")]
         //[DataType(DataType.Date)]
@@ -132,10 +132,10 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Rate (USD)")]
         //[Range(0.00001,int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
-        public decimal Rate { get; set; }
+        public double Rate { get; set; }
 
         [Display(Name = "Rate Countered")]
-        public decimal RateCountered { get; set; }
+        public double RateCountered { get; set; }
 
         [Display(Name = "Rate ID")]
         public string RateID { get; set; }
@@ -180,7 +180,7 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Gross Weight")]
         [Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
-        public decimal Grossweight { get; set; }
+        public double Grossweight { get; set; }
 
         [Display(Name = "Gross Weight Measurement")]
         public string GrossweightMeasurement { get; set; }

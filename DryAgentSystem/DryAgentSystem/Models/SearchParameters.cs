@@ -62,7 +62,7 @@ namespace DryAgentSystem.Models
         [Display(Name = "ExRate")]
         public string ExRate { get; set; }
 
-
-
+        [Display(Name = "Company ID")]
+        public string CompanyID { get; set; }
     }
 }
