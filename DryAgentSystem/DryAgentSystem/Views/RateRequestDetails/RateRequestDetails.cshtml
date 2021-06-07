@@ -125,7 +125,8 @@
                 <span class="RequiredAstrik">*</span>
             </div>
             <div class="col-md-3 forleftalign">
-                @Html.EditorFor(model => model.ShipperName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.ShipperName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+               "Select Shipper Name", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "ShipperName" })
                 @Html.ValidationMessageFor(model => model.ShipperName, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -208,13 +209,13 @@
                 No
                 @Html.ValidationMessageFor(model => model.TransshipmentType, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-1"></div>
+            <div class="col-md-2"></div>
             <div class="col-md-2 forleftalign">
                 @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel", style = "display: none;padding-right: 31px;" })
             </div>
             <div class="col-md-2 forleftalign">
                 @Html.DropDownListFor(model => model.TransshipmentPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-               "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "TransshipmentPortText", @name = "TransshipmentPortText" })
+               "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "TransshipmentPortText", @name = "TransshipmentPortText", style="width: 159%;" })
                 @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger", @id = "TransshipmentPortValid" })
             </div>
         </div>
@@ -241,14 +242,16 @@
                 @Html.EditorFor(model => model.Humidity, new { htmlAttributes = new { @class = "form-control", style = "display: none;" } })
                 @Html.ValidationMessageFor(model => model.Humidity, "", new { @class = "text-danger", @id = "HumidityValid" })
             </div>
+            <div class="col-md-1"></div>
             <div class="col-md-2">
-                @Html.LabelFor(model => model.Temperature, htmlAttributes: new { @class = "control-label", @id = "TemperatureLabel", style = "display: none;" })                
+                @Html.LabelFor(model => model.Temperature, htmlAttributes: new { @class = "control-label", @id = "TemperatureLabel", style = "display: none;" })
             </div>
             <div class="col-md-2 forleftalign">
                 @Html.EditorFor(model => model.Temperature, new { htmlAttributes = new { @class = "form-control", style = "display: none;" } })
                 @Html.ValidationMessageFor(model => model.Temperature, "", new { @class = "text-danger", @id = "TemperatureValid" })
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1"></div>
+            <div class="col-md-2 forleftalign">
                 @Html.LabelFor(model => model.Ventilation, htmlAttributes: new { @class = "control-label", @id = "VentilationLabel", style = "display: none;" })
             </div>
             <div class="col-md-2 forleftalign">

@@ -6,35 +6,41 @@
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
         url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
-        editurl: 'DeleteVessel',
         datatype: 'json',
-        colNames: ['ID', 'Vessel Name', 'Voy No', 'Load Port', 'Discharge Port', 'ETD POL', 'ETA POD', 'Carrier', 'UniversalSerialNr', 'CarrierBookingRefNo'],
+        colNames: ['ID', 'Vessel Name', 'Voy No', 'Load Port', 'Discharge Port', 'ETD POL', 'ETA POD', 'Carrier', 'UniversalSerialNr', 'CarrierBookingRefNo','Delete'],
         colModel: [
             {
                 key: true,
-                //hidden: true,
+                hidden: true,
                 name: 'ID',
                 index: 'ID',
+                width: '100px',
+                align: 'center',
             },
             {
                 key: false,
-                name: 'VesselName'
+                name: 'VesselName',
+                align: 'center',
             },
             {
                 key: false,
-                name: 'VoyNo'
+                name: 'VoyNo',
+                align: 'center',
             },
             {
                 key: false,
-                name: 'LoadPort'
+                name: 'LoadPort',
+                align: 'center',
             },
             {
                 key: false,
-                name: 'DischPort'
+                name: 'DischPort',
+                align: 'center',
             },
             {
                 key: false,
                 name: 'ETD',
+                align: 'center',
                 formatter: 'date',
                 formatoptions: {
                     srcformat: 'm-d-Y',
@@ -44,6 +50,7 @@
             {
                 key: false,
                 name: 'ETA',
+                align: 'center',
                 formatter: 'date',
                 formatoptions: {
                     srcformat: 'm-d-Y',
@@ -84,6 +91,16 @@
                 key: false,
                 hidden: true,
                 name: 'CarrierBookingRefNo'
+            },
+            {
+                name: 'actions', index: 'actions', formatter: 'actions',
+                width: '60px',
+                formatoptions: {
+                    keys: true,
+                    editbutton: false,
+                    delbutton: true,
+                    delOptions: { url: 'DeleteVessel' }
+                }
             }
         ],
         loadonce: true,
@@ -108,6 +125,7 @@
         //    Id: "0"
         //},
         autowidth: false,
+        shrinkToFit: true,
         multiselect: false,
         onSelectRow: function (id) {
             
@@ -128,7 +146,6 @@
 
                 //DateATA = $.trim(DateATA);
                 //DateSOB = $.trim(DateSOB);
-                
 
                 $('#Carrier').val(Carrier);
                 $('#VesselName').val(VesselName);
@@ -144,13 +161,26 @@
                 $('#UniversalSerialNr').val(UniversalSerialNr);
                 $('#ID').val(ID);
                 $('#CarrierBookingRefNo').val(CarrierBookingRefNo);
+                if (VesselName == "TRUCKING") {
+                    $("#TransportTrucking").trigger('click');
+                }
+                else {
+                    $("#TransportSeaways").trigger('click');
+                }
             }
+        },
+        loadComplete: function () {
+            if ((BookingStatus == "CONFIRMED") || (BookingStatus == "ISSUED")) {
+                $(".ui-inline-del").addClass('ui-state-disabled');
+            }
+            
         }
     });
 
+    
+    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: false, search: false, refresh: false });
 
-    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: true });
-
+    $("#TransportSeaways").prop("checked", true);
 
     $("#ETA").datepicker({
 
@@ -199,45 +229,7 @@
     });
     $("#ETD").datepicker().show();
 
-    //$("#DateSOB").datepicker({
-    //    dateFormat: "mm-dd-yy",
-    //    changeMonth: true,
-    //    changeYear: true,
-    //    showOn: 'both',
-
-    //    //yearRange: "-60:+0"
-    //});
-    //if ($("#DateSOB").val() == "01-01-0001") {
-    //    $("#DateSOB").datepicker("setDate","");
-    //}
-
-    //$("#DateSOB").datepicker().next('button').button({
-    //    icons: {
-    //        primary: 'ui-icon-calendar'
-    //    },
-    //    text: false
-    //});
-    //$("#DateSOB").datepicker().show();
-
-    //$("#DateATA").datepicker({
-    //    dateFormat: "mm-dd-yy",
-    //    changeMonth: true,
-    //    changeYear: true,
-    //    showOn: 'both',
-
-    //    //yearRange: "-60:+0"
-    //});
-    //if ($("#DateATA").val() == "01-01-0001") {
-    //    $("#DateATA").datepicker("setDate", null);
-    //}
-
-    //$("#DateATA").datepicker().next('button').button({
-    //    icons: {
-    //        primary: 'ui-icon-calendar'
-    //    },
-    //    text: false
-    //});
-    //$("#DateATA").datepicker().show();
+    
 
     function ReloadGrid() {
         $("#vesselGrid").setGridParam({ page: 1 }).trigger("reloadGrid");
@@ -287,7 +279,8 @@
         //$("#DateATA").prop("disabled", true);
         $("#loadportDropDownList").prop("disabled", true);
         $("#dischportDropDownList").prop("disabled", true);
-        
+        $("#TransportTrucking").prop("disabled", true);
+        $("#TransportSeaways").prop("disabled", true);
     }
     if (BookingStatus == "ISSUED") {
 
@@ -306,18 +299,163 @@
         //$("#DateATA").prop("disabled", true);
         $("#loadportDropDownList").prop("disabled", true);
         $("#dischportDropDownList").prop("disabled", true);
-
+        $("#TransportTrucking").prop("disabled", true);
+        $("#TransportSeaways").prop("disabled", true);
     }
 
     $('#CreateVessel').click(function () {
-        var url = 'CreateVessel';
-        vesselentry(url);
+        
+        var LoadPort = $('#loadportDropDownList').find(":selected").attr('value');
+        var CarrierBookingRefNo = $('#CarrierBookingRefNo').val();
+        var Carrier = $('#Carrier').val();
+        var VesselName = $('#VesselName').val();
+        var VoyNo = $('#VoyNo').val();
+        var DischPort = $('#dischportDropDownList').find(":selected").attr('value');
+        var valid = "The following fields are missing value.\nPlease check ";
+        if (VesselName != "TRUCKING") {
+            if ((LoadPort == "") || (CarrierBookingRefNo == "") || (Carrier == "") || (VesselName == "") || (VoyNo == "") || (DischPort == "")) {
+
+                if (Carrier == "") {
+                    valid += "Carrier. ";
+                }
+                if (CarrierBookingRefNo == "") {
+                    valid += "CarrierBookingRefNo. ";
+                }
+                if (VesselName == "") {
+                    valid += "VesselName. ";
+                }
+                if (VoyNo == "") {
+                    valid += "VoyNo. ";
+                }
+                if (LoadPort == "") {
+                    valid += "LoadPort. ";
+                }
+                if (DischPort == "") {
+                    valid += "DischPort. ";
+                }
+
+                alert(valid);
+                event.preventDefault();
+            }
+            else {
+                var url = 'CreateVessel';
+                vesselentry(url);
+            }
+        }
+        else {
+            if ((LoadPort == "") || (DischPort == "")) {
+
+                if (LoadPort == "") {
+                    valid += "LoadPort ";
+                }
+                
+                if (DischPort == "") {
+                    valid += "DischPort ";
+                }
+
+                alert(valid);
+                event.preventDefault();
+            }
+            else {
+                var url = 'CreateVessel';
+                vesselentry(url);
+            }
+        }
+        
+        
+        
     });
 
     $('#UpdateVessel').click(function () {
-        var url = 'UpdateVessel';
-        vesselentry(url);
+        var LoadPort = $('#loadportDropDownList').find(":selected").attr('value');
+        var CarrierBookingRefNo = $('#CarrierBookingRefNo').val();
+        var Carrier = $('#Carrier').val();
+        var VesselName = $('#VesselName').val();
+        var VoyNo = $('#VoyNo').val();
+        var DischPort = $('#dischportDropDownList').find(":selected").attr('value');
+        var valid = "The following fields are missing value.\nPlease check ";
+        if (VesselName != "TRUCKING") {
+            if ((LoadPort == "") || (CarrierBookingRefNo == "") || (Carrier == "") || (VesselName == "") || (VoyNo == "") || (DischPort == "")) {
+
+                if (Carrier == "") {
+                    valid += "Carrier. ";
+                }
+                if (CarrierBookingRefNo == "") {
+                    valid += "CarrierBookingRefNo. ";
+                }
+                if (VesselName == "") {
+                    valid += "VesselName. ";
+                }
+                if (VoyNo == "") {
+                    valid += "VoyNo. ";
+                }
+                if (LoadPort == "") {
+                    valid += "LoadPort. ";
+                }
+                if (DischPort == "") {
+                    valid += "DischPort. ";
+                }
+
+                alert(valid);
+                event.preventDefault();
+            }
+            else {
+                var url = 'UpdateVessel';
+                vesselentry(url);
+            }
+        }
+        else {
+            if ((LoadPort == "") || (DischPort == "")) {
+
+                if (LoadPort == "") {
+                    valid += "LoadPort ";
+                }
+
+                if (DischPort == "") {
+                    valid += "DischPort ";
+                }
+
+                alert(valid);
+                event.preventDefault();
+            }
+            else {
+                var url = 'UpdateVessel';
+                vesselentry(url);
+            }
+        }
+
+
+
+        
     });
+
+    
+
+    $("#TransportSeaways").click(function () {
+
+        $("#CarrierLabel, #Carrier, #CarrierLabelAstrik,#CarrierBookingRefNoLabel, #CarrierBookingRefNo, #VoyNoLabel, #VoyNo, #VoyNoLabelAstrik").removeClass("HideAndShow");
+        
+        $('#VesselName').removeAttr('readonly', 'readonly');
+        if ($('#VesselName').val() == "TRUCKING") {
+            $('#VesselName').val('');
+        }
+        $('#LoadPortLabel').html('Load Port');
+        $('#DischPortLabel').html('Discharge Port');
+        
+    });
+
+    $("#TransportTrucking").click(function () {
+        $("#CarrierLabel, #Carrier, #CarrierLabelAstrik,#CarrierBookingRefNoLabel, #CarrierBookingRefNo, #VoyNoLabel, #VoyNo, #VoyNoLabelAstrik").addClass("HideAndShow");
+        $('#Carrier').val('');
+        $('#CarrierBookingRefNo').val('');
+        $('#VoyNo').val('');
+        $('#VesselName').attr('readonly', 'readonly');
+        $('#VesselName').val('TRUCKING');
+        $('#LoadPortLabel').html('From');
+        $('#DischPortLabel').html('To');
+    });
+
+   
 });
 
 function vesselentry(url) {    
@@ -331,7 +469,13 @@ function vesselentry(url) {
     var ETD = $('#ETD').val();
     var UniversalSerialNr = $('#UniversalSerialNr').val();
     var ID = $('#ID').val();
-    
+    if (VesselName == 'TRUCKING') {
+        var TransportMode = VesselName;
+    }
+    else {
+        var TransportMode = 'SEAWAYS'
+    }
+    debugger;
     $.ajax({
         type: "POST",
         url: url,
@@ -346,6 +490,7 @@ function vesselentry(url) {
             ETD: ETD,
             UniversalSerialNr: UniversalSerialNr,
             ID: ID,
+            TransportMode: TransportMode
         },
         dataType: "json",
         success: function (result) {

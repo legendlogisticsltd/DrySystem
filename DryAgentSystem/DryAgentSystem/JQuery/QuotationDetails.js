@@ -6,11 +6,10 @@ $(function () {
         mtype: 'Get',
         url: 'GetQuoteChargesList', //'/QuotationDetails/GetQuoteChargesList'
         datatype: 'json',
-        colNames: ['ID', 'Description'],
+        colNames: ['ID', 'Sales Charges'],
         colModel: [
             {
                 key: true,
-                //hidden: true,
                 name: 'ID',
                 hidden: true,
                 index: 'ID',
@@ -77,13 +76,12 @@ $(function () {
     $("#GrossWt").attr('readonly', 'readonly');
     $("#GrossWtUnit").attr('readonly', 'readonly');
 
-
     if ((quantity - quantitylifted) > 0) {
         $("#Save").show();
         //$("#Save").prop("disabled", true); //Disabling for now will make it live for April 15 release.
     }
     else {
-        $("#Save").hide();
+        $("#Save").prop("disabled",true);
     }
 
     $("#submit").click(function () {

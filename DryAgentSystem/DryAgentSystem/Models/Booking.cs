@@ -78,18 +78,23 @@ namespace DryAgentSystem.Models
         public DateTime ModifiedDate { get; set; }
 
         [Display(Name = "Grand Total Sales")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double GTotalSalesCal { get; set; }
 
         [Display(Name = "Grand Total Cost")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double GTotalCostCal { get; set; }
 
         [Display(Name = "Total Selling")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double TotalSalesItemCal { get; set; }
 
         [Display(Name = "Profit & Loss Calculation")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double PNLCal { get; set; }
 
         [Display(Name = "Total Other Revenue")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double TotalXRevItemCal { get; set; }
 
         //[Display(Name = "Valid From")]
@@ -132,9 +137,11 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Rate (USD)")]
         //[Range(0.00001,int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double Rate { get; set; }
 
         [Display(Name = "Rate Countered")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double RateCountered { get; set; }
 
         [Display(Name = "Rate ID")]
@@ -166,7 +173,7 @@ namespace DryAgentSystem.Models
         [Required(ErrorMessage = "Please specify Commodity Group", AllowEmptyStrings = false)]
         public string CommodityGroup { get; set; }
 
-        [Display(Name = "Cut-off Date")]
+        [Display(Name = "Cut-off Date & Time")]
         public DateTime CutoffDate { get; set; }
 
         [Display(Name = "Cut-off Date & Time")]
@@ -179,7 +186,9 @@ namespace DryAgentSystem.Models
         public string ServiceMode { get; set; }
 
         [Display(Name = "Gross Weight")]
-        [Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [Range(0.01, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Please enter Valid Weight upto 2 decimal place")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double Grossweight { get; set; }
 
         [Display(Name = "Gross Weight Measurement")]

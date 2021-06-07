@@ -30,6 +30,11 @@
         margin-top: 6px;
     }
 </style>
+<style type="text/css">
+    .ui-jqgrid-bdiv {
+        overflow-x: hidden !important;
+    }
+</style>
 
 @using (Html.BeginForm("ShipmentDetails", "ShipmentDetails", FormMethod.Post))
 {
@@ -100,7 +105,7 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "ShippingInstruction",jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-success ForShippingInstructionButton" target="_blank" onclick="shipping()"><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" /> Print Shipping Instruction</a>
+                                    <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "Shipping Instruction",jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-success ForShippingInstructionButton" target="_blank" onclick="shipping()"><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" /> Print Shipping Instruction</a>
                                 </div>
                             </div>
                         </div>
@@ -403,8 +408,18 @@
                         @*<span>  Containers Selected : <span id="CountingContainers"></span></span>*@
                     </div>
                     <div class="col-md-2">
-                       @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
-                        <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()"/>
+                        @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
+                        <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()" />
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="containerGrid" class="overflow:auto;">
+                        </table>
+                        <div id="containerPager">
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -437,8 +452,7 @@
                         <span class="AligningCharacterCount"><span id="CountingCharactersRemarks">0</span>/300</span>
                     </div>
                 </div>
-                <br />
-                <br />
+                
                 @*<div class="row">
                     <div class="col-md-2" style="margin-left: 470px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
@@ -456,15 +470,8 @@
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.MeasurementUnit, "", new { @class = "text-danger" })
                     </div>
                 </div>*@
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="containerGrid" class="overflow:auto;">
-                        </table>
-                        <div id="containerPager">
-                        </div>
-                    </div>
-                </div>
+                
+                
 
             </fieldset>
             <br />

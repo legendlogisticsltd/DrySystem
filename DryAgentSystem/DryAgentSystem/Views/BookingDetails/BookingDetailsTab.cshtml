@@ -322,7 +322,8 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3 forleftalign">
-                        @Html.EditorFor(model => model.ServiceMode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownListFor(model => model.ServiceMode, new SelectList(ViewBag.servicelist, "Text", "Text"),
+                            new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "ServiceMode" })
                         @Html.ValidationMessageFor(model => model.ServiceMode, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -486,7 +487,7 @@
                         @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label" })
                     </div>
                     <div class="col-md-3 forleftalign">
-                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "29", style = "resize:none;", id = "#Remark" })
+                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "29", style = "resize:none;", id = "Remark" })
                         @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-1"></div>
@@ -503,6 +504,7 @@
         </div>
     </div>
     @Html.HiddenFor(model => model.CollectionYard)
+    @Html.HiddenFor(model => model.ServiceMode)
     @Html.HiddenFor(model => model.RateType)
     @Html.HiddenFor(model => model.ShipmentTerm)
     @Html.HiddenFor(model => model.UniversalSerialNr)

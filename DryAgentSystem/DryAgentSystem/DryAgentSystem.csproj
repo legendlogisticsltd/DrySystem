@@ -300,8 +300,9 @@
     <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Img\DownArrorwIcon.jpg" />
     <Content Include="Content\Img\BLLegendLogo.png" />
-    <Content Include="Content\Img\caret-down-square-fill.svg" />
+    <Content Include="Content\Img\DraftBLLogo1.png" />
     <Content Include="Content\Img\footer1920.png" />
     <Content Include="Content\Img\LegendLogoWhiteNew.png" />
     <Content Include="Content\Img\LoginPageBackground.png" />

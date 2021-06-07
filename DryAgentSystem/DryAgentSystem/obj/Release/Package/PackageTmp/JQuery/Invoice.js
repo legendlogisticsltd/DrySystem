@@ -62,7 +62,7 @@
         emptyrecords: 'No records to display',
     });
       
-    var $s = $("#statusDropDownList").selectmenu();
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#statusDropDownList").selectmenu();
+    //var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
 });

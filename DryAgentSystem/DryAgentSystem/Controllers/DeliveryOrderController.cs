@@ -63,6 +63,7 @@ namespace DryAgentSystem.Controllers
                             cell = new string[]
                             {
                                 dischargePlanDataGrid.JobRef,
+                                dischargePlanDataGrid.ChargeParty,
                                 dischargePlanDataGrid.ATA.ToString("MM-dd-yyyy") == "01-01-0001" ? null : dischargePlanDataGrid.ATA.ToString("MM-dd-yyyy"),
                                 dischargePlanDataGrid.ETA.ToString("MM-dd-yyyy") == "01-01-0001" ? null : dischargePlanDataGrid.ETA.ToString("MM-dd-yyyy"),
                                 dischargePlanDataGrid.ETD.ToString("MM-dd-yyyy") == "01-01-0001" ? null : dischargePlanDataGrid.ETD.ToString("MM-dd-yyyy"),

@@ -45,7 +45,7 @@
             },
             {
                 key: false,
-                name: 'StatusShipment'
+                name: 'BLTypes'
             }
         ],
         loadonce: true,

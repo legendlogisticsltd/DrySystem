@@ -81,8 +81,5 @@
     //    document.forms[0].submit();
     //    return false;
     //});
-    var $s = $("#statusDropDownList").selectmenu();
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    
 });

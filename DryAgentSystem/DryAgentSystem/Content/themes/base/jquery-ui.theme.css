@@ -177,17 +177,17 @@ a.ui-button:active,
 	background-color: #DCDCDC;
 }
 
-	.ui-priority-secondary:hover {
-		background-color: #2694e8;
-	}
+.ui-priority-secondary:hover {
+	background-color: #2694e8;
+}
 
-	.ui-state-disabled,
-	.ui-widget-content .ui-state-disabled,
-	.ui-widget-header .ui-state-disabled {
-		opacity: .35;
-		filter: Alpha(Opacity=35); /* support: IE8 */
-		background-image: none;
-	}
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled {
+	opacity: .35;
+	filter: Alpha(Opacity=35); /* support: IE8 */
+	background-image: none;
+}
 .ui-state-disabled .ui-icon {
 	filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
 }
@@ -219,7 +219,7 @@ a.ui-button:active,
 }
 .ui-state-highlight .ui-icon,
 .ui-button .ui-state-highlight.ui-icon {
-	background-image: url("images/ui-icons_2694e8_256x240.png");
+	background-image: url("images/ui-icons_0a152e_256x240.png");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {

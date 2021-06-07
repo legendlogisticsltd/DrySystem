@@ -257,7 +257,7 @@ namespace DryAgentSystem.Models
         public int Quantity { get; set; }
 
         [Display(Name = "Quantity Lifting")]
-        public string QuantityLifting { get; set; }
+        public int QuantityLifting { get; set; }
 
         [Display(Name = "Quote Type")]
         public string QuoteType { get; set; }
@@ -285,7 +285,7 @@ namespace DryAgentSystem.Models
         public string ShipperAddress { get; set; } 
         
         [Display(Name = "Shipper Name")]
-        [Required(ErrorMessage = "Please provide Shipper Address")]
+        [Required(ErrorMessage = "Please provide Shipper Name")]
         public string Shipper { get; set; }
 
         [Display(Name = "Status Cancel")]
@@ -344,6 +344,8 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Discharge Plan Id")]
         public int IDNo { get; set; }
+
+        public string BLTypes { get; set; }
 
         public IEnumerable<SelectListItem> ContainerList { get; set; }
 

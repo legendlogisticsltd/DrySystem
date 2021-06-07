@@ -145,23 +145,23 @@ namespace DryAgentSystem.Controllers
             PdfPCell cell;
 
             table = new PdfPTable(2);
-            table.SetTotalWidth(new float[] { 72, 300 });
+            table.SetTotalWidth(new float[] { 72, 350 });
             table.LockedWidth = true;
             table.SpacingAfter = 5f;
 
             cell = new PdfPCell();
             cell.Border = 0;
             cell.HorizontalAlignment = Element.ALIGN_RIGHT;
-            Image image1 = Image.GetInstance(Server.MapPath("~/Content/img/LogoOnlyStar.png"));
+            Image image1 = Image.GetInstance(Server.MapPath("~/Content/Img/LogoOnlyStar.png"));
             image1.ScaleAbsolute(70, 70);
             image1.Alignment = Element.ALIGN_RIGHT;
             cell.AddElement(image1);
             table.AddCell(cell);
 
-            chunk = new Chunk("LEGEND LOGISTICS (INDIA) PTE LTD", FontFactory.GetFont("Times", 16, Font.BOLD, new BaseColor(0, 0, 128)));
-            para = new Paragraph("NO. 402 RUSTOMJEE ASPIREE, IMAX ROAD, EVERARD NAGAR OFF EASTERN EXPRESS HIGHWAY SION, MUMBAI - 400022, INDIA" +
-                                    "\nindia@legendasia.com" +
-                                    "\nwww.legendasia.com", FontFactory.GetFont("Calibri", 8));
+            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
+                                    "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
+                                    "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -175,7 +175,7 @@ namespace DryAgentSystem.Controllers
             table.HorizontalAlignment = 1;
             table.DefaultCell.PaddingLeft = 5f;
 
-            para = new Paragraph("EXPORT INVOICE", FontFactory.GetFont("Arial", 13, Font.BOLD));
+            para = new Paragraph("PROFORMA EXPORT INVOICE", FontFactory.GetFont("Arial", 13, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -185,8 +185,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(invoice.BillingParty +
-                                "\n"+invoice.BillingPartyAddress+
+            para = new Paragraph(invoice.BillingPartyAddress+
                                 "\n ", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Colspan = 3;
@@ -236,13 +235,23 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
+            string CerditTerm = string.Empty;
+            if (invoice.CreditTerms <= 0)
+            {
+                CerditTerm = "COD";
+            }
+            else
+            {
+                CerditTerm = invoice.CreditTerms.ToString();
+            }
+
             para1 = new Paragraph("CREDIT TERMS", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(": "+invoice.CreditTerms, FontFactory.GetFont("Arial", 8));
+            para1 = new Paragraph(": "+CerditTerm, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.BorderWidthRight = 0.5f;
@@ -405,7 +414,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(": "+invoice.Grossweight+invoice.GrossweightUnit, FontFactory.GetFont("Arial", 8));
+            para1 = new Paragraph(": "+invoice.Grossweight+" "+invoice.GrossweightUnit, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.BorderWidthRight = 0.5f;
@@ -507,7 +516,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(invoiceDetails[i].UnitRate.ToString()).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(invoiceDetails[i].UnitRate.ToString("0.00"), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -521,21 +530,21 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(invoiceDetails[i].TaxPercent.ToString()).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(invoiceDetails[i].TaxPercent.ToString("0.00"), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(invoiceDetails[i].ExRate.ToString()).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(invoiceDetails[i].ExRate.ToString("0.00"), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(float.Parse(invoiceDetails[i].AmountUSD.ToString()).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+                para = new Paragraph(invoiceDetails[i].AmountUSD.ToString("0.00"), FontFactory.GetFont("Arial", 8));
                 para.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -628,7 +637,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(float.Parse(invoice.AmountinUSDSUMWTax).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+            para = new Paragraph(invoice.AmountinUSDSUMWTax.ToString("0.00"), FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();            
             cell.Border = 0;
@@ -658,7 +667,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(float.Parse(invoice.TaxAmountSum).ToString("0.00"), FontFactory.GetFont("Arial", 8));
+            para = new Paragraph(invoice.TaxAmountSum.ToString("0.00"), FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -675,7 +684,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Total", FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para = new Paragraph("Grand Total", FontFactory.GetFont("Arial", 8,Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
@@ -692,8 +701,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(float.Parse(invoice.AmountinUSDSUM.ToString()).ToString("0.00"), FontFactory.GetFont("Arial", 8,Font.BOLD));
-            para.Alignment = Element.ALIGN_CENTER;
+            para = new Paragraph("USD  "+invoice.AmountinUSDSUM.ToString("0.00"), FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
             cell.Border = 0;
@@ -760,22 +769,28 @@ namespace DryAgentSystem.Controllers
             pdfDoc.Add(table);
 
             para = new Paragraph("Bank Details", FontFactory.GetFont("Arial", 8, Font.BOLD));
-            para.SpacingBefore = 2f;
+            para.SpacingBefore = 10f;
             para.SpacingAfter = 10f;
             pdfDoc.Add(para);
 
             para = new Paragraph("Terms and Conditions:", FontFactory.GetFont("Arial", 8, Font.BOLD));
-            para.SpacingAfter = 2f;
+            para.SpacingAfter = 7f;
             pdfDoc.Add(para);
 
-            para = new Paragraph("1) Terms of Sale" +
-                "\nClear demarcation of terms of sales will wipe-out any potential chance of misunderstanding or disagreement from any of the parties. Hence, it is of utmost" +
-                "importance to mention the terms of sales like - cost, quantity, single unit cost, delivery date or time of service, payment method or credit, if any.", FontFactory.GetFont("Arial", 8));
+            para = new Paragraph("1) Terms of Sale", FontFactory.GetFont("Arial", 8));
             para.SpacingAfter = 4f;
             pdfDoc.Add(para);
 
-            para = new Paragraph("2) Payment in Advance" +
-                "\nIt is one of the most usual payment terms, where the service provider asks for full or partial payment before the delivery of product or service. This is prevalent in" +
+            para = new Paragraph("Clear demarcation of terms of sales will wipe-out any potential chance of misunderstanding or disagreement from any of the parties. Hence, it is of utmost " +
+                "importance to mention the terms of sales like - cost, quantity, single unit cost, delivery date or time of service, payment method or credit, if any.", FontFactory.GetFont("Arial", 8));
+            para.SpacingAfter = 8f;
+            pdfDoc.Add(para);
+
+            para = new Paragraph("2) Payment in Advance", FontFactory.GetFont("Arial", 8));
+            para.SpacingAfter = 4f;
+            pdfDoc.Add(para);
+
+            para = new Paragraph("It is one of the most usual payment terms, where the service provider asks for full or partial payment before the delivery of product or service. This is prevalent in " +
                 "the service industry and is followed to avoid after - sales non - payment recovery.It is practiced to avoid out -of - pocket expenses to finish the project.", FontFactory.GetFont("Arial", 8));
             para.SpacingAfter = 4f;
             pdfDoc.Add(para);

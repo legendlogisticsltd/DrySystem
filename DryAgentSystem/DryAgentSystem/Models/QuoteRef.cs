@@ -24,6 +24,7 @@ namespace DryAgentSystem.Models
         public string ShipperName3 { get; set; }
 
         [Display(Name = "Gross Weight")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         //[Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
         public double GrossWt { get; set; }
 
@@ -110,6 +111,7 @@ namespace DryAgentSystem.Models
         public string StatusDIS { get; set; }
 
         [Display(Name = "Grand Total Sales")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double GTotalSalesCal { get; set; }
 
         [Display(Name = "Quantity")]
@@ -136,10 +138,12 @@ namespace DryAgentSystem.Models
         public string IMO { get; set; }
 
         [Display(Name = "Rate (USD)")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         //[Range(0.00001,int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
         public double Rate { get; set; }
 
         [Display(Name = "Rate Countered")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double RateCountered { get; set; }
 
         [Display(Name = "Rate ID")]

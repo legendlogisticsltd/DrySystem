@@ -14,6 +14,12 @@
     var hasshipment = "@Html.Raw(@Model.hasshipment)";
 </script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 @using (Html.BeginForm("BookingDetailsTab", "BookingDetails", FormMethod.Post, new { id = "BookingDetailForm" }))
 {
     @Html.AntiForgeryToken()
@@ -119,7 +125,7 @@
                         <div class="col-md-2">
                             @Html.LabelFor(model => model.CompanyName)
                         </div>
-                        <div class="col-md-5 forleftalignquantity">
+                        <div class="col-md-3 forleftalignquantity">
                             @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
                         </div>
@@ -168,7 +174,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2">
-                            @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label" , style="margin-top: 0px;"})
                         </div>
                         <div class="col-md-2">
                             @Html.RadioButtonFor(model => model.TransshipmentType, "Yes", htmlAttributes: new { @id = "TransshipmentTypeYes" })
@@ -188,7 +194,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-2">
-                            @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label" , style="margin-top: 0px;"})
                         </div>
                         <div class="col-md-2">
                             @Html.RadioButtonFor(model => model.RateType, "REEFER", htmlAttributes: new { @id = "RateTypeReefer" })
@@ -266,7 +272,7 @@
                             @Html.LabelFor(model => model.CargoType, htmlAttributes: new { @class = "control-label" })
                         </div>
                         <div class="col-md-2 forleftalign">
-                            @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "29", style = "resize:none;" })
+                            @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "29", style = "resize:none; background-color: #E9ECEF; border: 1px solid #CED4DA; border-radius: 5px;" })
                             @Html.ValidationMessageFor(model => model.CargoType, "", new { @class = "text-danger" })
                         </div>
 
@@ -283,7 +289,6 @@
                         @Html.EditorFor(model => model.AddressAttn, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.AddressAttn, "", new { @class = "text-danger" })
                     </div>
-
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.AddressFax, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
@@ -307,16 +312,18 @@
                         @Html.LabelFor(model => model.AddressTo, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.AddressTo, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.AddressTo, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ServiceMode, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.EditorFor(model => model.ServiceMode, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-3 forleftalign">
+                        @Html.DropDownListFor(model => model.ServiceMode, new SelectList(ViewBag.servicelist, "Text", "Text"),
+                            new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "ServiceMode" })
                         @Html.ValidationMessageFor(model => model.ServiceMode, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -344,15 +351,16 @@
                         @Html.LabelFor(model => model.Commodity, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.Commodity, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Commodity, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-1">
                         @Html.LabelFor(model => model.CommodityGroup, htmlAttributes: new { @class = "control-label" })
                     </div>
                     <div class="col-md-1"><span class="RequiredAstrik">*</span></div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.CommodityGroup, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.CommodityGroup, "", new { @class = "text-danger" })
                     </div>
@@ -380,15 +388,16 @@
                         @Html.LabelFor(model => model.CutoffDate, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-4 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.CutoffDate, "{0:MM-dd-yyyy HH:mm}", new { @class = "ui-datepicker form-control", @id = "cutoffDatePicker"})
                         @Html.ValidationMessageFor(model => model.CutoffDate, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CROPickUpDate, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-4 forleftaligngrossunit" >
+                    <div class="col-md-3 forleftaligngrossunit" >
                         @Html.TextBoxFor(model => model.CROPickUpDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "pickupDatePicker" })
                         @Html.ValidationMessageFor(model => model.CROPickUpDate, "", new { @class = "text-danger" })
                     </div>
@@ -407,9 +416,9 @@
                         @Html.LabelFor(model => model.CollectionYard, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.DropDownListFor(model => model.CollectionYard, new SelectList(ViewBag.CollectionList, "Text", "Text"),
-                            "Select Collection Yard", new { @class = "ui-selectmenu-menu", @id = "collectionDropDownList" })
+                            "Select Collection Yard", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "collectionDropDownList" })
                         @Html.ValidationMessageFor(model => model.CollectionYard, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -419,15 +428,15 @@
                         @Html.LabelFor(model => model.Grossweight, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.Grossweight, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Grossweight, "", new { @class = "text-danger" })
                     </div>
-
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.GrossweightMeasurement, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.GrossweightMeasurement, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.GrossweightMeasurement, "", new { @class = "text-danger" })
                     </div>
@@ -436,7 +445,7 @@
                         </div>
                         <div class="col-md-2 forleftalign">
                             @Html.DropDownListFor(model => model.PaymentTerms, new SelectList(ViewBag.PaymentList, "Text", "Text"),
-                           "Select Payment Terms", new { @class = "ui-selectmenu-menu", @id = "paymentDropDownList" })
+                           "Select Payment Terms", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "paymentDropDownList" })
                             @Html.ValidationMessageFor(model => model.PaymentTerms, "", new { @class = "text-danger" })
                         </div>*@
                 </div>
@@ -478,9 +487,10 @@
                         @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label" })
                     </div>
                     <div class="col-md-3 forleftalign">
-                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "29", style = "resize:none;" })
+                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "29", style = "resize:none;", id = "Remark" })
                         @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CRORemarks, htmlAttributes: new { @class = "control-label" })
                     </div>
@@ -494,8 +504,10 @@
         </div>
     </div>
     @Html.HiddenFor(model => model.CollectionYard)
+    @Html.HiddenFor(model => model.ServiceMode)
     @Html.HiddenFor(model => model.RateType)
     @Html.HiddenFor(model => model.ShipmentTerm)
     @Html.HiddenFor(model => model.UniversalSerialNr)
     @Html.HiddenFor(model => model.Shipper)
+    @Html.HiddenFor(model => model.CutoffDate)
 }

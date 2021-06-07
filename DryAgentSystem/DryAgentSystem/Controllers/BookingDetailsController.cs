@@ -38,6 +38,7 @@ namespace DryAgentSystem.Controllers
             ViewBag.PortList = DataContext.GetCountryPorts();
             ViewBag.shipmentlist = DataContext.ShipmentTerm();
             ViewBag.equipmentlist = DataContext.EquipmentType();
+            ViewBag.servicelist = DataContext.GetServiceModes();
             if (booking.CutoffDate.ToString() == "1/1/0001 12:00:00 AM")
             {
                 booking.CutoffDate = DateTime.Today;
@@ -53,7 +54,7 @@ namespace DryAgentSystem.Controllers
             ViewBag.PortList = DataContext.GetCountryPorts();
             ViewBag.shipmentlist = DataContext.ShipmentTerm();
             ViewBag.equipmentlist = DataContext.EquipmentType();
-            //ViewBag.PaymentList = DataContext.GetPaymentTerm();
+            ViewBag.servicelist = DataContext.GetServiceModes();
 
             if (submit == "Save")
             {
@@ -233,7 +234,7 @@ namespace DryAgentSystem.Controllers
                 }
                 else
                 {
-                    message = "Vessel Schedule is not created";
+                    message = "Vessel Schedule is not created. Please check your fields.";
                 }
             }
             catch (Exception ex)
@@ -343,7 +344,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(image1);
             table.AddCell(cell);
 
-            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, BaseColor.BLUE));
+            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
             para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
                                     "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
                                     "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
@@ -617,7 +618,7 @@ namespace DryAgentSystem.Controllers
 
             DateTime dateTime = DateTime.Now;
             chunk = new Chunk("Prepared By", FontFactory.GetFont("Courier", 10));
-            para = new Paragraph(chunk + "    :  "+ HttpContext.User.Identity.Name + "                     "+dateTime.ToString("dd-MM-yyyy h:mm tt"), FontFactory.GetFont("Courier", 10, Font.BOLD));
+            para = new Paragraph(chunk + "    :  "+ HttpContext.User.Identity.Name + "                     "+dateTime.ToString("dd-MM-yyyy"), FontFactory.GetFont("Courier", 10, Font.BOLD));
             pdfDoc.Add(para);
 
             para = new Paragraph("ALL BUSINESS TRANSACTED WITH LEGEND SHIPPING PTE LTD IS CONDUCTED TO \n SLA SINGAPORE LOGISTICS ASSOCIATION CONDITIONS.", FontFactory.GetFont("Courier", 10));
@@ -664,7 +665,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(image1);
             table.AddCell(cell);
 
-            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, BaseColor.BLUE));
+            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
             para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
                                     "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
                                     "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
@@ -693,7 +694,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingAfter = 5f;
 
             chunk = new Chunk("To,", FontFactory.GetFont("Courier", 9, Font.BOLD));
-            para = new Paragraph(booking.Address+"\nPhone No: "+booking.PhoneNo+"\nEmail id: "+booking.Email, FontFactory.GetFont("Courier", 9));   //booking.CollectionYard+"\n"+
+            para = new Paragraph(booking.Address, FontFactory.GetFont("Courier", 9));   //booking.CollectionYard+"\n"+
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;

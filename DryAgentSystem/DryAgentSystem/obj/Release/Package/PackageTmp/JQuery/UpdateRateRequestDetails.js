@@ -70,8 +70,8 @@
         //$("#Quantity").prop("disabled", true);
 
         $("#agencyDropDownList").prop("disabled", true);
+        $("#ShipperName").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
         $("#GrossWt").attr('readonly', 'readonly');
         $("#TransshipmentTypeYes").prop("disabled", true);
         $("#TransshipmentTypeNo").prop("disabled", true);
@@ -90,7 +90,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").attr('readonly', 'readonly');
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").attr('readonly', 'readonly');
+        $("#endDatePicker").datepicker().next('button').hide();
 
         $("#POLFreeDays").attr('readonly', 'readonly');
         $("#PODFreeDays").attr('readonly', 'readonly');
@@ -114,7 +116,8 @@
         $("#Quantity").prop("disabled", true);
         $("#RateCountered").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
+
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -134,11 +137,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").prop("disabled", true);
-        $("#startDatePicker").datepicker({
-            "showButtonPanel": false
-        });
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
-
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#POLFreeDays").prop("disabled", true);
         $("#PODFreeDays").prop("disabled", true);
 
@@ -164,7 +165,7 @@
         $("#Quantity").prop("disabled", true);
         $("#RateCountered").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -184,8 +185,9 @@
         $("#shipmentDropDownList").prop("disabled", true);
 
         $("#startDatePicker").prop("disabled", true);
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
-
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#POLFreeDays").prop("disabled", true);
         $("#PODFreeDays").prop("disabled", true);
 
@@ -211,7 +213,7 @@
         $("#RateCountered").prop("disabled", true);
         $("#Quantity").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -248,32 +250,16 @@
 
     }
 
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#TransshipmentPortText").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#loadplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#shipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#equipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#agencyDropDownList").selectmenu();
+   
 
     $('.selectExportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectImportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $("#Fetch").click(function () {      
@@ -294,7 +280,7 @@
         mtype: 'Get',
         url: 'GetQuoteChargesList', //'/QuotationDetails/GetQuoteChargesList'
         datatype: 'json',
-        colNames: ['Description'],
+        colNames: ['Cost Charges'],
         colModel: [
             //{
             //    key: true,
@@ -328,21 +314,21 @@
 
 
     $('#TransshipmentPortLabel').css('visibility', 'hidden');
-    $("#TransshipmentPortText").selectmenu("widget").hide();
+    $("#TransshipmentPortText").hide();
 
     $("#TransshipmentTypeYes").click(function () {
         $('#TransshipmentPortLabel').css('visibility', 'visible');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     });
 
     $("#TransshipmentTypeNo").click(function () {
         $('#TransshipmentPortLabel').css('visibility', 'hidden');
-        $("#TransshipmentPortText").selectmenu("widget").hide();
+        $("#TransshipmentPortText").hide();
     });
 
     if ((transshipmenttype == "Yes") || (transshipmenttype == "YES")) {
         $('#TransshipmentPortLabel').css('visibility', 'visible');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     }
 
     $("#RateTypeReefer").click(function () {
@@ -438,7 +424,5 @@
         $("#PrincipalRemarkLabel").css('display', 'none');
     }
 
-    $("#companyDropDownList").selectmenu({
-        width: 300
-    });
+    
 });

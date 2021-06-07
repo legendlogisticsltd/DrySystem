@@ -16,6 +16,7 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Country")]
         public string Country { get; set; }
+        public string ChargeParty { get; set; }
 
         [Display(Name = "Create Date")]
         public DateTime CreateDate { get; set; }
@@ -91,6 +92,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Quote Type")]
         public string QuoteType { get; set; }
+        
+        [Display(Name = "Remarks")]
+        public string Remark { get; set; }
 
         [Display(Name = "Universal Serial Nr")]
         public string UniversalSerialNr { get; set; }

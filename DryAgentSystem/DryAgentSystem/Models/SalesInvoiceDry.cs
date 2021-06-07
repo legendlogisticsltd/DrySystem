@@ -28,8 +28,8 @@ namespace DryAgentSystem.Models
             public DateTime DueDate { get; set; }
             public DateTime ETA { get; set; }
             public DateTime ETD { get; set; }
-            public int Grossweight { get; set; }
-            public string GrossweightMeasurement { get; set; }
+            public double Grossweight { get; set; }
+            public string GrossWeightUnit { get; set; }
             public string HBLHAWB { get; set; }
             public string ID { get; set; }
             public string IDCompany { get; set; }

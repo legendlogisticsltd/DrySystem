@@ -81,7 +81,9 @@ namespace DryAgentSystem.Models
         public int PODFreeDays { get; set; }
 
         [Display(Name = "Gross Weight")]
-        [Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [Range(0.01, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Please enter Valid weight upto 2 decimal place")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double GrossWt { get; set; }
 
         [Display(Name = "Gross Weight Unit")]
@@ -132,16 +134,21 @@ namespace DryAgentSystem.Models
         public string IMO { get; set; }
 
         [Display(Name = "Rate (USD)")]
-        [Range(0.00001, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [Range(0.01, int.MaxValue, ErrorMessage = "The field {0} must be greater than 0")]
+        [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Please enter Valid Rate upto 2 decimal place")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double Rate { get; set; }
 
         [Display(Name = "Rate Countered")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double RateCountered { get; set; }
 
         [Display(Name = "Grand Total Sales")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double GTotalSalesCal { get; set; }
 
         [Display(Name = "Offer Rate")]
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public double OfferRate { get; set; }
 
         [Display(Name = "Rate ID")]

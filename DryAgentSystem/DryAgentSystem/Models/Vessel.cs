@@ -15,7 +15,6 @@ namespace DryAgentSystem.Models
         public string CarrierBookingRefNo { get; set; }
 
         [Display(Name = "Carrier")]
-        [Required(ErrorMessage = "Please provide Carrier")]
         public string Carrier { get; set; }
         public string UniversalSerialNr { get; set; }
 
@@ -24,7 +23,6 @@ namespace DryAgentSystem.Models
         public string VesselName { get; set; }
 
         [Display(Name = "Voy No.")]
-        [Required(ErrorMessage = "Please provide Voyage Number")]
         public string VoyNo { get; set; }
 
         [Display(Name = "Load Port")]
@@ -44,6 +42,11 @@ namespace DryAgentSystem.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}")]
         public DateTime ETA { get; set; }
+
+        [Display(Name = "Mode of Transport")]
+        [Required(ErrorMessage = "Please provide Mode of Transport")]
+        public string TransportMode { get; set; }
+
 
         //[Display(Name = "Date SOB")]
         //[DataType(DataType.Date)]

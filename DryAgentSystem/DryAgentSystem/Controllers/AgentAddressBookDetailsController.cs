@@ -12,26 +12,10 @@ namespace DryAgentSystem.Controllers
     public class AgentAddressBookDetailsController : Controller
     {
         // GET: AgentAddressBookDetails
-        [Authorize]
-        //public ActionResult AgentAddressBookDetails(string ID)
-        //{
-        //    AgentAddressBook agentaddressbook = new AgentAddressBook();
-        //    agentaddressbook = DataContext.GetAgentAddressBookfromID(ID);
-        //    Session["ID"] = ID;
-
-
-        //    if (TempData["agentaddressbookobj"] != null)
-        //    {
-        //        agentaddressbook = (AgentAddressBook)TempData["agentaddressbookobj"];
-        //    }
-
-        //    return View(agentaddressbook);
-        //}
-
+        [Authorize]       
         public ActionResult AgentAddressBookDetails()
         {
-            ViewBag.PortList = DataContext.GetCountryPorts();
-           // ViewBag.Comoanynames=
+            ViewBag.PortList = DataContext.GetCountryPortsByASC();
             return View();
         }
 
@@ -40,12 +24,6 @@ namespace DryAgentSystem.Controllers
             var companynames = DataContext.GetCompanyNames(agentaddressbook);
             return Json(companynames, JsonRequestBehavior.AllowGet);
         }
-
-        //public JsonResult GetCompanyNamesForUpadte(string agentaddressbook)
-        //{
-        //    var comapnynames = DataContext.GetCompanyNamesForUpdate(agentaddressbook);
-        //    return Json(comapnynames, JsonRequestBehavior.AllowGet);
-        //}
 
         public JsonResult GetCompanyNamesForUpdate(string CompanyName, string CompanyID)
         {
@@ -56,7 +34,7 @@ namespace DryAgentSystem.Controllers
         [HttpPost]
         public ActionResult AgentAddressBookDetails(AgentAddressBook agentaddressbook, string submit)
         {
-            ViewBag.PortList = DataContext.GetCountryPorts();
+            ViewBag.PortList = DataContext.GetCountryPortsByASC();
             if (submit == "Save")
             {
                 bool flag = true;
@@ -66,7 +44,6 @@ namespace DryAgentSystem.Controllers
                 if (companynames == true)
                 {
                     TempData["Message"] = "Company name already exist.";
-                    // return RedirectToAction("AgentAddressBookDetails", "AgentAddressBookDetails");
                 }
                 else
                 {
@@ -76,7 +53,6 @@ namespace DryAgentSystem.Controllers
                         if (!errorLog.IsError && flag == true && EmailFlag == true)
                         {
                             agentaddressbook.ID = errorLog.ErrorMessage;
-                            //TempData["Message"] = "Agent Address Book successfully created ID " + agentaddressbook.ID;
                         }
 
                         else
@@ -90,7 +66,6 @@ namespace DryAgentSystem.Controllers
             }
             if (submit == "Update")
             {
-                //var comapnynames = DataContext.GetCompanyNamesForUpdate(agentaddressbook.CompanyName);
                 if (ModelState.IsValid)
                 {
                     ErrorLog errorLog = DataContext.UpdateAgentAddressDetails(agentaddressbook);
@@ -119,7 +94,7 @@ namespace DryAgentSystem.Controllers
         {
             var addressbookDetails = DataContext.GetAddressBookFromID(ID);
             
-            ViewBag.PortList = DataContext.GetCountryPorts();
+            ViewBag.PortList = DataContext.GetCountryPortsByASC();
             ViewBag.shipmentlist = DataContext.ShipmentTerm();
             ViewBag.equipmentlist = DataContext.EquipmentType();
             ViewBag.CompanyList = DataContext.GetCompany();
@@ -134,7 +109,7 @@ namespace DryAgentSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                ViewBag.PortList = DataContext.GetCountryPorts();
+                ViewBag.PortList = DataContext.GetCountryPortsByASC();
                 ErrorLog errorLog = DataContext.UpdateAgentAddressDetails(agentaddressbook);
                 if (!errorLog.IsError)
                 {

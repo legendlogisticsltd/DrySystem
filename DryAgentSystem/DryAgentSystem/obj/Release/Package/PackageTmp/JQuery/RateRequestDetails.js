@@ -56,23 +56,7 @@
     });
     $("#endDatePicker").datepicker().show();
 
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#TransshipmentPortText").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#loadplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#dischplantDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#shipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#equipmentDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
-    var $s = $("#agencyDropDownList").selectmenu();
+    
 
     $("#Status").val("DRAFT");
     $("#Status").attr('readonly', 'readonly');
@@ -82,7 +66,7 @@
 
     $('.selectExportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectExportList').multiselect('selectAll', false);
@@ -90,7 +74,7 @@
 
     $('.selectImportList').multiselect({
         includeSelectAllOption: true,
-        buttonWidth: '225px'
+        buttonWidth: '260px'
     });
 
     $('.selectImportList').multiselect('selectAll', false);
@@ -111,27 +95,24 @@
     
 
     //$('#TransshipmentPortLabel').css('visibility', 'hidden');
-    $("#TransshipmentPortText").selectmenu("widget").hide();
+    $("#TransshipmentPortText").hide();
 
     $("#TransshipmentTypeYes").click(function () {
         $('#TransshipmentPortLabel').css('display', 'block');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
        
        
     });
 
     $("#TransshipmentTypeNo").click(function () {
         $('#TransshipmentPortLabel').css('display', 'none');
-        $("#TransshipmentPortText").selectmenu("widget").hide();
+        $("#TransshipmentPortText").hide();
     });
 
     if ((transshipmenttype == "Yes") || (transshipmenttype == "YES")) {
         $('#TransshipmentPortLabel').css('display', 'block');
-        $("#TransshipmentPortText").selectmenu("widget").show();
+        $("#TransshipmentPortText").show();
     }
-
-    
-    
 
     $("#RateTypeReefer").click(function () {
         $('#TemperatureLabel').css('display', 'block');
@@ -225,10 +206,6 @@
     else {
         $("#RateTypeDry").prop("checked", true);
     }
-
-    $("#companyDropDownList").selectmenu({
-        width: 300
-    });
 
 });
 

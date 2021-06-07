@@ -123,8 +123,7 @@
     $("#Ventilation").attr('readonly', 'readonly');
 
     
-
-
+    
     if (BookingStatus == "CONFIRMED") {
 
         $("#Save").hide();
@@ -133,7 +132,7 @@
         $("#Shipment").hide();
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
-        $("#ServiceMode").attr('readonly', 'readonly');
+        $("#ServiceMode").prop("disabled", true);
         $("#Commodity").attr('readonly', 'readonly');
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
@@ -141,7 +140,9 @@
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
+        $("#Remark").css('background-color', '#E9ECEF');
         $("#CRORemarks").attr('readonly', 'readonly');
+        $("#CRORemarks").css('background-color', '#E9ECEF');
         $("#paymentDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
         $("#pickupDatePicker").datepicker().next('button').hide();
@@ -172,7 +173,7 @@
 
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
-        $("#ServiceMode").attr('readonly', 'readonly');
+        $("#ServiceMode").prop("disabled", true);
         $("#Commodity").attr('readonly', 'readonly');
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
@@ -180,7 +181,9 @@
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
+        $("#Remark").css('background-color', '#E9ECEF');
         $("#CRORemarks").attr('readonly', 'readonly');
+        $("#CRORemarks").css('background-color', '#E9ECEF');
         $("#AddressAttn").attr('readonly', 'readonly');
         $("#AddressFax").attr('readonly', 'readonly');
         $("#AddressTel").attr('readonly', 'readonly');
@@ -232,7 +235,7 @@
 
     $("#vesseltab").click(function () {
         if (BookingStatus == "") {
-            alert('Please save booking before saving Vessel Details');
+            alert('Please save booking before adding Vessel Details');
             $("#bookingtab").trigger('click');
         }
     });

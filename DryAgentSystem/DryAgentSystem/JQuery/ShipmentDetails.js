@@ -172,7 +172,7 @@
         editurl: 'ProcessContainerData',
         onAfterSaveCell: reload,
         datatype: 'json',
-        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Unit', 'Net Weight', 'Unit', 'Measurement', 'Unit', 'UniversalSerialNr'],
+        colNames: ['ID', 'Container No', 'Seal No', 'Gross Weight', 'Unit', 'Net Weight', 'Unit', 'Measurement', 'Unit', 'UniversalSerialNr','Modify'],
         colModel: [
             {
                 key: true,
@@ -184,6 +184,7 @@
             {
                 key: false,
                 //hidden: true,
+                align: 'center',
                 name: 'ContainerNo',
                 index: 'ContainerNo',
 
@@ -191,11 +192,13 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'SealNo',
                 editable: true
             },
             {
                 key: false,
+                align: 'center',
                 name: 'GrossWeight',
                 editable: true,
                 formatter: 'number',
@@ -205,6 +208,7 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'GrossWeightUnit',
                 editable: true,
                 edittype: 'select',
@@ -215,6 +219,7 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'NettWeight',
                 editable: true,
                 formatter: 'number',
@@ -224,6 +229,7 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'NetWeightUnit',
                 editable: true,
                 edittype: 'select',
@@ -234,6 +240,7 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'Measurement',
                 editable: true,
                 formatter: 'number',
@@ -243,6 +250,7 @@
             },
             {
                 key: false,
+                align: 'center',
                 name: 'MeasurementUnit',
                 editable: true,
                 edittype: 'select',
@@ -255,6 +263,18 @@
                 key: false,
                 hidden: true,
                 name: 'UniversalSerialNr'
+            },
+            {
+                name: 'actions', index: 'actions', formatter: 'actions',
+                width: '150px',
+                formatoptions: {
+                    keys: true,
+                    size: 10,
+                    editbutton: true,
+                    delbutton: true,
+                    savebutton: true,
+                    cancelbutton: true
+                }
             }
         ],
         loadonce: true,
@@ -271,31 +291,37 @@
         emptyrecords: 'No records to display',
         autowidth: true,
         multiselect: false,
-        rownumbers: true
-        
+        rownumbers: true,
+
+        loadComplete: function () {
+            if (blstatus == "ORIGINAL ISSUED") {
+                $(".ui-inline-del").addClass('ui-state-disabled');
+                $(".ui-inline-edit").addClass('ui-state-disabled');
+            }
+        }
     });
 
 
 
-    $('#containerGrid').navGrid('#containerPager', { edit: false, add: false, del: true, deltext: "Delete", search: false, refresh: false });
+    $('#containerGrid').navGrid('#containerPager', { edit: false, add: false, del: false, search: false, refresh: false });
 
-    $('#containerGrid').jqGrid('inlineNav', '#containerPager',
-        {
-            edit: true,
-            editicon: "ui-icon-pencil",
-            edittext: "Edit",
-            add: false,
-            //addicon: "ui-icon-plus",
-            //addtext: "Add",
-            save: true,
-            saveicon: "ui-icon-disk",
-            savetext: "Save",
-            //saveurl: '/ShipmentDetails/AddTank/',
-            cancel: true,
-            cancelicon: "ui-icon-cancel",
-            canceltext: "Cancel",
-            addParams: { position: "last" }
-        });
+    //$('#containerGrid').jqGrid('inlineNav', '#containerPager',
+    //    {
+    //        edit: true,
+    //        editicon: "ui-icon-pencil",
+    //        edittext: "Edit",
+    //        add: false,
+    //        //addicon: "ui-icon-plus",
+    //        //addtext: "Add",
+    //        save: true,
+    //        saveicon: "ui-icon-disk",
+    //        savetext: "Save",
+    //        //saveurl: '/ShipmentDetails/AddTank/',
+    //        cancel: true,
+    //        cancelicon: "ui-icon-cancel",
+    //        canceltext: "Cancel",
+    //        addParams: { position: "last" }
+    //    });
 
 
     function reload(rowid, result) {
@@ -349,6 +375,17 @@
         $("#SURRENDER").hide();
     }
 
+    if (housebl != "") {
+        $("#Save").hide();
+        $("#Update").show();
+    }
+    else {
+        $("#Save").show();
+        $("#Update").hide();
+        $("#printbl").hide();
+        $("#ExportInvoice").hide();
+    }
+
     if (blstatus == "ORIGINAL ISSUED"){
         $("#MANIFEST").show();
         $("#ShipmentDetailsModel_MBLMAWB").attr('readonly', 'readonly');
@@ -358,11 +395,15 @@
         $("#shipperDropDownList").prop("disabled", true);
         $("#consigneenameblDropDownList").prop("disabled", true);
         $("#ShipmentDetailsModel_ShipperAddress").attr('readonly', 'readonly');
+        $("#ShipmentDetailsModel_ShipperAddress").css('background-color', '#E9ECEF');      
         $("#BLDetailsModel_ConsigneeAddressBL").attr('readonly', 'readonly');
+        $("#BLDetailsModel_ConsigneeAddressBL").css('background-color', '#E9ECEF');   
         $("#notifypartynameDropDownList").prop("disabled", true);
         $("#dischagentnameblDropDownList").prop("disabled", true);
         $("#BLDetailsModel_NotifyPartyAddress").attr('readonly', 'readonly');
+        $("#BLDetailsModel_NotifyPartyAddress").css('background-color', '#E9ECEF');   
         $("#ShipmentDetailsModel_DischAgentAddress").attr('readonly', 'readonly');
+        $("#ShipmentDetailsModel_DischAgentAddress").css('background-color', '#E9ECEF');
         $("#closingDatePicker").prop("disabled", true);
         $("#blfinalisedDatePicker").prop("disabled", true);
         $("#blfinalisedDatePicker").datepicker().next('button').hide();
@@ -371,8 +412,11 @@
         $("#issueDatePicker").prop("disabled", true);
         $("#issueDatePicker").datepicker().next('button').hide();
         $("#MarksAndNo").attr('readonly', 'readonly');
+        $("#MarksAndNo").css('background-color', '#E9ECEF');   
         $("#CargoDescription").attr('readonly', 'readonly');
+        $("#CargoDescription").css('background-color', '#E9ECEF');   
         $("#InvoiceRemark").attr('readonly', 'readonly');
+        $("#InvoiceRemark").css('background-color', '#E9ECEF');   
         $("#NoofOriginalBLissuedZero").prop("disabled", true);
         $("#NoofOriginalBLissuedOne").prop("disabled", true);
         $("#NoofOriginalBLissuedThree").prop("disabled", true);
@@ -380,11 +424,13 @@
         $("#HBLCollectType").prop("disabled", true);
         $("#MBLPrepaidTypeYes").prop("disabled", true);
         $("#MBLCollectType").prop("disabled", true);
-        $("#Allocate").hide();
+        $("#Allocate").prop("disabled", true);
         $("#Update").hide();
+        
     }
     else {
         $("#MANIFEST").hide();
+        
     }
 
     
@@ -435,18 +481,14 @@
 
 
 
-    if (housebl != "") {
-        $("#Save").hide();
-        $("#Update").show();
-    }
-    else {
-        $("#Save").show();
-        $("#Update").hide();
-        $("#printbl").hide();
-        $("#ExportInvoice").hide();
-    }
+    
 
     //ContainerCount();
+    if ($('#shipperDropDownList').find(":selected").attr('value') != "") {
+        var selected_val = $('#shipperDropDownList').find(":selected").attr('value');
+        var address = $('#ShipmentDetailsModel_ShipperAddress');
+        get_add(selected_val, address);
+    }
 
     
 
@@ -495,6 +537,10 @@
 
   
     $('.ContainerList').multiselect('updateButtonText');
+
+    MarksAndNoCount();
+    CargoDescriptionCount();
+    InvoiceRemarkCount();
 });
 
 function MarksAndNoCount() {

@@ -135,7 +135,7 @@ namespace DryAgentSystem.Controllers
 
                 #region Header Name
                 table = new PdfPTable(2);
-                table.SetTotalWidth(new float[] { 72, 300 });
+                table.SetTotalWidth(new float[] { 72, 350 });
                 table.LockedWidth = true;
                 table.SpacingAfter = 5f;
 
@@ -148,10 +148,10 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(image1);
                 table.AddCell(cell);
 
-                chunk = new Chunk("LEGEND LOGISTICS (INDIA) PTE LTD", FontFactory.GetFont("Times", 16, Font.BOLD, new BaseColor(0, 0, 128)));
-                para = new Paragraph("NO. 402 RUSTOMJEE ASPIREE, IMAX ROAD, EVERARD NAGAR OFF EASTERN EXPRESS HIGHWAY SION, MUMBAI - 400022, INDIA" +
-                                        "\nindia@legendasia.com" +
-                                        "\nwww.legendasia.com", FontFactory.GetFont("Calibri", 8));
+                chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
+                para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
+                                        "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
+                                        "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -199,11 +199,11 @@ namespace DryAgentSystem.Controllers
 
                 if (DeliveryDet.DevAllocateEquipmentModel.Count > 0)
                 {
-                    para1 = new Paragraph(":    " + DeliveryDet.DevAllocateEquipmentModel[0].DOIssueDate.ToString("dd/MMM/yyyy"), FontFactory.GetFont("Arial", 8));
+                    para1 = new Paragraph(":    " + DeliveryDet.DevAllocateEquipmentModel[0].DOIssueDate.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 8));
                 }
                 else
                 {
-                    para1 = new Paragraph(":    " + DateTime.Now.ToString("dd/MMM/yyyy"), FontFactory.GetFont("Arial", 8));
+                    para1 = new Paragraph(":    " + DateTime.Now.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 8));
                 }
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -329,7 +329,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.ETA.ToString("dd/MMM/yyyy"), FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.ETA.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.Colspan = 3;
@@ -342,7 +342,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.ATA.ToString("dd/MMM/yyyy"), FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.ATA.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.Colspan = 3;

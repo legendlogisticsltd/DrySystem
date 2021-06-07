@@ -48,8 +48,8 @@ namespace DryAgentSystem.Controllers
             {
                 filter = (SearchParameters)TempData["filterobj"];
             }
-            var shipmentData = DataContext.GetDischargePlanList(filter);
-            int totalRecords = shipmentData.Count();
+            var dischargePlanData = DataContext.GetDischargePlanList(filter);
+            int totalRecords = dischargePlanData.Count();
             var totalPages = (int)Math.Ceiling((float)totalRecords / (float)rows);
 
             var jsonData = new
@@ -57,41 +57,23 @@ namespace DryAgentSystem.Controllers
                 total = totalPages,
                 page,
                 records = totalRecords,
-                rows = (from shipmentDataGrid in shipmentData
+                rows = (from dischargePlanGrid in dischargePlanData
                         select new
                         {
                             //rateRequestGrid.RateID,
                             cell = new string[]
                             {
-                                shipmentDataGrid.JobRef,
-                                shipmentDataGrid.IDNo.ToString(),
-                                shipmentDataGrid.LoadPort,
-                                shipmentDataGrid.DischPort,
-                                shipmentDataGrid.Country,
-                                shipmentDataGrid.Quantity.ToString(),
-                                shipmentDataGrid.DischargePlanStatus,
-                                shipmentDataGrid.ATA.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.CreateDate.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.ClosingDate.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.LoadAgent,
-                                shipmentDataGrid.ETA.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.ETD.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.QuoteType,
-                                shipmentDataGrid.QuantityLifting.ToString(),
-                                shipmentDataGrid.DischAgentAddress,
-                                shipmentDataGrid.DischFT.ToString(),
-                                shipmentDataGrid.IDAgentDisch,
-                                shipmentDataGrid.IDAgentLoad,
-                                shipmentDataGrid.LoadAgentAddress,
-                                shipmentDataGrid.LoadFT.ToString(),
-                                shipmentDataGrid.PortPair,
-                                shipmentDataGrid.ModifyDate.ToString("MM-dd-yyyy"),
-                                shipmentDataGrid.PlaceOfDelivery,
-                                shipmentDataGrid.PlaceOfReceipt,
-                                shipmentDataGrid.DischAgentNameBL,
-                                shipmentDataGrid.ShipperNameBL,
-                                shipmentDataGrid.UniversalSerialNr,
-                                shipmentDataGrid.User
+                                dischargePlanGrid.JobRef,
+                                dischargePlanGrid.ChargeParty,
+                                dischargePlanGrid.IDNo.ToString(),
+                                dischargePlanGrid.LoadPort,
+                                dischargePlanGrid.DischPort,
+                                dischargePlanGrid.Quantity.ToString(),
+                                dischargePlanGrid.DischargePlanStatus,
+                                dischargePlanGrid.ATA.ToString("MM-dd-yyyy"),
+                                dischargePlanGrid.ETA.ToString("MM-dd-yyyy"),
+                                dischargePlanGrid.ETD.ToString("MM-dd-yyyy"),
+                                dischargePlanGrid.User
                             }
                         }).ToArray()
             };

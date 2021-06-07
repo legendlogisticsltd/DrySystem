@@ -73,9 +73,7 @@ namespace DryAgentSystem.Controllers
                                 BLDataGrid.ConsigneeNameBL,
                                 BLDataGrid.DischPort,
                                 BLDataGrid.LoadPort,
-                                BLDataGrid.CountryPOL,
-                                BLDataGrid.PlaceofDelivery,
-                                BLDataGrid.CargoDescription
+                                BLDataGrid.CountryPOL
                             }
                         }).ToArray()
             };
@@ -100,7 +98,7 @@ namespace DryAgentSystem.Controllers
             #region PDF Logo Address And Name
 
             table = new PdfPTable(2);
-            table.SetTotalWidth(new float[] { 72, 300 });
+            table.SetTotalWidth(new float[] { 72, 350 });
             table.LockedWidth = true;
             table.SpacingAfter = 5f;
 
@@ -113,10 +111,10 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(image1);
             table.AddCell(cell);
 
-            chunk = new Chunk("LEGEND LOGISTICS (INDIA) PTE LTD", FontFactory.GetFont("Times", 16, Font.BOLD, new BaseColor(0, 0, 128)));
-            para = new Paragraph("NO. 402 RUSTOMJEE ASPIREE, IMAX ROAD, EVERARD NAGAR OFF EASTERN EXPRESS HIGHWAY SION, MUMBAI - 400022, INDIA" +
-                                    "\nindia@legendasia.com" +
-                                    "\nwww.legendasia.com", FontFactory.GetFont("Calibri", 8));
+            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
+                                    "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
+                                    "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -144,12 +142,12 @@ namespace DryAgentSystem.Controllers
             //table.SpacingAfter = 5f;
 
             chunk = new Chunk("SHIPPER,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para = new Paragraph(DetBL.BLDetailsModel.ShipperNameBL, FontFactory.GetFont("Arial", 9));
+            para = new Paragraph(DetBL.BLDetailsModel.ShipperAddressBL, FontFactory.GetFont("Arial", 9));
 
             paraSp = new Paragraph(" ", FontFactory.GetFont("Arial", 9));
 
             chunk1 = new Chunk("CONSIGNEE,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para2 = new Paragraph(DetBL.BLDetailsModel.ConsigneeNameBL, FontFactory.GetFont("Arial", 9));
+            para2 = new Paragraph(DetBL.BLDetailsModel.ConsigneeAddressBL, FontFactory.GetFont("Arial", 9));
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -212,7 +210,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingAfter = 5f;
 
             chunk = new Chunk("DESCRIPTION OF GOODS,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para = new Paragraph(DetBL.BLDetailsModel.ConsigneeNameBL, FontFactory.GetFont("Arial", 9));
+            para = new Paragraph(DetBL.BLDetailsModel.CargoDescription, FontFactory.GetFont("Arial", 9));
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -440,7 +438,8 @@ namespace DryAgentSystem.Controllers
 
             para = new Paragraph("Remarks", FontFactory.GetFont("Arial", 10, Font.BOLD));
             pdfDoc.Add(para);
-
+            para = new Paragraph(DetBL.ShipmentDetailsModel.Remark, FontFactory.GetFont("Arial", 10));
+            pdfDoc.Add(para);
             pdfWriter.CloseStream = false;
             pdfDoc.Close();
             Response.Buffer = true;
@@ -456,7 +455,7 @@ namespace DryAgentSystem.Controllers
         {
             ShipmentBL DetShipBL = DataContext.GetShipmentDetailsFromJobRefForImportInvoice(JobRefId);
 
-            ErrorLog errorlog = DataContext.SaveSalesInvoiveData(DetShipBL);
+            ErrorLog errorlog = DataContext.SaveSalesInvoiceData(DetShipBL);
             if (!errorlog.IsError)
             {
                 GenerateImportInvoicePDF(DetShipBL.ShipmentDetailsModel.JobRef);
@@ -486,7 +485,7 @@ namespace DryAgentSystem.Controllers
             string DecTotal = "";
 
             table = new PdfPTable(2);
-            table.SetTotalWidth(new float[] { 72, 300 });
+            table.SetTotalWidth(new float[] { 72, 350 });
             table.LockedWidth = true;
             table.SpacingAfter = 5f;
 
@@ -499,10 +498,10 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(image1);
             table.AddCell(cell);
 
-            chunk = new Chunk("LEGEND LOGISTICS (INDIA) PTE LTD", FontFactory.GetFont("Times", 16, Font.BOLD, new BaseColor(0, 0, 128)));
-            para = new Paragraph("NO. 402 RUSTOMJEE ASPIREE, IMAX ROAD, EVERARD NAGAR OFF EASTERN EXPRESS HIGHWAY SION, MUMBAI - 400022, INDIA" +
-                                    "\nindia@legendasia.com" +
-                                    "\nwww.legendasia.com", FontFactory.GetFont("Calibri", 8));
+            chunk = new Chunk("LEGEND CONTAINER LINE PTE LTD", FontFactory.GetFont("Times", 19, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("531 Upper Cross Street, #04-59 Hong Lim Complex, Singapore 050531." +
+                                    "\nTel: +65 6221 4844 Fax: +65 6225 4644" +
+                                    "\nCO.Reg No and GST Reg No. 201209737N", FontFactory.GetFont("Calibri", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -516,7 +515,7 @@ namespace DryAgentSystem.Controllers
             table.HorizontalAlignment = 1;
             table.DefaultCell.PaddingLeft = 5f;
 
-            para = new Paragraph("IMPORT INVOICE", FontFactory.GetFont("Arial", 13, Font.BOLD));
+            para = new Paragraph("PROFORMA IMPORT INVOICE", FontFactory.GetFont("Arial", 13, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -526,8 +525,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(InVDet.SalesInvoiceDryModel.BillingParty +
-                                "\n" + InVDet.SalesInvoiceDryModel.BillingPartyAddress +
+            para = new Paragraph(InVDet.SalesInvoiceDryModel.BillingPartyAddress +
                                 "\n ", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Colspan = 3;
@@ -738,7 +736,7 @@ namespace DryAgentSystem.Controllers
 
             if (InVDet.salesInvoiceLineItemDryModel.Count > 0)
             {
-                para1 = new Paragraph(": " + InVDet.salesInvoiceLineItemDryModel[0].Quantity + " x " + InVDet.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(": " + InVDet.ShipmentDetailsModel.QuantityLifting + " x " + InVDet.ShipmentDetailsModel.EquipmentType, FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.BorderWidthRight = 0.5f;
@@ -757,36 +755,6 @@ namespace DryAgentSystem.Controllers
                 table.AddCell(cell);
             }
 
-            //para = new Paragraph("PRODUCT GROUP", FontFactory.GetFont("Arial", 8));
-            cell = new PdfPCell();
-            cell.BorderWidthTop = 0f;
-            cell.BorderWidthRight = 0f;
-            //cell.AddElement(para);
-            table.AddCell(cell);
-
-            //para = new Paragraph(": " + shipment.ShipmentDetailsModel.ProductName, FontFactory.GetFont("Arial", 8));
-            cell = new PdfPCell();
-            cell.Colspan = 2;
-            cell.BorderWidthTop = 0f;
-            cell.BorderWidthLeft = 0f;
-            //cell.AddElement(para);
-            table.AddCell(cell);
-
-            para1 = new Paragraph("  GROSS WT.", FontFactory.GetFont("Arial", 8));
-            cell = new PdfPCell();
-            cell.Border = 0;
-            cell.BorderWidthBottom = 0.5f;
-            cell.AddElement(para1);
-            table.AddCell(cell);
-
-            para1 = new Paragraph(": " + InVDet.SalesInvoiceDryModel.Grossweight, FontFactory.GetFont("Arial", 8));
-            cell = new PdfPCell();
-            cell.Border = 0;
-            cell.BorderWidthRight = 0.5f;
-            cell.BorderWidthBottom = 0.5f;
-            cell.AddElement(para1);
-            table.AddCell(cell);
-
             para = new Paragraph("REMARKS", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.BorderWidthTop = 0f;
@@ -796,10 +764,25 @@ namespace DryAgentSystem.Controllers
 
             para = new Paragraph(": " + InVDet.SalesInvoiceDryModel.Remarks, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
-            cell.Colspan = 4;
+            cell.Colspan = 2;
             cell.BorderWidthTop = 0f;
             cell.BorderWidthLeft = 0f;
             cell.AddElement(para);
+            table.AddCell(cell);
+
+            para1 = new Paragraph("  GROSS WT.", FontFactory.GetFont("Arial", 8));
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.BorderWidthBottom = 0.5f;
+            cell.AddElement(para1);
+            table.AddCell(cell);
+
+            para1 = new Paragraph(": " + InVDet.SalesInvoiceDryModel.Grossweight.ToString("0.00") +" "+ InVDet.SalesInvoiceDryModel.GrossWeightUnit, FontFactory.GetFont("Arial", 8));
+            cell = new PdfPCell();
+            cell.Border = 0;
+            cell.BorderWidthRight = 0.5f;
+            cell.BorderWidthBottom = 0.5f;
+            cell.AddElement(para1);
             table.AddCell(cell);
             pdfDoc.Add(table);
 
@@ -1069,7 +1052,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Total", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("Grand Total", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
@@ -1079,7 +1062,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
+            para = new Paragraph(":", FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -1097,8 +1080,8 @@ namespace DryAgentSystem.Controllers
                 double decTot = InVDet.SalesInvoiceDryModel.AmountinUSDSUM;
                 DecTotal = Convert.ToDecimal(decTot).ToString("0.00");
             }
-            para = new Paragraph(DecTotal, FontFactory.GetFont("Arial", 8, Font.BOLD));
-            para.Alignment = Element.ALIGN_CENTER;
+            para = new Paragraph("USD  "+DecTotal, FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
             cell.Border = 0;
@@ -1195,7 +1178,7 @@ namespace DryAgentSystem.Controllers
             para.SpacingAfter = 4f;
             pdfDoc.Add(para);
 
-            para = new Paragraph("Clear demarcation of terms of sales will wipe-out any potential chance of misunderstanding or disagreement from any of the parties. Hence, it is of utmost" +
+            para = new Paragraph("Clear demarcation of terms of sales will wipe-out any potential chance of misunderstanding or disagreement from any of the parties. Hence, it is of utmost " +
                 "importance to mention the terms of sales like - cost, quantity, single unit cost, delivery date or time of service, payment method or credit, if any.", FontFactory.GetFont("Arial", 8));
             para.SpacingAfter = 8f;
             pdfDoc.Add(para);
@@ -1204,7 +1187,7 @@ namespace DryAgentSystem.Controllers
             para.SpacingAfter = 4f;
             pdfDoc.Add(para);
 
-            para = new Paragraph("It is one of the most usual payment terms, where the service provider asks for full or partial payment before the delivery of product or service. This is prevalent in" +
+            para = new Paragraph("It is one of the most usual payment terms, where the service provider asks for full or partial payment before the delivery of product or service. This is prevalent in " +
                 "the service industry and is followed to avoid after - sales non - payment recovery.It is practiced to avoid out -of - pocket expenses to finish the project.", FontFactory.GetFont("Arial", 8));
             para.SpacingAfter = 4f;
             pdfDoc.Add(para);

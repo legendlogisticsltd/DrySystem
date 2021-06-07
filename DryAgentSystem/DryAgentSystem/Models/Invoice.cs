@@ -25,10 +25,10 @@ namespace DryAgentSystem.Models
         public string Address4 { get; set; }
 
         [Display(Name = "Amount in USD SUM")]
-        public decimal AmountinUSDSUM { get; set; }
+        public double AmountinUSDSUM { get; set; }
 
         [Display(Name = "Amount USD SUM WTax")]
-        public string AmountinUSDSUMWTax { get; set; }
+        public double AmountinUSDSUMWTax { get; set; }
 
         [Display(Name = "Billing Party Address")]
         public string BillingPartyAddress { get; set; }
@@ -179,7 +179,7 @@ namespace DryAgentSystem.Models
         public string TankNo{ get; set; }
 
         [Display(Name = "Tax Amount Sum")]
-        public string TaxAmountSum { get; set; }
+        public double TaxAmountSum { get; set; }
 
         [Display(Name = "Type")]
         public string Type { get; set; }

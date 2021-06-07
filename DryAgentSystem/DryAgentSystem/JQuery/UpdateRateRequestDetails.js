@@ -70,8 +70,8 @@
         //$("#Quantity").prop("disabled", true);
 
         $("#agencyDropDownList").prop("disabled", true);
+        $("#ShipperName").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
         $("#GrossWt").attr('readonly', 'readonly');
         $("#TransshipmentTypeYes").prop("disabled", true);
         $("#TransshipmentTypeNo").prop("disabled", true);
@@ -116,7 +116,8 @@
         $("#Quantity").prop("disabled", true);
         $("#RateCountered").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
+
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -164,7 +165,7 @@
         $("#Quantity").prop("disabled", true);
         $("#RateCountered").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -212,7 +213,7 @@
         $("#RateCountered").prop("disabled", true);
         $("#Quantity").prop("disabled", true);
 
-        $("#ShipperName").attr('readonly', 'readonly');
+        $("#ShipperName").prop("disabled", true);
         $("#GrossWt").attr('readonly', 'readonly');
         $("#agencyDropDownList").prop("disabled", true);
         $("#TransshipmentTypeYes").prop("disabled", true);
@@ -279,7 +280,7 @@
         mtype: 'Get',
         url: 'GetQuoteChargesList', //'/QuotationDetails/GetQuoteChargesList'
         datatype: 'json',
-        colNames: ['Description'],
+        colNames: ['Cost Charges'],
         colModel: [
             //{
             //    key: true,

@@ -17,12 +17,24 @@
 
 <script src="~/JQuery/ShipmentDetails.js"></script>
 <script type="text/javascript">
-    var jobref = "@Html.Raw(@Model.ShipmentDetailsModel.JobRef)";
+    var housebl = "@Html.Raw(@Model.ShipmentDetailsModel.HBLHAWB)";
     var bltypes = "@Html.Raw(@Model.BLDetailsModel.BLTypes)";
     var blstatus = "@Html.Raw(@Model.BLDetailsModel.BLStatus)";
     var blseawaystatus = "@Html.Raw(@Model.BLDetailsModel.BLSeawayStatus)";
     var invoicesave = "@Html.Raw(@Model.ShipmentDetailsModel.InvoiceSave)";
+    var usn = "@Html.Raw(@Model.ShipmentDetailsModel.UniversalSerialNr)";
 </script>
+
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+<style type="text/css">
+    .ui-jqgrid-bdiv {
+        overflow-x: hidden !important;
+    }
+</style>
 
 @using (Html.BeginForm("ShipmentDetails", "ShipmentDetails", FormMethod.Post))
 {
@@ -34,7 +46,7 @@
                     <input type="submit" name="submit" id="Update" value="Update" class="btn btn-success" />
                 </div>
                 <div class="col-md-2" style="margin-left: -1px;">
-                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice">Print Invoice</a>
+                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice" onclick="ReloadPage()">Print Invoice</a>
                 </div>
 
                 <div class="col-md-3">
@@ -42,7 +54,7 @@
                         Shipping Instruction
                     </button>
                     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="z-index: 1000;">
+                        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content" style="z-index: 1000;">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLongTitle">Shipping Instruction</h5>
@@ -54,20 +66,20 @@
                                     <p>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <div style="margin-left: 45px;z-index: 2;">
+                                                <div style="margin-left: 45px;">
                                                     <!-- Remove the below text and add shipper -->
                                                     @Html.LabelFor(model => model.BLDetailsModel.ShipperNameSI, htmlAttributes: new { @class = "control-label" })
                                                     <span class="RequiredAstrik">*</span>
                                                     <br>
                                                     @Html.DropDownListFor(model => model.BLDetailsModel.ShipperNameSI, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                                                    "Select Agency", new { @class = "ui-selectmenu-menu", @id = "shippernamesiDropDownList", style = "z-index: 3000;" })
+                                                    "Select Agency", new { @class= "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shippernamesiDropDownList", style="width: 84%;"})
                                                     @Html.ValidationMessageFor(model => model.BLDetailsModel.ShipperNameSI, "", new { @class = "text-danger" })
                                                     <br><br>
                                                     <!-- Remove the below text and add shipper address -->
                                                     @Html.LabelFor(model => model.BLDetailsModel.ShipperAddressSI, htmlAttributes: new { @class = "control-label" })
                                                     <span class="RequiredAstrik">*</span>
                                                     <br>
-                                                    @Html.TextAreaFor(model => model.BLDetailsModel.ShipperAddressSI, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Shipper Address" })
+                                                    @Html.TextAreaFor(model => model.BLDetailsModel.ShipperAddressSI, new { rows = "4", cols = "36", style = "resize:none;", placeholder = "Shipper Address" })
                                                     @Html.ValidationMessageFor(model => model.BLDetailsModel.ShipperAddressSI, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -78,13 +90,14 @@
                                                     <span class="RequiredAstrik">*</span>
                                                     <br>
                                                     @Html.DropDownListFor(model => model.BLDetailsModel.ConsigneeNameSI, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                                                    "Select Agency", new { @class = "ui-selectmenu-menu", @id = "consigneenamesiDropDownList" })
+                                                    "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "consigneenamesiDropDownList", style = "width: 84%;" })
                                                     @Html.ValidationMessageFor(model => model.BLDetailsModel.ConsigneeNameSI, "", new { @class = "text-danger" })
                                                     <br><br>
                                                     <!-- Remove the below text and add Consignee address -->
                                                     @Html.LabelFor(model => model.BLDetailsModel.ConsigneeAddressSI, htmlAttributes: new { @class = "control-label" })
                                                     <span class="RequiredAstrik">*</span>
-                                                    @Html.TextAreaFor(model => model.BLDetailsModel.ConsigneeAddressSI, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Consignee Address" })
+                                                    <br>
+                                                    @Html.TextAreaFor(model => model.BLDetailsModel.ConsigneeAddressSI, new { rows = "4", cols = "36", style = "resize:none;", placeholder = "Consignee Address" })
                                                     @Html.ValidationMessageFor(model => model.BLDetailsModel.ConsigneeAddressSI, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -92,11 +105,7 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    @*<button type="button" class="btn btn-success" style="text-align:center;margin:auto; width: 150px;"
-                                            onclick="window.open('@Url.Action("SaveShippingInstruction","ShipmentDetails", new { ShipperNameSI = Model.BLDetailsModel.ShipperNameSI,ShipperAddressSI = Model.BLDetailsModel.ShipperAddressSI,ConsigneeNameSI = Model.BLDetailsModel.ConsigneeNameSI,ConsigneeAddressSI = Model.BLDetailsModel.ConsigneeAddressSI,UniversalSerialNr = Model.ShipmentDetailsModel.UniversalSerialNr })')">
-                                        <img src="~/Content/Img/printer-fill.svg" alt="Print Icon" />Print Shipping Instruction
-                                    </button>*@
-                                    <input type="submit" name="submit" id="ShippingInstruction" value="Print Shipping Instruction" class="btn btn-success"  style="margin:auto;"/>
+                                    <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "Shipping Instruction",jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-success ForShippingInstructionButton" target="_blank" onclick="shipping()"><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" /> Print Shipping Instruction</a>
                                 </div>
                             </div>
                         </div>
@@ -108,13 +117,13 @@
                 </div>
                 <div class="col-md-2">
                     <div class="dropdown1">
-                        <button type="button" class="dropbtn1" style="width: 100%;" new { id="printbl" }><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" />Print BL</button>
+                        <button type="button" class="dropbtn1" style="width: 100%;" new { id="printbls" }><img src="~/Content/Img/printer-fill.svg" alt="Print Icon" />Print BL</button>
                         <div class="dropdown-content1">
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "ORIGINAL",jobref = @Model.ShipmentDetailsModel.JobRef})' ; target="_blank" id="ORIGINAL">Original BL</a>
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "NON-NEGOTIABLE",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="NON-NEGOTIABLE" onclick="ReloadPage()">Non-Negotiable</a>
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "SEAWAY",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="SEAWAY">Seaway</a>
                             <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "SURRENDER",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="SURRENDER" onclick="ReloadPage()">Surrender</a>
-                            <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "DRAFT",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="DRAFT" onclick="ReloadPage()">Draft BL</a>
+                            <a href='@Url.Action("PrintBL", "ShipmentDetails", new { PrintName = "DRAFT",jobref = @Model.ShipmentDetailsModel.JobRef })' ; target="_blank" id="DRAFTs" onclick="ReloadPage()">Draft BL</a>
                         </div>
                     </div>
                 </div>
@@ -123,11 +132,10 @@
             <div class="row">
                 <div class="form-group">
                     <h3 class="text-success">@TempData["message"]</h3>
-                    @*<input type="button" value="Re-PrintBL Request" onclick="RePrintMethod()" id="RePrint" />*@
                 </div>
                 <div class="col-10"></div>
                 <div class="col-2">
-                    <a href='@Url.Action("MailSend", "ShipmentDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" id="RePrint">Re-PrintBL Request</a>
+                    <input type="button" value="Re-PrintBL Request" class="btn btn-outline-info" onclick="RePrintMethod()" id="RePrint" />
                 </div>
             </div>
             
@@ -222,7 +230,7 @@
                     </div>
                     <div class="col-md-3">
                         @Html.DropDownListFor(model => model.BLDetailsModel.PkgType, new SelectList(ViewBag.pktypeList, "Text", "Text"),
-                            "Select Package Type", new { @class = "ui-selectmenu-menu", @id = "packageDropDownList" })
+                            "Select Package Type", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "packageDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.PkgType, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -233,7 +241,7 @@
                     </div>
                     <div class="col-md-3">
                         @Html.DropDownListFor(model => model.ShipmentDetailsModel.Shipper, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                        "Select Agency", new { @class = "ui-selectmenu-menu", @id = "shipperDropDownList" })
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shipperDropDownList"})
                         @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.Shipper, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2"></div>
@@ -243,7 +251,7 @@
                     </div>
                     <div class="col-md-3">
                         @Html.DropDownListFor(model => model.BLDetailsModel.ConsigneeNameBL, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                        "Select Agency", new { @class = "ui-selectmenu-menu", @id = "consigneenameblDropDownList" })
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "consigneenameblDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.ConsigneeNameBL, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -272,7 +280,8 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
-                        @Html.EditorFor(model => model.BLDetailsModel.NotifyPartyName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownListFor(model => model.BLDetailsModel.NotifyPartyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "notifypartynameDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.NotifyPartyName, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2"></div>
@@ -281,7 +290,8 @@
                         <span class="RequiredAstrik">*</span>
                     </div>
                     <div class="col-md-3">
-                        @Html.EditorFor(model => model.BLDetailsModel.DischAgentNameBL, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.DropDownListFor(model => model.BLDetailsModel.DischAgentNameBL, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                        "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischagentnameblDropDownList" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.DischAgentNameBL, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -398,7 +408,18 @@
                         @*<span>  Containers Selected : <span id="CountingContainers"></span></span>*@
                     </div>
                     <div class="col-md-2">
-                        <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />
+                        @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
+                        <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()" />
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="containerGrid" class="overflow:auto;">
+                        </table>
+                        <div id="containerPager">
+                        </div>
                     </div>
                 </div>
             </fieldset>
@@ -431,34 +452,26 @@
                         <span class="AligningCharacterCount"><span id="CountingCharactersRemarks">0</span>/300</span>
                     </div>
                 </div>
-                <br />
-                <br />
-                <div class="row">
+                
+                @*<div class="row">
                     <div class="col-md-2" style="margin-left: 470px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select GW. Unit", new { @class = "ui-selectmenu-menu", @id = "grossweightDropDownList" })
+                            "Select GW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "grossweightDropDownList", style="width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.GrossWeightUnit, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2" style="margin-left: 20px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.NetWtUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select NW. Unit", new { @class = "ui-selectmenu-menu", @id = "netweightDropDownList" })
+                            "Select NW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "netweightDropDownList", style = "width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.NetWtUnit, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-2" style="margin-left: 25px;">
                         @Html.DropDownListFor(model => model.BLDetailsModel.MeasurementUnit, new SelectList(ViewBag.munitlist, "Text", "Text"),
-                            "Select M. Unit", new { @class = "ui-selectmenu-menu", @id = "munitDropDownList" })
+                            "Select M. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "munitDropDownList", style = "width: 170px" })
                         @Html.ValidationMessageFor(model => model.BLDetailsModel.MeasurementUnit, "", new { @class = "text-danger" })
                     </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="tankGrid" class="overflow:auto;">
-                        </table>
-                        <div id="tankPager">
-                        </div>
-                    </div>
-                </div>
+                </div>*@
+                
+                
 
             </fieldset>
             <br />
@@ -475,7 +488,7 @@
                     @Html.LabelFor(model => model.BLDetailsModel.LadenOnBoard, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.LadenOnBoard, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ladenDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.LadenOnBoard, "", new { @class = "text-danger" })
                 </div>
@@ -485,15 +498,16 @@
                     @Html.LabelFor(model => model.BLDetailsModel.BLFinalisedDate, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.BLFinalisedDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "blfinalisedDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.BLFinalisedDate, "", new { @class = "text-danger" })
                 </div>
+                <div class="col-md-1"></div>
                 <div class="col-md-2">
                     @Html.LabelFor(model => model.BLDetailsModel.DateofIssue, htmlAttributes: new { @class = "control-label" })
                     <span class="RequiredAstrik">*</span>
                 </div>
-                <div class="col-md-4 forleftalign">
+                <div class="col-md-3 forleftalign">
                     @Html.TextBoxFor(model => model.BLDetailsModel.DateofIssue, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "issueDatePicker" })
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.DateofIssue, "", new { @class = "text-danger" })
                 </div>
