@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\asus\Source\Workspaces\Legend2\Legend\Dev\Mar-2021\DryAgentSystem\DryAgentSystem\bin\app.publish\</_PublishTargetUrl>
-    <History>True|2021-06-06T06:05:07.0225623Z;True|2021-06-06T11:13:24.1317659+05:30;True|2021-06-06T10:02:46.1364877+05:30;True|2021-06-05T10:27:24.8874229+05:30;True|2021-06-04T16:04:40.1596695+05:30;True|2021-06-04T15:44:19.9669553+05:30;True|2021-06-03T17:12:39.9848483+05:30;True|2021-06-03T14:51:50.6801686+05:30;</History>
+    <History>True|2021-06-14T04:52:49.8284508Z;True|2021-06-07T11:55:47.9409175+05:30;True|2021-06-06T11:35:07.0225623+05:30;True|2021-06-06T11:13:24.1317659+05:30;True|2021-06-06T10:02:46.1364877+05:30;True|2021-06-05T10:27:24.8874229+05:30;True|2021-06-04T16:04:40.1596695+05:30;True|2021-06-04T15:44:19.9669553+05:30;True|2021-06-03T17:12:39.9848483+05:30;True|2021-06-03T14:51:50.6801686+05:30;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Antlr3.Runtime.dll">
@@ -46,10 +46,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:48:12</publishTime>
     </File>
     <File Include="bin/DryAgentSystem.dll">
-      <publishTime>06/06/2021 11:35:05</publishTime>
+      <publishTime>06/14/2021 16:01:04</publishTime>
     </File>
     <File Include="bin/DryAgentSystem.pdb">
-      <publishTime>06/06/2021 11:35:05</publishTime>
+      <publishTime>06/14/2021 16:01:04</publishTime>
     </File>
     <File Include="bin/ExcelNumberFormat.dll">
       <publishTime>06/01/2021 19:48:12</publishTime>
@@ -460,10 +460,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:48:10</publishTime>
     </File>
     <File Include="Content/jquery.jqGrid/ui.jqgrid.css">
-      <publishTime>06/01/2021 19:48:10</publishTime>
+      <publishTime>06/10/2021 12:54:01</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>06/04/2021 15:42:11</publishTime>
+      <publishTime>06/10/2021 12:54:00</publishTime>
     </File>
     <File Include="Content/themes/base/accordion.css">
       <publishTime>06/01/2021 19:48:10</publishTime>
@@ -640,13 +640,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="JQuery/AgentAddressBook.js">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/AgentAddressBookDetails.js">
       <publishTime>06/05/2021 16:45:27</publishTime>
     </File>
     <File Include="JQuery/Booking.js">
-      <publishTime>06/01/2021 19:49:24</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/BookingDetails.js">
       <publishTime>06/01/2021 19:48:10</publishTime>
@@ -655,43 +655,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/06/2021 09:58:08</publishTime>
     </File>
     <File Include="JQuery/DeliveryOrder.js">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/DeliveryOrderDetails.js">
       <publishTime>06/01/2021 20:05:14</publishTime>
     </File>
     <File Include="JQuery/DischargePlan.js">
-      <publishTime>06/05/2021 17:12:16</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/DischargePlanDetails.js">
       <publishTime>06/05/2021 17:36:10</publishTime>
     </File>
     <File Include="JQuery/ImportDocument.js">
-      <publishTime>06/06/2021 11:34:21</publishTime>
+      <publishTime>06/14/2021 10:21:03</publishTime>
     </File>
     <File Include="JQuery/Invoice.js">
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="JQuery/InvoiceDetails.js">
-      <publishTime>06/01/2021 19:49:24</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="JQuery/Quotation.js">
-      <publishTime>06/01/2021 19:49:24</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/QuotationDetails.js">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/RateRequest.js">
-      <publishTime>06/01/2021 19:49:24</publishTime>
+      <publishTime>06/07/2021 11:54:14</publishTime>
     </File>
     <File Include="JQuery/RateRequestDetails.js">
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="JQuery/Shipment.js">
-      <publishTime>06/03/2021 14:48:50</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="JQuery/ShipmentDetails.js">
-      <publishTime>06/06/2021 11:11:33</publishTime>
+      <publishTime>06/14/2021 10:21:03</publishTime>
     </File>
     <File Include="JQuery/UpdateAddressBookDetails.js">
       <publishTime>06/05/2021 16:45:27</publishTime>
@@ -703,7 +703,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/05/2021 16:45:27</publishTime>
     </File>
     <File Include="JQuery/VesselTab.js">
-      <publishTime>06/06/2021 09:58:08</publishTime>
+      <publishTime>06/14/2021 15:55:52</publishTime>
     </File>
     <File Include="Scripts/bootstrap-multiselect-collapsible-groups.js">
       <publishTime>06/01/2021 19:48:10</publishTime>
@@ -1195,10 +1195,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/05/2021 16:45:27</publishTime>
     </File>
     <File Include="Views/AgentAddressBookDetails/AgentAddressBookDetails.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/AgentAddressBookDetails/UpdateAgentAddressDetails.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/Booking/Booking.cshtml">
       <publishTime>06/01/2021 19:49:24</publishTime>
@@ -1207,25 +1207,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="Views/BookingDetails/BookingDetailsTab.cshtml">
-      <publishTime>06/06/2021 09:58:08</publishTime>
+      <publishTime>06/14/2021 15:55:52</publishTime>
     </File>
     <File Include="Views/BookingDetails/VesselDetailsTab.cshtml">
       <publishTime>06/04/2021 15:42:11</publishTime>
     </File>
     <File Include="Views/DeliveryOrder/DeliveryOrder.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/DeliveryOrderDetails/DeliveryOrderDetails.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/10/2021 12:54:01</publishTime>
     </File>
     <File Include="Views/DischargePlan/DischargePlan.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/DischargePlanDetails/DischargePlanDetails.cshtml">
-      <publishTime>06/05/2021 17:07:30</publishTime>
+      <publishTime>06/10/2021 12:54:01</publishTime>
     </File>
     <File Include="Views/DischargePlanDetails/UpdateDischargePlanDetails.cshtml">
-      <publishTime>06/05/2021 17:07:06</publishTime>
+      <publishTime>06/10/2021 12:54:01</publishTime>
     </File>
     <File Include="Views/Home/Home.cshtml">
       <publishTime>06/01/2021 19:48:10</publishTime>
@@ -1234,7 +1234,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="Views/ImportDocument/ImportDocument.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/Invoice/Invoice.cshtml">
       <publishTime>06/01/2021 19:49:24</publishTime>
@@ -1249,16 +1249,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="Views/QuotationDetails/QuotationDetails.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/10/2021 12:54:01</publishTime>
     </File>
     <File Include="Views/RateRequest/RateRequest.cshtml">
       <publishTime>06/01/2021 19:49:24</publishTime>
     </File>
     <File Include="Views/RateRequestDetails/RateRequestDetails.cshtml">
-      <publishTime>06/05/2021 10:24:31</publishTime>
+      <publishTime>06/14/2021 15:55:52</publishTime>
     </File>
     <File Include="Views/RateRequestDetails/UpdateRateRequestDetails.cshtml">
-      <publishTime>06/05/2021 16:45:27</publishTime>
+      <publishTime>06/14/2021 15:55:52</publishTime>
     </File>
     <File Include="Views/Shared/DetailLayout.cshtml">
       <publishTime>06/04/2021 15:42:11</publishTime>
@@ -1273,10 +1273,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/04/2021 15:42:11</publishTime>
     </File>
     <File Include="Views/Shipment/Shipment.cshtml">
-      <publishTime>06/06/2021 09:58:08</publishTime>
+      <publishTime>06/07/2021 11:54:15</publishTime>
     </File>
     <File Include="Views/ShipmentDetails/ShipmentDetails.cshtml">
-      <publishTime>06/04/2021 15:42:11</publishTime>
+      <publishTime>06/14/2021 15:55:52</publishTime>
     </File>
     <File Include="Views/Web.config">
       <publishTime>06/01/2021 19:48:10</publishTime>

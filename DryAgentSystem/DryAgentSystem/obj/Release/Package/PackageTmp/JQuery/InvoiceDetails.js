@@ -60,7 +60,6 @@
     });
 
 
-    $('#InvoiceDetailsGrid').navGrid('#InvoiceDetailsPager', { edit: false, add: false, del: false, search: false, refresh: true });
 
 
     $("#InvoiceDatePicker").datepicker({

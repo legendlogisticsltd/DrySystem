@@ -175,7 +175,7 @@ namespace DryAgentSystem.Controllers
         //[ValidateAntiForgeryToken]
         public void FetchCharges(RateRequest RateRequest)
         {
-            RateRequest.ExportLocalCharges = DataContext.GetExportChargesList(RateRequest).Select(x => new SelectListItem { Text = x.ChargeDescription, Value = x.ChargeDescription });
+            RateRequest.ExportLocalCharges = DataContext.GetExportChargesList(RateRequest).Select(x => new SelectListItem { Text = x.ChargeDescription, Value = x.ChargeDescription});
 
             RateRequest.ImportLocalCharges = DataContext.GetImportChargesList(RateRequest).Select(x => new SelectListItem { Text = x.ChargeDescription, Value = x.ChargeDescription });
         }

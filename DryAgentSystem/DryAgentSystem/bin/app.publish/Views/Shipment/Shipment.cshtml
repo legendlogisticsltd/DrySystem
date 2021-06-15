@@ -11,6 +11,12 @@
 @Styles.Render("~/Content/cssjqryUi")
 <script src="~/JQuery/Shipment.js"></script>
 
+<style>
+    label {
+        margin-top: 6px;
+    }
+</style>
+
 
 @using (Html.BeginForm("Shipment", "Shipment", FormMethod.Post))
 {
@@ -47,32 +53,34 @@
                     @Html.EditorFor(model => model.JobRef, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.JobRef, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    @Html.LabelFor(model => model.ChargeParty, htmlAttributes: new { @class = "control-label" })
-                    @Html.DropDownListFor(model => model.ChargeParty, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                                 "Select Status", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
-                    @Html.ValidationMessageFor(model => model.ChargeParty, "", new { @class = "text-danger" })
-                </div>
+                
             </div>
             <div class="row">
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label" })
                     @Html.DropDownListFor(model => model.Status, new SelectList(ViewBag.statuslist, "Text", "Text"),
-                                 "Select Status", new { @class = "ui-selectmenu-menu", @id = "statusDropDownList" })
+                                 "Select Status", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "statusDropDownList" })
                     @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.ChargeParty, htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(model => model.ChargeParty, new SelectList(ViewBag.CompanyList, "Text", "Text"),
+                                 "Select Charge Party", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList" })
+                    @Html.ValidationMessageFor(model => model.ChargeParty, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
                     @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "loadportDropDownList" })
+                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "loadportDropDownList" })
                     @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
                 </div>
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.DischargePort, htmlAttributes: new { @class = "control-label" })
                     @Html.DropDownListFor(model => model.DischargePort, new SelectList(ViewBag.PortList, "Port", "Port"),
-                        "Select Port", new { @class = "ui-selectmenu-menu", @id = "dischportDropDownList" })
+                        "Select Port", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "dischportDropDownList" })
                     @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
                 </div>
+
                 <div class="col-md-1"></div>
             </div>
         </div>

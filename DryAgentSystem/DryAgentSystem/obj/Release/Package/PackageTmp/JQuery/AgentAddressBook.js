@@ -24,7 +24,7 @@ $(function () {
             {
                 key: false,
                 name: 'CompanyName',
-                width: '300px'
+                width: '402px'
             },
             //{
             //    key: false,
@@ -69,7 +69,7 @@ $(function () {
         emptyrecords: 'No records to display'
         //pager-you have to choose here what icons should appear at the bottom  
         //like edit,create,delete icons  
-    }).navGrid('#AgentAddressBookDataPager', { edit: false, add: false, del: false, search: false, refresh: true });
+    });
 
 
     function reloadGrid(refresh) {

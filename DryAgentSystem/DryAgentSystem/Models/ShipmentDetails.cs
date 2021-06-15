@@ -9,6 +9,8 @@ namespace DryAgentSystem.Models
 {
     public class ShipmentDetails
     {
+        public bool AllocateStatus { get; set; }
+
         [Display(Name = "Acct Month")]
         public string AcctMonth { get; set; }
 

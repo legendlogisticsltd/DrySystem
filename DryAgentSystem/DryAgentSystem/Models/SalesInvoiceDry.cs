@@ -37,6 +37,7 @@ namespace DryAgentSystem.Models
             public int InvoiceAmt { get; set; }
             public DateTime InvoiceDate { get; set; }
             public string InvoiceNo { get; set; }
+            public string ProformaInvoiceNo { get; set; }
             public string InvoiceType { get; set; }
             public string JobRefNo { get; set; }
             public string LoadPort { get; set; }

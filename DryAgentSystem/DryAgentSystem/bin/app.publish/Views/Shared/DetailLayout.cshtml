@@ -39,7 +39,7 @@
                         switch (CurrentControllerName)
                         {
                             case "RateRequestDetails":
-                                <li>@Html.ActionLink("CREATE RATE REQUEST", "RateRequestDetails", "RateRequestDetails")</li>
+                                <li>@Html.ActionLink("HOME", "Home", "Home")</li>
                                 <li>@Html.ActionLink("RATE REQUEST", "RateRequest", "RateRequest")</li>
                                 break;
                             case "QuotationDetails":
@@ -55,6 +55,17 @@
                                 break;
                             case "InvoiceDetails":
                                 <li>@Html.ActionLink("Invoice", "Invoice", "Invoice")</li>
+                                break;
+                            case "DischargePlanDetails":
+                                <li>@Html.ActionLink("IMPORT", "ImportDocument", "ImportDocument")</li>
+                                <li>@Html.ActionLink("DISCHARGE PLAN", "DischargePlan", "DischargePlan")</li>
+                                break;
+                            case "DeliveryOrderDetails":
+                                <li>@Html.ActionLink("DELIVERY ORDER", "DeliveryOrder", "DeliveryOrder")</li>
+                                break;
+                            case "AgentAddressBookDetails":
+                                <li> @Html.ActionLink("ADD NEW", "AgentAddressBookDetails", "AgentAddressBookDetails") </li>
+                                <li>@Html.ActionLink("ADDRESS BOOK", "AgentAddressBook", "AgentAddressBook")</li>
                                 break;
                             default:
                                 Layout = "~/C/Shared/Layout.cshtml";

@@ -67,9 +67,9 @@ namespace DryAgentSystem.Controllers
                                 shipmentGrid.ChargeParty,
                                 shipmentGrid.BookingNo,
                                 shipmentGrid.IDQuoteRef,
+                                shipmentGrid.BLTypes,
                                 shipmentGrid.DischPort,
-                                shipmentGrid.LoadPort,
-                                shipmentGrid.BLTypes
+                                shipmentGrid.LoadPort
                             }
                         }).ToArray()
             };

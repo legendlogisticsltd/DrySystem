@@ -110,7 +110,7 @@
     $("#UNNo").attr('readonly', 'readonly');
     $("#IMO").attr('readonly', 'readonly');
 
-    var $s = $("#collectionDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    //var $s = $("#collectionDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
     $("#BookingStatus").attr('readonly', 'readonly');
     $("#ContainerReleaseOrderNo").attr('readonly', 'readonly');
     $("#TransshipmentTypeYes").prop("disabled", true);
@@ -123,8 +123,7 @@
     $("#Ventilation").attr('readonly', 'readonly');
 
     
-
-
+    
     if (BookingStatus == "CONFIRMED") {
 
         $("#Save").hide();
@@ -133,7 +132,7 @@
         $("#Shipment").hide();
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
-        $("#ServiceMode").attr('readonly', 'readonly');
+        $("#ServiceMode").prop("disabled", true);
         $("#Commodity").attr('readonly', 'readonly');
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
@@ -141,15 +140,17 @@
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
+        $("#Remark").css('background-color', '#E9ECEF');
         $("#CRORemarks").attr('readonly', 'readonly');
+        $("#CRORemarks").css('background-color', '#E9ECEF');
         $("#paymentDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").attr('readonly', 'readonly');
+        $("#pickupDatePicker").datepicker().next('button').hide();
+        $("#cutoffDatePicker").prop("disabled", true);
         $("#startDatePicker").prop("disabled", true);
-        $("#startDatePicker").datepicker({
-            "showButtonPanel": false
-        });
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
+        $("#endDatePicker").datepicker().next('button').hide();
         $("#AddressAttn").attr('readonly', 'readonly');
         $("#AddressFax").attr('readonly', 'readonly');
         $("#AddressTel").attr('readonly', 'readonly');
@@ -172,7 +173,7 @@
 
         $("#LoadAgent").attr('readonly', 'readonly');
         $("#DischAgent").attr('readonly', 'readonly');
-        $("#ServiceMode").attr('readonly', 'readonly');
+        $("#ServiceMode").prop("disabled", true);
         $("#Commodity").attr('readonly', 'readonly');
         $("#CommodityGroup").attr('readonly', 'readonly');
         $("#Grossweight").attr('readonly', 'readonly');
@@ -180,7 +181,9 @@
         $("#LoadTerminal").attr('readonly', 'readonly');
         $("#DischargeTerminal").attr('readonly', 'readonly');
         $("#Remark").attr('readonly', 'readonly');
+        $("#Remark").css('background-color', '#E9ECEF');
         $("#CRORemarks").attr('readonly', 'readonly');
+        $("#CRORemarks").css('background-color', '#E9ECEF');
         $("#AddressAttn").attr('readonly', 'readonly');
         $("#AddressFax").attr('readonly', 'readonly');
         $("#AddressTel").attr('readonly', 'readonly');
@@ -189,9 +192,12 @@
         $("#SOC").attr('readonly', 'readonly');
         $("#collectionDropDownList").prop("disabled", true);
         $("#pickupDatePicker").prop("disabled", true);
-        $("#cutoffDatePicker").attr('readonly', 'readonly');
+        $("#pickupDatePicker").datepicker().next('button').hide();
+        $("#cutoffDatePicker").prop("disabled", true);
         $("#startDatePicker").prop("disabled", true);
+        $("#startDatePicker").datepicker().next('button').hide();
         $("#endDatePicker").prop("disabled", true);
+        $("#endDatePicker").datepicker().next('button').hide();
 
 
     }
@@ -211,7 +217,6 @@
         $("#Edit").hide();
         $("#Issue").hide();
         $("#Shipment").hide();
-
         $("#PrintBC").hide();
         $("#PrintCRO").hide();
         $("#BookingStatus").val("DRAFT");
@@ -227,6 +232,14 @@
         $('#TransshipmentPortLabel').css('visibility', 'hidden');
         $("#TransshipmentPortText").hide();
     }
+
+    $("#vesseltab").click(function () {
+        if (BookingStatus == "") {
+            alert('Please save booking before adding Vessel Details');
+            $("#bookingtab").trigger('click');
+        }
+    });
+
 
     $("#RateTypeReefer").click(function () {
         $('#TemperatureLabel').css('display', 'block');

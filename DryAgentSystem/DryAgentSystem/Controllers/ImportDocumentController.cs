@@ -21,7 +21,7 @@ namespace DryAgentSystem.Controllers
             SearchParameters statusdisplay = new SearchParameters();
             ViewBag.statuslist = DataContext.GetImportDocStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
-            //ViewBag.CompanyList = DataContext.GetCompany();
+            ViewBag.CompanyList = DataContext.GetCompany();
             return View();
         }
 
@@ -31,7 +31,7 @@ namespace DryAgentSystem.Controllers
         {
             ViewBag.statuslist = DataContext.GetImportDocStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
-            //ViewBag.jobRefList = DataContext.GetCompany();
+            ViewBag.CompanyList = DataContext.GetCompany();
 
             if (submit == "Search")
             {
@@ -142,12 +142,12 @@ namespace DryAgentSystem.Controllers
             //table.SpacingAfter = 5f;
 
             chunk = new Chunk("SHIPPER,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para = new Paragraph(DetBL.BLDetailsModel.ShipperAddressBL, FontFactory.GetFont("Arial", 9));
+            para = new Paragraph(string.IsNullOrEmpty(DetBL.BLDetailsModel.ShipperAddressBL) ? string.Empty : DetBL.BLDetailsModel.ShipperAddressBL.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
 
             paraSp = new Paragraph(" ", FontFactory.GetFont("Arial", 9));
 
             chunk1 = new Chunk("CONSIGNEE,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para2 = new Paragraph(DetBL.BLDetailsModel.ConsigneeAddressBL, FontFactory.GetFont("Arial", 9));
+            para2 = new Paragraph(string.IsNullOrEmpty(DetBL.BLDetailsModel.ConsigneeAddressBL) ? string.Empty : DetBL.BLDetailsModel.ConsigneeAddressBL.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -183,15 +183,30 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
 
             DateTime dateTime = DateTime.Now;
-            para = new Paragraph(":  " + DetBL.BLDetailsModel.JobRef + " \n" +
+            if(DetBL.TransVessel.Any())
+            {
+                para = new Paragraph(":  " + DetBL.BLDetailsModel.JobRef + " \n" +
                 ":  " + dateTime.ToString("dd-MM-yyyy") + " \n" +
                 ":  " + DetBL.ShipmentDetailsModel.ShipmentTerm + " \n" +
-                ":  " + DetBL.VesselModel.Carrier + " \n" +
-                ":  " + DetBL.VesselModel.VesselName + " \n" +
-                ":  " + DetBL.VesselModel.VoyNo + " \n" +
-                ":  " + DetBL.BLDetailsModel.LoadPort + " \n" +
-                ":  " + DetBL.BLDetailsModel.DischPort + " \n" +
-                ":  " + DetBL.VesselModel.ETA.ToString("dd-MM-yyyy") + " ", FontFactory.GetFont("Arial", 9));
+                ":  " + DetBL.TransVessel[0].Carrier + " \n" +
+                ":  " + DetBL.TransVessel[0].VesselName + " \n" +
+                ":  " + DetBL.TransVessel[0].VoyNo + " \n" +
+                ":  " + DetBL.TransVessel[0].LoadPort + " \n" +
+                ":  " + DetBL.TransVessel[DetBL.TransVessel.Count-1].DischPort + " \n" +
+                ":  " + DetBL.TransVessel[DetBL.TransVessel.Count-1].ETA.ToString("dd-MM-yyyy") + " ", FontFactory.GetFont("Arial", 9));
+            }
+            else
+            {
+                para = new Paragraph(":  " + DetBL.BLDetailsModel.JobRef + " \n" +
+                ":  " + dateTime.ToString("dd-MM-yyyy") + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " \n" +
+                ":  " + " " + " ", FontFactory.GetFont("Arial", 9));
+            }
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;
@@ -210,7 +225,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingAfter = 5f;
 
             chunk = new Chunk("DESCRIPTION OF GOODS,", FontFactory.GetFont("Arial", 9, Font.BOLD));
-            para = new Paragraph(DetBL.BLDetailsModel.CargoDescription, FontFactory.GetFont("Arial", 9));
+            para = new Paragraph((string.IsNullOrEmpty(DetBL.BLDetailsModel.CargoDescription) ? string.Empty : DetBL.BLDetailsModel.CargoDescription.ToString().ToUpperInvariant()), FontFactory.GetFont("Arial", 9));
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -360,6 +375,7 @@ namespace DryAgentSystem.Controllers
 
                 //No of Pkgs(s)
                 para3 = new Paragraph(DetBL.BLDetailsModel.NoOfPkgs.ToString(), FontFactory.GetFont("Arial", 9));
+                para3.Alignment = Element.ALIGN_CENTER;
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_LEFT;
                 cell.Padding = 3f;
@@ -436,10 +452,11 @@ namespace DryAgentSystem.Controllers
             para = new Paragraph(" ", FontFactory.GetFont("Arial", 10, Font.BOLD));
             pdfDoc.Add(para);
 
-            para = new Paragraph("Remarks", FontFactory.GetFont("Arial", 10, Font.BOLD));
+            para = new Paragraph("REMARKS", FontFactory.GetFont("Arial", 10, Font.BOLD));
             pdfDoc.Add(para);
-            para = new Paragraph(DetBL.ShipmentDetailsModel.Remark, FontFactory.GetFont("Arial", 10));
+            para = new Paragraph((string.IsNullOrEmpty(DetBL.ShipmentDetailsModel.Remark) ? string.Empty : DetBL.ShipmentDetailsModel.Remark.ToString().ToUpperInvariant()), FontFactory.GetFont("Arial", 10));
             pdfDoc.Add(para);
+
             pdfWriter.CloseStream = false;
             pdfDoc.Close();
             Response.Buffer = true;
@@ -525,7 +542,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(InVDet.SalesInvoiceDryModel.BillingPartyAddress +
+            para = new Paragraph((string.IsNullOrEmpty(InVDet.SalesInvoiceDryModel.BillingPartyAddress) ? string.Empty : InVDet.SalesInvoiceDryModel.BillingPartyAddress.ToUpperInvariant()) +
                                 "\n ", FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Colspan = 3;
@@ -542,7 +559,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(": " + InVDet.SalesInvoiceDryModel.InvoiceNo, FontFactory.GetFont("Arial", 8));
+            para1 = new Paragraph(": " + InVDet.SalesInvoiceDryModel.ProformaInvoiceNo, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.BorderWidthBottom = 0f;
             cell.BorderWidthLeft = 0f;
@@ -575,14 +592,14 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            string CerditTerm = string.Empty;
+            string CreditTerm = string.Empty;
             if (InVDet.SalesInvoiceDryModel.CreditTerms <= 0)
             {
-                CerditTerm = "COD";
+                CreditTerm = "COD";
             }
             else
             {
-                CerditTerm = InVDet.SalesInvoiceDryModel.CreditTerms.ToString();
+                CreditTerm = InVDet.SalesInvoiceDryModel.CreditTerms.ToString();
             }
 
             para1 = new Paragraph("  CREDIT TERMS", FontFactory.GetFont("Arial", 8));
@@ -591,7 +608,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(": " + CerditTerm, FontFactory.GetFont("Arial", 8));
+            para1 = new Paragraph(": " + CreditTerm, FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.BorderWidthRight = 0.5f;
@@ -762,7 +779,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph(": " + InVDet.SalesInvoiceDryModel.Remarks, FontFactory.GetFont("Arial", 8));
+            para = new Paragraph(": " + (string.IsNullOrEmpty(InVDet.SalesInvoiceDryModel.Remarks) ? string.Empty : InVDet.SalesInvoiceDryModel.Remarks.ToUpperInvariant()), FontFactory.GetFont("Arial", 8));
             cell = new PdfPCell();
             cell.Colspan = 2;
             cell.BorderWidthTop = 0f;
@@ -786,7 +803,7 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
             pdfDoc.Add(table);
 
-            para = new Paragraph("Freight Charges:", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("FREIGHT CHARGES:", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.SpacingBefore = 10f;
             para.SpacingAfter = 10f;
             para.IndentationLeft = 2f;
@@ -798,35 +815,35 @@ namespace DryAgentSystem.Controllers
             table.DefaultCell.PaddingLeft = 5f;
             table.SpacingAfter = 5f;
 
-            para = new Paragraph("Description", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("DESCRIPTION", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Eqp. Type", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("EQP. TYPE", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Qty", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("QTY", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Rate", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("RATE", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Currency", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("CURRENCY", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -840,14 +857,14 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Ex-Rate", FontFactory.GetFont("Arial", 8, Font.BOLD)); //Ex.Rate in USD
+            para = new Paragraph("EX-RATE", FontFactory.GetFont("Arial", 8, Font.BOLD)); //Ex.Rate in USD
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Amount in USD", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
+            para = new Paragraph("AMOUNT IN USD", FontFactory.GetFont("Arial", 7.7f, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -856,7 +873,7 @@ namespace DryAgentSystem.Controllers
 
             for (int i = 0; i < InVDet.salesInvoiceLineItemDryModel.Count; i++)
             {
-                para = new Paragraph(InVDet.salesInvoiceLineItemDryModel[i].Description, FontFactory.GetFont("Arial", 7));
+                para = new Paragraph((string.IsNullOrEmpty(InVDet.salesInvoiceLineItemDryModel[i].Description) ? string.Empty : InVDet.salesInvoiceLineItemDryModel[i].Description.ToUpperInvariant()), FontFactory.GetFont("Arial", 7));
                 para.Alignment = Element.ALIGN_LEFT;
                 cell = new PdfPCell();
                 cell.Border = 0;
@@ -923,7 +940,7 @@ namespace DryAgentSystem.Controllers
                 }
 
                 para = new Paragraph(AmountUSD, FontFactory.GetFont("Arial", 8));
-                para.Alignment = Element.ALIGN_CENTER;
+                para.Alignment = Element.ALIGN_RIGHT;
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.AddElement(para);
@@ -959,8 +976,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
             //-------// SubTotal Line
-            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_CENTER;
+            para = new Paragraph("", FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.Colspan = 5;
             cell.Border = 0;
@@ -968,7 +985,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("SubTotal", FontFactory.GetFont("Arial", 8));
+            para = new Paragraph("SUBTOTAL", FontFactory.GetFont("Arial", 8));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.Border = 0;
@@ -995,15 +1012,15 @@ namespace DryAgentSystem.Controllers
             }
 
             para = new Paragraph(DecAmtSumTax, FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_CENTER;
+            para.Alignment = Element.ALIGN_RIGHT;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.BorderWidthTop = 1f;
             cell.AddElement(para);
             table.AddCell(cell);
             //-------// GST Line
-            para = new Paragraph(InVDet.SalesInvoiceDryModel.AmountInWords, FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_CENTER;
+            para = new Paragraph("AMOUNT IN WORDS:", FontFactory.GetFont("Arial", 8,Font.BOLD));
+            para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.Colspan = 5;
             cell.Border = 0;
@@ -1036,14 +1053,14 @@ namespace DryAgentSystem.Controllers
             }
 
             para = new Paragraph(DecGSTAmtTaxSum, FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_CENTER;
+            para.Alignment = Element.ALIGN_RIGHT;
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
             table.AddCell(cell);
             //-------// Total Line
-            para = new Paragraph(" ", FontFactory.GetFont("Arial", 8));
-            para.Alignment = Element.ALIGN_CENTER;
+            para = new Paragraph((string.IsNullOrEmpty(InVDet.SalesInvoiceDryModel.AmountInWords) ? string.Empty : InVDet.SalesInvoiceDryModel.AmountInWords.ToUpperInvariant()), FontFactory.GetFont("Arial", 8));
+            para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.Colspan = 5;
             cell.Border = 0;
@@ -1052,7 +1069,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Grand Total", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("GRAND TOTAL", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
@@ -1080,8 +1097,8 @@ namespace DryAgentSystem.Controllers
                 double decTot = InVDet.SalesInvoiceDryModel.AmountinUSDSUM;
                 DecTotal = Convert.ToDecimal(decTot).ToString("0.00");
             }
-            para = new Paragraph("USD  "+DecTotal, FontFactory.GetFont("Arial", 8, Font.BOLD));
-            para.Alignment = Element.ALIGN_LEFT;
+            para = new Paragraph("USD   "+DecTotal, FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para.Alignment = Element.ALIGN_RIGHT;
             cell = new PdfPCell();
             cell.PaddingBottom = 5f;
             cell.Border = 0;
@@ -1099,14 +1116,14 @@ namespace DryAgentSystem.Controllers
             para.SpacingAfter = 10f;
             table.HorizontalAlignment = 0;
 
-            para = new Paragraph("Equipment No", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("EQUIPMENT NO", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.BackgroundColor = new BaseColor(211, 211, 211);
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Size/Type", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("SIZE/TYPE", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.Alignment = Element.ALIGN_LEFT;
             cell = new PdfPCell();
             cell.BackgroundColor = new BaseColor(211, 211, 211);
@@ -1165,12 +1182,12 @@ namespace DryAgentSystem.Controllers
             }
             pdfDoc.Add(table);
 
-            para = new Paragraph("Bank Details", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("BANK DETAILS", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.SpacingBefore = 10f;
             para.SpacingAfter = 10f;
             pdfDoc.Add(para);
 
-            para = new Paragraph("Terms and Conditions:", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("TERMS AND CONDITIONS:", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.SpacingAfter = 7f;
             pdfDoc.Add(para);
 

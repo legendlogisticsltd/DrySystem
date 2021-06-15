@@ -2,7 +2,7 @@
 
     $bookingGrid = $('#bookingGrid').jqGrid({
         mtype: 'Get',
-        url: 'Booking/GetBookingData', //'/QuotationDetails/GetQuoteChargesList'
+        url: 'Booking/GetBookingData', 
         datatype: 'json',
         colNames: ['Booking ID', 'Booking No', 'QuoteRef ID', 'Agency Name', 'Discharge Port', 'Load Port', 'Booking Status'],
         colModel: [
@@ -11,7 +11,7 @@
                 //hidden: true,
                 name: 'BookingID',
                 index: 'BookingID',
-                width: '88px',
+                width: '92px',
                 classes: 'myLink',
                 formatter: 'showlink',
                 formatoptions: {
@@ -31,7 +31,8 @@
             },
             {
                 key: false,
-                name: 'CompanyName'
+                name: 'CompanyName',
+                width: '259px',
             },
             {
                 key: false,
@@ -63,23 +64,9 @@
         altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
-        //jsonReader: {
-        //    root: "rows",
-        //    page: "page",
-        //    total: "total",
-        //    records: "records",
-        //    repeatitems: false,
-        //    Id: "0"
-        //},
+        
     });
 
-    //.navGrid('#quoteChargesPager', { edit: false, add: false, del: false, search: false, refresh: true });
-
-
-
-    //$("#submit").click(function () {
-    //    document.forms[0].submit();
-    //    return false;
-    //});
+    
     
 });

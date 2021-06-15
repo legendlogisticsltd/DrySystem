@@ -24,6 +24,15 @@
     label {
         margin-top: 6px;
     }
+
+    .ThemeBox {
+        background: #F5F5F5;
+        border-color: rgba(0,153,204,0.4);
+        border-radius: 12px;
+        border-width: 1px;
+        border-style: solid;
+        padding: 13px;
+    }
 </style>
 <style type="text/css">
     .ui-jqgrid-bdiv {
@@ -81,8 +90,7 @@
                 <h3 class="text-success">@TempData["message"]</h3>
                 @*<h3 class="text-success">@ViewBag.Message</h3>*@
             </div>
-
-            <br />
+            <div class="ThemeBox">
             <div class="form_group">
                 <div class="row">
                     <div class="col-md-2">
@@ -231,10 +239,11 @@
                         No
                         @Html.ValidationMessageFor(model => model.TransshipmentType, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-2"></div>
                     <div class="col-md-2 forleftalign">
                         @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel",style= "padding-right: 31px;" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.TransshipmentPort, new { htmlAttributes = new { @class = "form-control", @id = "TransshipmentPortText" } })
                         @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger" })
                     </div>
@@ -356,6 +365,7 @@
                     </div>
                 </div>
             </div>
+                </div>
             @Html.HiddenFor(model => model.TransshipmentPort)
             @Html.HiddenFor(model => model.TransshipmentType)
             @Html.HiddenFor(model => model.RateType)

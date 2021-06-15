@@ -93,8 +93,8 @@
             </div>
 
             <div class="form_group">
-                <fieldset class="quotationfieldset">
-                    <legend class="quotationfieldsetlegend">&nbsp; Quotation Details: &nbsp;</legend>
+                <fieldset class="quotationfieldset" style="border-color:rgba(0,153,204,1);">
+                    <legend class="quotationfieldsetlegend" style="background-color:rgba(0,153,204,0.6);border-radius:10px;">&nbsp; Quotation Details: &nbsp;</legend>
                     <div class="row">
                         <div class="col-md-2">
                             @Html.LabelFor(model => model.GTotalSalesCal, htmlAttributes: new { @class = "control-label" })
@@ -184,7 +184,7 @@
                             @Html.ValidationMessageFor(model => model.TransshipmentType, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-2 forleftalign">
-                            @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel", style= "padding-right: 20px;padding-left:20px;" })
+                            @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel", style= "margin-top: 0px;padding-right: 20px;padding-left:20px;" })
                         </div>
                         <div class="col-md-2 forleftalignquantity">
                             @Html.EditorFor(model => model.TransshipmentPort, new { htmlAttributes = new { @class = "form-control", @id = "TransshipmentPortText" } })
@@ -385,8 +385,8 @@
                     <br />*@
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.CutoffDate, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
+                        @Html.LabelFor(model => model.CutoffDate, htmlAttributes: new { @class = "control-label", style="padding-right:30px;" })
+                        <div class="RequiredAstrik" style="margin-top: -50px; margin-left: 100px;">*</div>
                     </div>
                     <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.CutoffDate, "{0:MM-dd-yyyy HH:mm}", new { @class = "ui-datepicker form-control", @id = "cutoffDatePicker"})
@@ -395,9 +395,9 @@
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CROPickUpDate, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
+                        <span class="RequiredAstrik" style="margin-left:-3px;">*</span>
                     </div>
-                    <div class="col-md-3 forleftaligngrossunit" >
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.CROPickUpDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "pickupDatePicker" })
                         @Html.ValidationMessageFor(model => model.CROPickUpDate, "", new { @class = "text-danger" })
                     </div>
@@ -416,7 +416,7 @@
                         @Html.LabelFor(model => model.CollectionYard, htmlAttributes: new { @class = "control-label" })
                         <span class="RequiredAstrik">*</span>
                     </div>
-                    <div class="col-md-3 forleftalign">
+                    <div class="col-md-4 forleftalign">
                         @Html.DropDownListFor(model => model.CollectionYard, new SelectList(ViewBag.CollectionList, "Text", "Text"),
                             "Select Collection Yard", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "collectionDropDownList" })
                         @Html.ValidationMessageFor(model => model.CollectionYard, "", new { @class = "text-danger" })
@@ -510,4 +510,5 @@
     @Html.HiddenFor(model => model.UniversalSerialNr)
     @Html.HiddenFor(model => model.Shipper)
     @Html.HiddenFor(model => model.CutoffDate)
+    @Html.HiddenFor(model => model.JobRef)
 }

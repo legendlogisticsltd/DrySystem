@@ -39,11 +39,14 @@ namespace DryAgentSystem.Controllers
             {
                 shiprefdetails.ShipmentDetailsModel.ClosingDate = DateTime.Today;
             }
-            
-            if(shiprefdetails.ShipmentDetailsModel.JobRef == null)
+            if(shiprefdetails.TransVessel.Count==0)
             {
-                shiprefdetails.ShipmentDetailsModel.JobRef = DataContext.GetJobRefFromUSN(shiprefdetails.ShipmentDetailsModel.UniversalSerialNr);
+                shiprefdetails.TransVessel = DataContext.GetTransVessel(shiprefdetails); 
             }
+            
+            
+            ViewBag.LoadPortAliasList = DataContext.GetPortAliasFromPort(shiprefdetails.ShipmentDetailsModel.LoadPort);
+            ViewBag.DischPortAliasList = DataContext.GetPortAliasFromPort(shiprefdetails.ShipmentDetailsModel.DischPort);
 
             return View(shiprefdetails);
         }
@@ -51,7 +54,8 @@ namespace DryAgentSystem.Controllers
         [HttpPost]
         public ActionResult ShipmentDetails(ShipmentBL shipment, string submit)
         {
-            //ViewBag.PortList = DataContext.GetCountryPorts();
+            ViewBag.LoadPortAliasList = DataContext.GetPortAliasFromPort(shipment.ShipmentDetailsModel.LoadPort);
+            ViewBag.DischPortAliasList = DataContext.GetPortAliasFromPort(shipment.ShipmentDetailsModel.DischPort);
             ViewBag.pktypeList = DataContext.GetPackageType();
             ViewBag.wtunitlist = DataContext.GetWtUnit();
             ViewBag.munitlist = DataContext.GetMUnit();
@@ -173,29 +177,30 @@ namespace DryAgentSystem.Controllers
             shipment.SelectedContainerList = DataContext.ConvertToList(shipment.SelectedContainerListArray);
             int totalRecords = containerData.Count() + shipment.SelectedContainerList.Count;
             string message = "";
+            bool success;
             if (totalRecords <= shipment.Quantity)
             {
                 ErrorLog errorLog = DataContext.CreateTank(shipment);
                 if (!errorLog.IsError)
                 {
                     message = "Containers are Allocated successfully";
+                    success = true;
                 }
                 else
                 {
                     message = errorLog.ErrorMessage;
+                    success = false;
                 }
             }
             else
             {
                 message = "No. of Allocated containers " + totalRecords + " cannot be more than quantity " + shipment.Quantity + ".\n Please reduce the no. of containers and try again";
+                success = false;
             }
 
-            if (shipment.ContainerList == null)
-            {
-                shipment.ContainerList = DataContext.GetContainerList(shipment.LoadPort).Select(x => new SelectListItem { Text = x.ContainerNo, Value = x.ContainerNo });
-            }
+            
             //TempData["shipmentobj"] = shipment;
-            return Json(shipment.ContainerList, JsonRequestBehavior.AllowGet);
+            return Json(new { success, msg = message }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -238,15 +243,15 @@ namespace DryAgentSystem.Controllers
 
             if(PrintName=="Shipping Instruction")
             {
-                para = new Paragraph("Shipper", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-                para1 = new Paragraph(shipment.BLDetailsModel.ShipperAddressSI +
-                    "\n\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("SHIPPER", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.ShipperAddressSI) ? "  \n\n" : shipment.BLDetailsModel.ShipperAddressSI.ToString().ToUpperInvariant() +
+                    "\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             }
             else
             {
-                para = new Paragraph("Shipper", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-                para1 = new Paragraph(shipment.BLDetailsModel.ShipperAddressBL +
-                    "\n\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("SHIPPER", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.ShipperAddressBL) ? "  \n\n" : shipment.BLDetailsModel.ShipperAddressBL.ToString().ToUpperInvariant() +
+                    "\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             }
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -260,7 +265,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph("Bill of Lading No.:          " + jobref, FontFactory.GetFont("Arail", 8, Font.ITALIC, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph("BILL OF LADING NO.:          " + jobref, FontFactory.GetFont("Arail", 8, Font.ITALIC, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;
@@ -287,15 +292,15 @@ namespace DryAgentSystem.Controllers
 
             if(PrintName=="Shipping Instruction")
             {
-                para = new Paragraph("Consignee (if 'To Order' so indicate)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-                para1 = new Paragraph(shipment.BLDetailsModel.ConsigneeAddressSI +
-                    "\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("CONSIGNEE (IF 'TO ORDER' SO INDICATE)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.ConsigneeAddressSI) ? "  \n\n" : shipment.BLDetailsModel.ConsigneeAddressSI.ToString().ToUpperInvariant() +
+                    "\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             }
             else
             {
-                para = new Paragraph("Consignee (if 'To Order' so indicate)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-                para1 = new Paragraph(shipment.BLDetailsModel.ConsigneeAddressBL +
-                    "\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                para = new Paragraph("CONSIGNEE (IF 'TO ORDER' SO INDICATE)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.ConsigneeAddressBL) ? "  \n\n" : shipment.BLDetailsModel.ConsigneeAddressBL.ToString().ToUpperInvariant() +
+                    "\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             }
             
             cell = new PdfPCell();
@@ -309,9 +314,9 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Notify Party (No claim shall attached for failure to notify)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.NotifyPartyAddress +
-                "\n\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para = new Paragraph("NOTIFY PARTY (NO CLAIM SHALL ATTACHED FOR FAILURE TO NOTIFY)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.NotifyPartyAddress) ? "  \n\n" : shipment.BLDetailsModel.NotifyPartyAddress.ToString().ToUpperInvariant() +
+                "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;
@@ -324,8 +329,8 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
 
             para = new Paragraph("SHIPPING AGENT REFERENCES (COMPLETE NAME AND ADDRESS)", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.DischAgentAddress +
-                "\n\n\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.DischAgentAddress) ? "  \n\n" : shipment.BLDetailsModel.DischAgentAddress.ToString().ToUpperInvariant() +
+                "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 5f;
@@ -340,12 +345,17 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("VESSEL/VOYAGE NO.", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.VesselModel.VesselName + " \t " + shipment.VesselModel.VoyNo +
-               "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            para = new Paragraph("VESSEL / VOYAGE NO.", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            if (shipment.TransVessel.Any())
+            {
+                para1 = new Paragraph(shipment.TransVessel[0].VesselName + " \t " + shipment.TransVessel[0].VoyNo +"\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            }
+            else
+            {
+                para1 = new Paragraph("  \n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+            }
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
-            cell.Colspan = 2;
             cell.Padding = 5f;
             cell.PaddingTop = 0f;
             cell.Border = 0;
@@ -357,8 +367,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("PORT OF LOADING ", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.LoadPort +
+            para = new Paragraph("PRE-CARRIAGE BY", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.PreCarriageBy) ? "  \n\n" : shipment.BLDetailsModel.PreCarriageBy.ToString().ToUpperInvariant() +
                "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -372,9 +382,47 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             cell.AddElement(para1);
             table.AddCell(cell);
+
+            if (shipment.BLDetailsModel.PortAlias == "YES")
+            {
+                para = new Paragraph("PORT OF LOADING ", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.LoadPortAlias) ? "  \n\n" : shipment.BLDetailsModel.LoadPortAlias.ToString().ToUpperInvariant() +
+                   "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                cell = new PdfPCell();
+                cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                cell.Padding = 5f;
+                cell.PaddingTop = 0f;
+                cell.Border = 0;
+                cell.BorderWidthLeft = 0f;
+                cell.BorderWidthRight = 0f;
+                cell.BorderWidthBottom = 1f;
+                cell.BorderColor = new BaseColor(0, 32, 96);
+                cell.AddElement(para);
+                cell.AddElement(para1);
+                table.AddCell(cell);
+            }
+            else
+            {
+                para = new Paragraph("PORT OF LOADING ", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.LoadPort) ? "  \n\n" : shipment.BLDetailsModel.LoadPort.ToString().ToUpperInvariant() +
+                   "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                cell = new PdfPCell();
+                cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                cell.Padding = 5f;
+                cell.PaddingTop = 0f;
+                cell.Border = 0;
+                cell.BorderWidthLeft = 0f;
+                cell.BorderWidthRight = 0f;
+                cell.BorderWidthBottom = 1f;
+                cell.BorderColor = new BaseColor(0, 32, 96);
+                cell.AddElement(para);
+                cell.AddElement(para1);
+                table.AddCell(cell);
+            }
+            
 
             para = new Paragraph("PLACE OF RECEIPT **", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.PlaceofReceipt +
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.PlaceofReceipt) ? "  \n\n" : shipment.BLDetailsModel.PlaceofReceipt.ToString().ToUpperInvariant() +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -389,20 +437,38 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("PORT OF DISCHARGE", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.DischPort +
-                "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
-            cell = new PdfPCell();
-            cell.HorizontalAlignment = Element.ALIGN_LEFT;
-            cell.Padding = 5f;
-            cell.PaddingTop = 0f;
-            cell.Border = 0;
-            cell.AddElement(para);
-            cell.AddElement(para1);
-            table.AddCell(cell);
+            if(shipment.BLDetailsModel.PortAlias=="YES")
+            {
+                para = new Paragraph("PORT OF DISCHARGE", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.DischPortAlias) ? "  \n\n" : shipment.BLDetailsModel.DischPortAlias.ToString().ToUpperInvariant() +
+                    "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                cell = new PdfPCell();
+                cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                cell.Padding = 5f;
+                cell.PaddingTop = 0f;
+                cell.Border = 0;
+                cell.AddElement(para);
+                cell.AddElement(para1);
+                table.AddCell(cell);
+            }
+            else
+            {
+                para = new Paragraph("PORT OF DISCHARGE", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+                para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.DischPort) ? "  \n\n" : shipment.BLDetailsModel.DischPort.ToString().ToUpperInvariant() +
+                    "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
+                cell = new PdfPCell();
+                cell.HorizontalAlignment = Element.ALIGN_LEFT;
+                cell.Padding = 5f;
+                cell.PaddingTop = 0f;
+                cell.Border = 0;
+                cell.AddElement(para);
+                cell.AddElement(para1);
+                table.AddCell(cell);
+            }
+            
 
             para = new Paragraph("PLACE OF DELIVERY **", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.PlaceofDelivery +
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.PlaceofDelivery) ? "  \n\n" : shipment.BLDetailsModel.PlaceofDelivery.ToString().ToUpperInvariant() +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -418,7 +484,7 @@ namespace DryAgentSystem.Controllers
             table.SetTotalWidth(new float[] { 140, 230, 70, 80 });
             table.LockedWidth = true;
             table.SpacingBefore = 0f;
-            table.SpacingAfter = 3f;
+            table.SpacingAfter = 1f;
             //table.SetExtendLastRow(true, false);
             //table.DefaultCell.FixedHeight = 500f;
 
@@ -454,7 +520,7 @@ namespace DryAgentSystem.Controllers
             para1.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
-            cell.Padding = 5f;
+            cell.Padding = 3f;
             cell.PaddingTop = 0f;
             cell.Border = 0;
             cell.BorderWidthBottom = 1f;
@@ -468,7 +534,7 @@ namespace DryAgentSystem.Controllers
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Padding = 5f;
-            cell.PaddingTop = 3f;
+            cell.PaddingTop = 0f;
             cell.Border = 0;
             cell.BorderWidthBottom = 1f;
             cell.BorderWidthRight = 1f;
@@ -477,12 +543,12 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Measurement", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("Measurement\n"+shipment.BLDetailsModel.MeasurementUnit, FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Padding = 5f;
-            cell.PaddingTop = 3f;
+            cell.PaddingTop = 0f;
             cell.Border = 0;
             cell.BorderWidthBottom = 1f;
             cell.BorderWidthRight = 0f;
@@ -630,8 +696,8 @@ namespace DryAgentSystem.Controllers
             }
 
             //Last Row
-            para = new Paragraph("Freight Payable at", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.HBLFreightPayment +
+            para = new Paragraph("FREIGHT PAYABLE AT", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.HBLFreightPayment) ? "  \n\n" : shipment.BLDetailsModel.HBLFreightPayment.ToString().ToUpperInvariant() +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -646,8 +712,9 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("No. of Original B/L issued", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.NoofOriginalBLissued +
+            para = new Paragraph("NO. OF ORIGINAL B/L ISSUED", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para.Alignment = Element.ALIGN_CENTER;
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.NoofOriginalBLissued) ? "  \n\n" : shipment.BLDetailsModel.NoofOriginalBLissued.ToString().ToUpperInvariant() +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para1.Alignment = Element.ALIGN_CENTER;
             cell = new PdfPCell();
@@ -663,8 +730,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Place and date of issue", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.PlaceofIssue +
+            para = new Paragraph("PLACE AND DATE OF ISSUE", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.PlaceofIssue) ? "  \n\n" : shipment.BLDetailsModel.PlaceofIssue.ToString().ToUpperInvariant() +
                 "\n" + shipment.BLDetailsModel.BLFinalisedDate.ToString("dd-MM-yyyy") +
                 "\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
@@ -684,7 +751,7 @@ namespace DryAgentSystem.Controllers
             table = new PdfPTable(2);
             table.WidthPercentage = 101;
             table.SpacingBefore = 0f;
-            table.SpacingAfter = 10f;
+            table.SpacingAfter = 3f;
 
             para = new Paragraph("** applicable only when the documents is used as a Combined Transport Bill of Lading", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
@@ -697,8 +764,8 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Laden On Board", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
-            para1 = new Paragraph(shipment.BLDetailsModel.LadenOnBoard.ToString("dd-MM-yyyy") +
+            para = new Paragraph("LADEN ON BOARD", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph(shipment.BLDetailsModel.LadenOnBoard == DateTime.MinValue ? "\n\n" :  shipment.BLDetailsModel.LadenOnBoard.ToString("dd-MM-yyyy") +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             para.Alignment = Element.ALIGN_CENTER;
             para1.Alignment = Element.ALIGN_CENTER;
@@ -712,7 +779,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("SIGNED as a Carrier", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para = new Paragraph("SIGNED AS A CARRIER", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             para1 = new Paragraph("LEGEND LOGISTICS (ASIA) PTE LTD OR ITS AGENT" +
                 "\n\n", FontFactory.GetFont("Arial", 7, new BaseColor(0, 0, 128)));
             cell = new PdfPCell();
@@ -724,7 +791,7 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
             pdfDoc.Add(table);
 
-            para1 = new Paragraph("ALL business is transacted only in accordance with Singapore Logistics Association's Standard Trading Conditions.", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
+            para1 = new Paragraph("ALL BUSINESS IS TRANSACTED ONLY IN ACCORDANCE WITH SINGAPORE LOGISTICS ASSOCIATION'S STANDARD TRADING CONDITIONS.", FontFactory.GetFont("Arial", 7, Font.BOLD, new BaseColor(0, 0, 128)));
             para1.Alignment = Element.ALIGN_CENTER;
             pdfDoc.Add(para1);
 
@@ -1102,7 +1169,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph("DATE OF ISSUE" + jobref, FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
+                para = new Paragraph("DATE OF ISSUE", FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.AddElement(para);
@@ -1114,29 +1181,38 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph("VESSEL", FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
+                para = new Paragraph("VESSEL Name / VOYAGE No:", FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph(":     " + shipment.VesselModel.VesselName, FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
+                if(shipment.TransVessel.Any())
+                {
+                    para = new Paragraph(":     " + shipment.TransVessel[0].VesselName + "\t" + shipment.TransVessel[0].VoyNo, FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
+                }
+                else
+                {
+                    para = new Paragraph(":     ", FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
+
+                }
                 cell = new PdfPCell();
+                cell.Colspan = 3;
                 cell.Border = 0;
                 cell.AddElement(para);
                 table.AddCell(cell);
 
-                para = new Paragraph("VOYAGE", FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
-                cell = new PdfPCell();
-                cell.Border = 0;
-                cell.AddElement(para);
-                table.AddCell(cell);
+                //para = new Paragraph("VOYAGE", FontFactory.GetFont("Arial", 8, Font.BOLD, new BaseColor(0, 0, 128)));
+                //cell = new PdfPCell();
+                //cell.Border = 0;
+                //cell.AddElement(para);
+                //table.AddCell(cell);
 
-                para = new Paragraph(":     " + shipment.VesselModel.VoyNo, FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
-                cell = new PdfPCell();
-                cell.Border = 0;
-                cell.AddElement(para);
-                table.AddCell(cell);
+                //para = new Paragraph(":     " + shipment.TransVessel[0].VoyNo, FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
+                //cell = new PdfPCell();
+                //cell.Border = 0;
+                //cell.AddElement(para);
+                //table.AddCell(cell);
 
                 para = new Paragraph(" ", FontFactory.GetFont("Arial", 8, new BaseColor(0, 0, 128)));
                 cell = new PdfPCell();
@@ -1190,7 +1266,7 @@ namespace DryAgentSystem.Controllers
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.Padding = 5f;
-                cell.PaddingTop = 3f;
+                cell.PaddingTop = 0f;
                 cell.Border = 0;
                 cell.BorderWidthBottom = 1f;
                 cell.BorderWidthRight = 1f;
@@ -1204,7 +1280,7 @@ namespace DryAgentSystem.Controllers
                 cell = new PdfPCell();
                 cell.HorizontalAlignment = Element.ALIGN_CENTER;
                 cell.Padding = 5f;
-                cell.PaddingTop = 3f;
+                cell.PaddingTop = 0f;
                 cell.Border = 0;
                 cell.BorderWidthBottom = 1f;
                 cell.BorderWidthRight = 0f;
@@ -1494,7 +1570,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingBefore = 0f;
             table.SpacingAfter = 3f;            
 
-            para = new Paragraph("Shipping Agent", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("SHIPPING AGENT", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1506,13 +1582,13 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.BLDetailsModel.ShipperNameBL, FontFactory.GetFont("Arial", 9));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.ShipperNameBL) ? "  \n\n" : shipment.BLDetailsModel.ShipperNameBL.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Shipping Line", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("SHIPPING LINE", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1524,14 +1600,21 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.VesselModel.Carrier, FontFactory.GetFont("Arial", 9));      //Ankita will notify you
+            if (shipment.TransVessel.Any())
+            {
+                para1 = new Paragraph(shipment.TransVessel[0].Carrier, FontFactory.GetFont("Arial", 9));
+            }
+            else
+            {
+                para1 = new Paragraph(" ", FontFactory.GetFont("Arial", 9));
+            }
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
 
-            para = new Paragraph("Vessel & Voyage No", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("VESSEL & VOYAGE NO", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1543,13 +1626,13 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.BLDetailsModel.VesselDetails, FontFactory.GetFont("Arial", 9));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.VesselDetails) ? "  \n\n" : shipment.BLDetailsModel.VesselDetails.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Port of Loading", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("PORT OF LOADING", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1561,7 +1644,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.BLDetailsModel.LoadPort, FontFactory.GetFont("Arial", 9));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.LoadPort) ? "  \n\n" : shipment.BLDetailsModel.LoadPort.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
@@ -1580,13 +1663,20 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.VesselModel.ETD.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 9));
+            if (shipment.TransVessel.Any())
+            {
+                para1 = new Paragraph(shipment.TransVessel[0].ETD.ToString("dd-MM-yyyy"), FontFactory.GetFont("Arial", 9));
+            }
+            else
+            {
+                para1 = new Paragraph(" ", FontFactory.GetFont("Arial", 9));
+            }
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Port Where Report is", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("PORT WHERE REPORT IS", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1598,14 +1688,14 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.BLDetailsModel.DischPort, FontFactory.GetFont("Arial", 9));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.DischPort) ? "  \n\n" : shipment.BLDetailsModel.DischPort.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
             table.AddCell(cell);
 
 
-            para = new Paragraph("Last Port of Call", FontFactory.GetFont("Arial", 9, Font.BOLD));
+            para = new Paragraph("LAST PORT OF CALL", FontFactory.GetFont("Arial", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para);
@@ -1617,7 +1707,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para1 = new Paragraph(shipment.BLDetailsModel.PlaceofDelivery, FontFactory.GetFont("Arial", 9));
+            para1 = new Paragraph(string.IsNullOrEmpty(shipment.BLDetailsModel.PlaceofDelivery) ? "  \n\n" : shipment.BLDetailsModel.PlaceofDelivery.ToString().ToUpperInvariant(), FontFactory.GetFont("Arial", 9));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(para1);
@@ -1785,7 +1875,7 @@ namespace DryAgentSystem.Controllers
             para1.SpacingAfter = 20f;
             pdfDoc.Add(para1);
 
-            para = new Paragraph("For Legend Shipping services pvt limited", FontFactory.GetFont("Arial", 8, Font.BOLD));
+            para = new Paragraph("FOR LEGEND SHIPPING SERVICES PVT LIMITED", FontFactory.GetFont("Arial", 8, Font.BOLD));
             para.SpacingAfter = 30f;
             pdfDoc.Add(para);
 
@@ -1806,6 +1896,7 @@ namespace DryAgentSystem.Controllers
         {
             if (ModelState.IsValid)
             {
+                DataContext.RePrintRequest(housebl);
                 string username = HttpContext.User.Identity.Name;
                 MailMessage mail = new MailMessage();
                 mail.To.Add("gauruv.grover@legendlogisticsltd.com");

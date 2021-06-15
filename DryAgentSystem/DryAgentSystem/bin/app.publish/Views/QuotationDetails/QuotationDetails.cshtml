@@ -16,7 +16,29 @@
     var rateCountered = "@Html.Raw(@Model.RateCountered)";
     var transshipmenttype = "@Html.Raw(Model.TransshipmentType)";
     var ratetype = "@Html.Raw(Model.RateType)";
+    var quantity = "@Html.Raw(Model.Quantity)";
+    var quantitylifted = "@Html.Raw(Model.QuantityLifted)";
 </script>
+
+<style>
+    label {
+        margin-top: 6px;
+    }
+
+    .ThemeBox {
+        background: #F5F5F5;
+        border-color: rgba(0,153,204,0.4);
+        border-radius: 12px;
+        border-width: 1px;
+        border-style: solid;
+        padding: 13px;
+    }
+</style>
+<style type="text/css">
+    .ui-jqgrid-bdiv {
+        overflow-x: hidden !important;
+    }
+</style>
 
 @using (Html.BeginForm("QuotationDetails", "QuotationDetails", FormMethod.Post))
 {
@@ -68,8 +90,7 @@
                 <h3 class="text-success">@TempData["message"]</h3>
                 @*<h3 class="text-success">@ViewBag.Message</h3>*@
             </div>
-
-            <br />
+            <div class="ThemeBox">
             <div class="form_group">
                 <div class="row">
                     <div class="col-md-2">
@@ -99,26 +120,35 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CompanyName)
                     </div>
-                    <div class="col-md-7 forleftalign">
-                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control"} })
+                    <div class="col-md-3 forleftalign">
+                        @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.AgencyType)
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.EditorFor(model => model.AgencyType, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <br />
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.AgencyType)
-                    </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.EditorFor(model => model.AgencyType, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.AgencyType, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2">
                         @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.QuantityLifted, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.EditorFor(model => model.QuantityLifted, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.QuantityLifted, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <br />
@@ -126,19 +156,19 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ShipperName3)
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.ShipperName3, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ShipperName3, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.GrossWt, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-1 forleftalign">
-                        @Html.EditorFor(model => model.GrossWt, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-3 forleftalign ForGrossWeightBox">
+                        @Html.EditorFor(model => model.GrossWt, new { htmlAttributes = new { @class = "form-control", style = "width: 100%; margin-left: 10px;" } })
                         @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                     </div>
-
-                    <div class="col-md-1 forleftaligngrossunit">
+                    <div class="col-md-1" style="margin-left: -20px;">
                         @Html.EditorFor(model => model.GrossWtUnit, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
                     </div>
@@ -148,14 +178,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.EquipmentType, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.EquipmentType, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.EquipmentType, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ShipmentTerm, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.ShipmentTerm, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.ShipmentTerm, "", new { @class = "text-danger" })
                     </div>
@@ -165,14 +196,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.LoadPort, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.LoadPort, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.DischargePort, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.DischargePort, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.DischargePort, "", new { @class = "text-danger" })
                     </div>
@@ -182,14 +214,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.PlaceOfReceipt, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.PlaceOfReceipt, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.PlaceOfReceipt, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.PlaceOfDelivery, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.PlaceOfDelivery, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.PlaceOfDelivery, "", new { @class = "text-danger" })
                     </div>
@@ -197,7 +230,7 @@
                 <br />
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.TransshipmentType, htmlAttributes: new { @class = "control-label", style="margin-top: 0px;" })
                     </div>
                     <div class="col-md-2">
                         @Html.RadioButtonFor(model => model.TransshipmentType, "Yes", htmlAttributes: new { @id = "TransshipmentTypeYes" })
@@ -206,10 +239,11 @@
                         No
                         @Html.ValidationMessageFor(model => model.TransshipmentType, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-2"></div>
                     <div class="col-md-2 forleftalign">
                         @Html.LabelFor(model => model.TransshipmentPort, htmlAttributes: new { @class = "control-label", @id = "TransshipmentPortLabel",style= "padding-right: 31px;" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.TransshipmentPort, new { htmlAttributes = new { @class = "form-control", @id = "TransshipmentPortText" } })
                         @Html.ValidationMessageFor(model => model.TransshipmentPort, "", new { @class = "text-danger" })
                     </div>
@@ -217,7 +251,7 @@
                 <br />
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.RateType, htmlAttributes: new { @class = "control-label", style="margin-top: 0px;" })
                     </div>
                     <div class="col-md-2">
                         @Html.RadioButtonFor(model => model.RateType, "REEFER", htmlAttributes: new { @id = "RateTypeReefer" })
@@ -256,15 +290,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.EffectiveDate, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.EffectiveDate, "{0:MM-dd-yyyy}", new { @readonly = "readonly", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.EffectiveDate, "", new { @class = "text-danger" })
                     </div>
-
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.Validity, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.TextBoxFor(model => model.Validity, "{0:MM-dd-yyyy}", new { @readonly = "readonly", @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Validity, "", new { @class = "text-danger" })
                     </div>
@@ -274,15 +308,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.POLFreeDays, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.POLFreeDays, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.POLFreeDays, "", new { @class = "text-danger" })
                     </div>
-
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.PODFreeDays, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.PODFreeDays, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.PODFreeDays, "", new { @class = "text-danger" })
                     </div>
@@ -292,15 +326,15 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.UNNo, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.UNNo, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.UNNo, "", new { @class = "text-danger" })
                     </div>
-
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.IMO, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
+                    <div class="col-md-3 forleftalign">
                         @Html.EditorFor(model => model.IMO, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.IMO, "", new { @class = "text-danger" })
                     </div>
@@ -310,15 +344,16 @@
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.CargoType, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "20", style = "resize:none;background-color: #e9ecef;" })
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextAreaFor(model => model.CargoType, new { rows = "4", cols = "34", style = "resize:none;background-color: #e9ecef;" })
                         @Html.ValidationMessageFor(model => model.CargoType, "", new { @class = "text-danger" })
                     </div>
+                    <div class="col-md-1"></div>
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.Remark, htmlAttributes: new { @class = "control-label" })
                     </div>
-                    <div class="col-md-2 forleftalign">
-                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "20", style = "resize:none;background-color: #e9ecef;" })
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextAreaFor(model => model.Remark, new { rows = "4", cols = "34", style = "resize:none;background-color: #e9ecef;" })
                         @Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -330,6 +365,7 @@
                     </div>
                 </div>
             </div>
+                </div>
             @Html.HiddenFor(model => model.TransshipmentPort)
             @Html.HiddenFor(model => model.TransshipmentType)
             @Html.HiddenFor(model => model.RateType)

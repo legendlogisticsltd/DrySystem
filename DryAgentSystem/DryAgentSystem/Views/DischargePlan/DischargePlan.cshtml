@@ -51,12 +51,12 @@
                                  "Select Status", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "statusDropDownList" })
                     @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
                 </div>
-                @*<div class="col-md-3">
-                    @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label" })
+                <div class="col-md-3">
+                    @Html.LabelFor(model => model.CompanyName, htmlAttributes: new { @class = "control-label", @id="CompanyNameLabel" })
                     @Html.DropDownListFor(model => model.CompanyName, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                  "Select Agency", new { @class = "ui-selectmenu-menu", @id = "companyDropDownList" })
+                  "Select Charge Party", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "companyDropDownList" })
                     @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
-                </div>*@
+                </div>
                 <div class="col-md-3">
                     @Html.LabelFor(model => model.LoadPort, htmlAttributes: new { @class = "control-label" })
                     @Html.DropDownListFor(model => model.LoadPort, new SelectList(ViewBag.PortList, "Port", "Port"),

@@ -209,4 +209,3 @@ F:\Shrutika\DrySystem\DryAgentSystem\DryAgentSystem\bin\System.Web.Http.xml
 F:\Shrutika\DrySystem\DryAgentSystem\DryAgentSystem\bin\System.Web.Http.WebHost.xml
 F:\Shrutika\DrySystem\DryAgentSystem\DryAgentSystem\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 F:\Shrutika\DrySystem\DryAgentSystem\DryAgentSystem\obj\Debug\DryAgentSystem.csproj.CopyComplete
-C:\Users\asus\Source\Workspaces\Legend2\Legend\Dev\Mar-2021\DryAgentSystem\DryAgentSystem\obj\Debug\DryAgentSystem.csprojAssemblyReference.cache

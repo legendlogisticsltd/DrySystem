@@ -18,7 +18,7 @@ namespace DryAgentSystem.Controllers
             SearchParameters statusdisplay = new SearchParameters();
             ViewBag.statuslist = DataContext.GetDischargePlanStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
-            //ViewBag.CompanyList = DataContext.GetCompany();
+            ViewBag.CompanyList = DataContext.GetCompany();
             return View();
         }
         [HttpPost]
@@ -27,7 +27,7 @@ namespace DryAgentSystem.Controllers
         {
             ViewBag.statuslist = DataContext.GetDischargePlanStatus();
             ViewBag.PortList = DataContext.GetCountryPorts();
-            //ViewBag.CompanyList = DataContext.GetCompany();
+            ViewBag.CompanyList = DataContext.GetCompany();
 
             if (submit == "Search")
             {

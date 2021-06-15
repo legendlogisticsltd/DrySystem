@@ -39,16 +39,19 @@
             /*background-attachment: fixed;*/
         }
         .bg-grey {
-            background: #2A2F32;
-            border: 1px solid #2a2f32;
+            background: #F5F5F5;
+            border-color: rgba(0,153,204,0.4);
+            border-radius: 12px;
         }
         fieldset {
             padding: 10px 15px;
             margin: 0 0 30px 0;
             border: 1px solid #efefef;
             border: 1px solid #ecf4ff;
+            /*
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            */
         }
 
         .form-control {
@@ -93,13 +96,13 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <fieldset class="my-1 bg-grey text-white">
+                    <fieldset class="my-1 bg-grey text-black">
                         <div class="col-md-12 text-center">
                             <h4> Address Book</h4>
                         </div>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <label>Company Name: <span class="txt-red">*</span></label>
+                                <label>Company Name: <span class="txt-red RequiredAstrik">*</span></label>
                                 @Html.EditorFor(model => model.CompanyName, new { htmlAttributes = new { @class = "form-control", required = "required", @style = "text-transform:uppercase" } })
                                 @Html.ValidationMessageFor(model => model.CompanyName, "", new { @class = "text-danger" })
 
@@ -108,12 +111,12 @@
                             </div>
                             </div>
                             <div class="col-md-12 form-group">
-                                <label>Address: <span class="txt-red">*</span></label>
+                                <label>Address: <span class="RequiredAstrik">*</span></label>
                                 @Html.TextAreaFor(model => model.Address, new { @class = "form-control", required = "required" })
                                 @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger forplaceholdertext" })
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Country: <span class="txt-red">*</span></label>
+                                <label>Country: <span class="txt-red RequiredAstrik">*</span></label>
                                 @Html.DropDownListFor(model => model.Country, new SelectList(ViewBag.PortList, "Country", "Country"),
                                 "Select Country", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "CountryDropDownList", required = "required" })
                                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
@@ -122,12 +125,12 @@
                                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })*@
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Zipcode: <span class="txt-red">*</span></label>
+                                <label>Zipcode: <span class="txt-red RequiredAstrik">*</span></label>
                                 @Html.EditorFor(model => model.Zipcode, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                 @Html.ValidationMessageFor(model => model.Zipcode, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Phone No: <span class="txt-red">*</span></label>
+                                <label>Phone No: <span class="txt-red RequiredAstrik">*</span></label>
                                 @Html.EditorFor(model => model.PhoneNo, new { htmlAttributes = new { @class = "form-control", required = "required" } })
                                 @Html.ValidationMessageFor(model => model.PhoneNo, "", new { @class = "text-danger" })
 

@@ -101,6 +101,7 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Invoice No.")]
         public string InvoiceNo { get; set; }
+        public string ProformaInvoiceNo { get; set; }
 
         [Display(Name = "Invoice Amt")]
         public string InvoiceAmt { get; set; }
@@ -190,7 +191,7 @@ namespace DryAgentSystem.Models
       
 
         [Display(Name = "Vessel Name")]
-        public DateTime VesselName { get; set; }
+        public string VesselName { get; set; }
 
         [Display(Name = "Voyage No.")]
         public string VoyageNo { get; set; }

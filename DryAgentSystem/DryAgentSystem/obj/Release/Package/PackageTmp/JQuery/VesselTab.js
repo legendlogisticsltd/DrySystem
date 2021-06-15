@@ -1,11 +1,9 @@
 ﻿$(function () {
 
-    //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-
+    
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
-        url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
+        url: 'GetVesselDetails', 
         datatype: 'json',
         colNames: ['ID', 'Vessel Name', 'Voy No', 'Load Port', 'Discharge Port', 'ETD POL', 'ETA POD', 'Carrier', 'UniversalSerialNr', 'CarrierBookingRefNo','Delete'],
         colModel: [
@@ -116,14 +114,7 @@
         altRows: true,
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
-        //jsonReader: {
-        //    root: "rows",
-        //    page: "page",
-        //    total: "total",
-        //    records: "records",
-        //    repeatitems: false,
-        //    Id: "0"
-        //},
+        
         autowidth: false,
         shrinkToFit: true,
         multiselect: false,
@@ -178,7 +169,7 @@
     });
 
     
-    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: false, search: false, refresh: false });
+    $('#vesselGrid');
 
     $("#TransportSeaways").prop("checked", true);
 
@@ -231,37 +222,7 @@
 
     
 
-    function ReloadGrid() {
-        $("#vesselGrid").setGridParam({ page: 1 }).trigger("reloadGrid");
-        //$("#vesselGrid").jqGrid("setGridParam", { datatype: "json" })
-        //    .trigger("reloadGrid", [{ current: true }]);
-    }
-
-    //$("#vesselForm    ").submit(function (event) {
-    //    event.preventDefault();
-    //}
-
-    //$('#CreateVessel').click(function (event) {
-    //    event.preventDefault();
-    //    event.stopImmediatePropagation();
-    //    $('#vesselForm').submit();
-
-    //    $.ajax({
-    //        url: 'VesselDetailsTab',
-    //        type: 'POST',
-    //        dataType: 'json',
-    //        data: $("#vesselForm").serialize(),
-    //        success: function (data) {
-    //            $('#vessel').html(data);
-    //        }
-    //    });
-    //});
     
-    //$("#submit").click(function () {
-    //    document.forms[0].submit();
-    //    return false;
-    //});
-
     if (BookingStatus == "CONFIRMED") {
 
         $("#CreateVessel").hide();
@@ -434,8 +395,10 @@
     $("#TransportSeaways").click(function () {
 
         $("#CarrierLabel, #Carrier, #CarrierLabelAstrik,#CarrierBookingRefNoLabel, #CarrierBookingRefNo, #VoyNoLabel, #VoyNo, #VoyNoLabelAstrik").removeClass("HideAndShow");
+        if (BookingStatus == "DRAFT"){
+            $('#VesselName').removeAttr('readonly', 'readonly');
+        }
         
-        $('#VesselName').removeAttr('readonly', 'readonly');
         if ($('#VesselName').val() == "TRUCKING") {
             $('#VesselName').val('');
         }

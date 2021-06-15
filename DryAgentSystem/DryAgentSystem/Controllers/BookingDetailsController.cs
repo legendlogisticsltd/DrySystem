@@ -114,6 +114,8 @@ namespace DryAgentSystem.Controllers
                     shipmentnew.ShipmentDetailsModel.Shipper = booking.Shipper;
                     shipmentnew.ShipmentDetailsModel.EquipmentType = booking.EquipmentType;
                     shipmentnew.ShipmentDetailsModel.ClosingDate = booking.CutoffDate;
+                    shipmentnew.ShipmentDetailsModel.JobRef = booking.JobRef;
+                    shipmentnew.QuoteRefModel.TransshipmentType = booking.TransshipmentType;
 
                     TempData["shipmentobj"] = shipmentnew;
                     ModelState.Clear();
@@ -369,7 +371,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingAfter = 1f;
 
             para = new Paragraph(" TO \n ATTN \n TEL \n FAX", FontFactory.GetFont("Courier", 10, Font.BOLD));
-            para1 = new Paragraph(" : "+booking.AddressTo+" \n : "+booking.AddressAttn+" \n : "+booking.AddressTel+" \n : "+booking.AddressFax, FontFactory.GetFont("Courier", 10));
+            para1 = new Paragraph(" : "+ (string.IsNullOrEmpty(booking.AddressTo) ? string.Empty : booking.AddressTo.ToUpperInvariant()) +" \n : "+ (string.IsNullOrEmpty(booking.AddressAttn) ? string.Empty : booking.AddressAttn.ToUpperInvariant()) + " \n : "+booking.AddressTel+" \n : "+booking.AddressFax, FontFactory.GetFont("Courier", 10));
             para2 = new Paragraph("\n\n\n BOOKING DATE", FontFactory.GetFont("Courier", 10, Font.BOLD));
             para3 = new Paragraph("\n\n\n : "+booking.BookingDate.ToString("dd-MM-yyyy")+" \n", FontFactory.GetFont("Courier", 10));
             cell = new PdfPCell();
@@ -423,7 +425,7 @@ namespace DryAgentSystem.Controllers
 
             if (quoteRef.TransshipmentPort != null)
             {
-                TranShipmentPortTempLabel = "TRAN-SHIPMENT PORT\n";
+                TranShipmentPortTempLabel = "TRANS-SHIPMENT PORT\n";
                 TranShipmentPortTempValue = ":  " + quoteRef.TransshipmentPort+"\n";
             }
             else
@@ -453,8 +455,8 @@ namespace DryAgentSystem.Controllers
 
 
             para1 = new Paragraph(":  "+booking.BookingNo+"\n" +
-                                ":  "+vessels[0].VesselName+" \n" +
-                                ":  "+vessels[0].VoyNo+" \n" +
+                                ":  "+ vessels[0].VesselName + " \n" +
+                                ":  "+ vessels[0].VoyNo + " \n" +
                                 ":  "+booking.LoadPort+ "\n" +
                                 ":  "+booking.DischargePort+"\n" +
                                 TranShipmentPortTempValue +
@@ -469,7 +471,7 @@ namespace DryAgentSystem.Controllers
                                 ":  "+quoteRef.Quantity+" \t X \t "+quoteRef.EquipmentType+"\n" +
                                 ":  "+booking.CollectionYard+"\n" +
                                 ":  "+booking.ContainerReleaseOrderNo+" \n" +
-                                ":  "+booking.Remark, FontFactory.GetFont("Courier", 10));
+                                ":  "+ (string.IsNullOrEmpty(booking.Remark) ? string.Empty : booking.Remark.ToUpperInvariant()), FontFactory.GetFont("Courier", 10));
 
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -495,7 +497,7 @@ namespace DryAgentSystem.Controllers
             table.SetTotalWidth(new float[] { 88, 85, 85, 88, 85, 85 });
             table.LockedWidth = true;
 
-            para = new Paragraph("Vessel Name",FontFactory.GetFont("Courier", 10,Font.BOLD));
+            para = new Paragraph("VESSEL NAME",FontFactory.GetFont("Courier", 10,Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
@@ -504,7 +506,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Voy No", FontFactory.GetFont("Courier", 10, Font.BOLD));
+            para = new Paragraph("VOY NO", FontFactory.GetFont("Courier", 10, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
@@ -514,7 +516,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Load Port", FontFactory.GetFont("Courier", 10, Font.BOLD));
+            para = new Paragraph("LOAD PORT", FontFactory.GetFont("Courier", 10, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
@@ -523,7 +525,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para);
             table.AddCell(cell);
 
-            para = new Paragraph("Discharge Port", FontFactory.GetFont("Courier", 10, Font.BOLD));
+            para = new Paragraph("DISCHARGE PORT", FontFactory.GetFont("Courier", 10, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_CENTER;
             cell.Border = 0;
@@ -617,7 +619,7 @@ namespace DryAgentSystem.Controllers
             pdfDoc.Add(line);
 
             DateTime dateTime = DateTime.Now;
-            chunk = new Chunk("Prepared By", FontFactory.GetFont("Courier", 10));
+            chunk = new Chunk("PREPARED BY", FontFactory.GetFont("Courier", 10));
             para = new Paragraph(chunk + "    :  "+ HttpContext.User.Identity.Name + "                     "+dateTime.ToString("dd-MM-yyyy"), FontFactory.GetFont("Courier", 10, Font.BOLD));
             pdfDoc.Add(para);
 
@@ -693,7 +695,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingBefore = 5f;
             table.SpacingAfter = 5f;
 
-            chunk = new Chunk("To,", FontFactory.GetFont("Courier", 9, Font.BOLD));
+            chunk = new Chunk("TO,", FontFactory.GetFont("Courier", 9, Font.BOLD));
             para = new Paragraph(booking.Address, FontFactory.GetFont("Courier", 9));   //booking.CollectionYard+"\n"+
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -707,10 +709,10 @@ namespace DryAgentSystem.Controllers
             cell.BorderWidthLeft = 0;
             table.AddCell(cell);
 
-            Paragraph para1 = new Paragraph("CRO No \n" +
-                "CRO Date \n" +
-                "Booking Ref No \n" +
-                "Pick Up Date \n" +
+            Paragraph para1 = new Paragraph("CRO NO \n" +
+                "CRO DATE \n" +
+                "BOOKING REF NO \n" +
+                "PICK UP DATE \n" +
                 "POR \n" +
                 "POL \n" +
                 "POD \n" +
@@ -739,7 +741,7 @@ namespace DryAgentSystem.Controllers
             table.AddCell(cell);
             pdfDoc.Add(table);
 
-            para = new Paragraph("Vessel Details", FontFactory.GetFont("Courier", 10, Font.BOLD | Font.UNDERLINE));
+            para = new Paragraph("VESSEL DETAILS", FontFactory.GetFont("Courier", 10, Font.BOLD | Font.UNDERLINE));
             pdfDoc.Add(para);
 
 
@@ -750,7 +752,7 @@ namespace DryAgentSystem.Controllers
             //table.WidthPercentage = 100;
             table.SpacingBefore = 5f;
 
-            para = new Paragraph("Vessel Name \n" +
+            para = new Paragraph("VESSEL NAME \n" +
                 "ETA ", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -768,7 +770,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para = new Paragraph("Voyage \n" +
+            para = new Paragraph("VOYAGE \n" +
                 "ETD ", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
@@ -817,7 +819,7 @@ namespace DryAgentSystem.Controllers
             table.SpacingBefore = 20f;
             table.PaddingTop = 10f;
 
-            para1 = new Paragraph("Size & Type", FontFactory.GetFont("Courier", 9, Font.BOLD));
+            para1 = new Paragraph("SIZE & TYPE", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
@@ -828,7 +830,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph("Quantity \n", FontFactory.GetFont("Courier", 9, Font.BOLD));
+            para1 = new Paragraph("QUANTITY \n", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
@@ -839,7 +841,7 @@ namespace DryAgentSystem.Controllers
             cell.AddElement(para1);
             table.AddCell(cell);
 
-            para1 = new Paragraph("Commodity", FontFactory.GetFont("Courier", 9, Font.BOLD));
+            para1 = new Paragraph("COMMODITY", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
@@ -859,7 +861,7 @@ namespace DryAgentSystem.Controllers
             cell.BorderWidthBottom = 1f;
             table.AddCell(cell);
 
-            para1 = new Paragraph("Remark", FontFactory.GetFont("Courier", 9, Font.BOLD));
+            para1 = new Paragraph("REMARK", FontFactory.GetFont("Courier", 9, Font.BOLD));
             cell = new PdfPCell();
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             cell.Padding = 3f;
@@ -902,7 +904,7 @@ namespace DryAgentSystem.Controllers
             cell.Border = 0;
             table.AddCell(cell);
 
-            para1 = new Paragraph(booking.CRORemarks, FontFactory.GetFont("Courier", 9));
+            para1 = new Paragraph((string.IsNullOrEmpty(booking.CRORemarks) ? string.Empty : booking.CRORemarks.ToUpperInvariant()), FontFactory.GetFont("Courier", 9));
             cell = new PdfPCell();
             cell.Padding = 3f;
             cell.PaddingLeft = 15f;

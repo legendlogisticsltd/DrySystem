@@ -21,7 +21,8 @@
             },
             {
                 key: false,
-                name: 'ChargeParty'
+                name: 'ChargeParty',
+                width: '272px'
             },
             {
                 key: false,
@@ -80,10 +81,10 @@
         viewrecords: true,
         multiselect: false,
         altRows: true,
-        altclass: 'shipmentRow',
+        //altclass: 'shipmentRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display'
     });
 
-    
+    $('#CompanyNameLabel').html('Charge Party');
 });

@@ -167,7 +167,7 @@ namespace DryAgentSystem.Data
                         selectquery = selectquery.Remove(selectquery.LastIndexOf("AND"));
                     }
 
-                    selectquery += " Order By RR.ModifiedDate DESC";
+                    selectquery += " Order By RR.ModifiedDate DESC";//FETCH FIRST 10 ROWS ONLY";
 
 
                     var rateRequestData = conn.Query<RateRequest>(selectquery);
@@ -247,7 +247,7 @@ namespace DryAgentSystem.Data
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
-                    string query = "Select Port, PortCode, Country from CountryPort Order By Port";// FETCH FIRST 10 ROWS ONLY";
+                    string query = "Select Port, PortCode, Country from CountryPort Order By Port";//FETCH FIRST 10 ROWS ONLY"; //WHERE Port IN('CHENNAI','JEBEL ALI') 
                     var allports = conn.Query<CountryPort>(query);
                     if (allports != null)
                     {
@@ -272,27 +272,36 @@ namespace DryAgentSystem.Data
                 throw ex;
             }
         }
-        public static string GetCountryPortFromPort(string Port)
+        public static List<SelectListItem> GetPortAliasFromPort(string Port)
         {
             CountryPort ports = new CountryPort();
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
-                {
-                    var parameters = new DynamicParameters();
-                    parameters.Add("Port", Port, DbType.String, ParameterDirection.Input);
-                    string query = ("Select Port, PortCode, Country from CountryPort WHERE Port = ?"); //FETCH FIRST 10 ROWS ONLY
-                    var PortDetails = conn.Query<CountryPort>(query, parameters);
-                    foreach (var item in PortDetails)
+                { 
+                    for(int i=1;i<=10;i++)
                     {
-                        ports.Port = item.Port;
-                        ports.PortCode = item.PortCode;
-                        ports.Country = item.Country;
-                        ports.PortCountry = ports.Port + ", " + ports.Country;
+                        var parameters = new DynamicParameters();
+                        parameters.Add("Port", Port, DbType.String, ParameterDirection.Input);
+                        string query = ("Select PortNameAlias["+i+"] from CountryPort WHERE Port = ?");
+                        var PortDetails = conn.Query<String>(query, parameters);
+
+                        foreach (var item in PortDetails)
+                        {
+                            if (!string.IsNullOrEmpty(item))
+                            {
+                                ports.PortNameAlias.Add(new SelectListItem
+                                {
+                                    Text = item
+                                });
+                            }
+                        }
+
                     }
+                    
 
                 }
-                return ports.PortCountry;
+                return ports.PortNameAlias;
             }
             catch (Exception ex)
             {
@@ -355,7 +364,7 @@ namespace DryAgentSystem.Data
 
 
                     //string query = "Select Address,Email,PhoneNo from DepotDetails WHERE Port = ? AND IDDepot = ? AND DepotName = ?";
-                    string query = "Select LabelAddressCustom AS Address from Address WHERE (TOBPort LIKE ?) AND (TOB LIKE '%DEPOT TERMINAL%') AND CompanyName = ?";
+                    string query = "Select LabelAddress AS Address from Address WHERE (TOBPort LIKE ?) AND (TOB LIKE '%DEPOT TERMINAL%') AND CompanyName = ?";
                     var DepoDetails = conn.Query<Booking>(query, parameters);
                     foreach (var item in DepoDetails)
                     {
@@ -533,6 +542,8 @@ namespace DryAgentSystem.Data
                     {
                         rateRequest.RateID = item.RateID;
                     }
+
+                    //SendCostLICharges(rateRequest.SelectedExportLocalCharges, rateRequest.SelectedImportLocalCharges, rateRequest.RateID);
 
                 }
 
@@ -1766,6 +1777,47 @@ namespace DryAgentSystem.Data
 
         }
         
+        public static bool CheckAllocationStatus(string UniversalSerialNr)
+        {
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameters = new DynamicParameters();
+                    parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string query = "SELECT StatusTrack FROM Inventory WHERE (StatusTrack = 'booked') AND UniversalSerialNr = ? ";
+
+                    var bookedData = conn.Query<ShipmentDetails>(query, parameters);
+
+                    if (bookedData.Count() == 0)
+                    {
+                        query = "SELECT StatusTrack FROM Inventory WHERE (StatusTrack = 'allocated') AND UniversalSerialNr = ? ";
+
+                        var allocateData = conn.Query<ShipmentDetails>(query, parameters);
+                        if(allocateData.Count()>0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        
         public static bool CheckShipmentfromBL(string UniversalSerialNr)
         {
 
@@ -1814,7 +1866,7 @@ namespace DryAgentSystem.Data
                     var parametersd = new DynamicParameters();
                     parametersd.Add("JobRef", JobRef, DbType.String, ParameterDirection.Input);
 
-                    string querysd = "Select JobRef, HBLHAWB, ClosingDate, ChargeParty, ClosingTime, EquipmentType, Remark, ShipmentTerm, Shipper, ShipperAddress, LoadPort, PlaceOfReceipt, DischPort, PlaceOfDelivery, Quantity, QuantityLifting, LDepotTerminal, DischAgentAddress, MBLMAWB, CustomerRef, UniversalSerialNr, IDQuoteRef from ShipmentDetailDry where JobRef = ?";
+                    string querysd = "Select JobRef, HBLHAWB, ClosingDate, ChargeParty, ClosingTime, EquipmentType, PrintApproval, Remark, ShipmentTerm, Shipper, ShipperAddress, LoadPort, PlaceOfReceipt, DischPort, PlaceOfDelivery, Quantity, QuantityLifting, LDepotTerminal, DischAgentAddress, MBLMAWB, CustomerRef, UniversalSerialNr, IDQuoteRef from ShipmentDetailDry where JobRef = ?";
 
                     var ShipmentData = conn.Query<ShipmentDetails>(querysd, parametersd);
                     foreach (var item in ShipmentData)
@@ -1841,9 +1893,11 @@ namespace DryAgentSystem.Data
                         shipmentRef.ShipmentDetailsModel.LDepotTerminal = item.LDepotTerminal;
                         shipmentRef.ShipmentDetailsModel.ChargeParty = item.ChargeParty;
                         shipmentRef.ShipmentDetailsModel.Remark = item.Remark;
+                        shipmentRef.ShipmentDetailsModel.PrintApproval = item.PrintApproval;
                         shipmentRef.ShipmentDetailsModel.EquipmentType = item.EquipmentType;
+                        shipmentRef.ShipmentDetailsModel.AllocateStatus = CheckAllocationStatus(shipmentRef.ShipmentDetailsModel.UniversalSerialNr);
                         shipmentRef.ShipmentDetailsModel.ContainerList = GetContainerList(shipmentRef.ShipmentDetailsModel.LoadPort).Select(x => new SelectListItem { Text = x.ContainerNo, Value = x.ContainerNo });
-                        if(String.IsNullOrEmpty(GetInvoiceFromUSN(shipmentRef.ShipmentDetailsModel.UniversalSerialNr).InvoiceNo))
+                        if(String.IsNullOrEmpty(GetInvoiceFromUSN(shipmentRef.ShipmentDetailsModel.UniversalSerialNr).ProformaInvoiceNo))
                         {
                             shipmentRef.ShipmentDetailsModel.InvoiceSave = false;
                         }
@@ -1874,8 +1928,10 @@ namespace DryAgentSystem.Data
                         shipmentRef.BLDetailsModel.NotifyPartyAddress = item.NotifyPartyAddress;
                         shipmentRef.BLDetailsModel.DischAgentAddress = item.DischAgentAddress;
                         shipmentRef.BLDetailsModel.LoadPort = item.LoadPort;
+                        shipmentRef.BLDetailsModel.LoadPortAlias = item.LoadPortAlias;
                         shipmentRef.BLDetailsModel.PlaceofReceipt = item.PlaceofReceipt;
                         shipmentRef.BLDetailsModel.DischPort = item.DischPort;
+                        shipmentRef.BLDetailsModel.DischPortAlias = item.DischPortAlias;
                         shipmentRef.BLDetailsModel.PlaceofDelivery = item.PlaceofDelivery;
                         shipmentRef.BLDetailsModel.VesselDetails = item.VesselDetails;
                         shipmentRef.BLDetailsModel.MarksandNo = item.MarksandNo;
@@ -1892,6 +1948,7 @@ namespace DryAgentSystem.Data
                         shipmentRef.BLDetailsModel.BLSeawayStatus = item.BLSeawayStatus;
                         shipmentRef.BLDetailsModel.PreCarriageBy = item.PreCarriageBy;
                         shipmentRef.BLDetailsModel.NoOfPkgs = item.NoOfPkgs;
+                        shipmentRef.BLDetailsModel.PortAlias = item.PortAlias;
                         shipmentRef.BLDetailsModel.PkgType = item.PkgType;
                         shipmentRef.BLDetailsModel.TotalGweight = item.TotalGweight;
                         shipmentRef.BLDetailsModel.GrossWeightUnit = item.GrossWeightUnit;
@@ -1900,19 +1957,17 @@ namespace DryAgentSystem.Data
                         shipmentRef.BLDetailsModel.TotalContainerMeasurement = item.TotalContainerMeasurement;
                     }
 
-                    var parameterv = new DynamicParameters();
-                    parameterv.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                    shipmentRef.TransVessel = GetTransVessel(shipmentRef);
 
-                    string queryv = "Select Carrier,ETD, ETA,VesselName,VoyNo from VesselScheduleDry where UniversalSerialNr = ?";
+                    var parameterQuote = new DynamicParameters();
+                    parameterQuote.Add("IDQuoteRef", shipmentRef.ShipmentDetailsModel.IDQuoteRef, DbType.String, ParameterDirection.Input);
 
-                    var VesselData = conn.Query<Vessel>(queryv, parameterv);
-                    foreach (var item in VesselData)
+                    string queryQuote = "Select TransshipmentType from QuoteReference where QuoteRefID = ?";
+
+                    var QuoteData = conn.Query<QuoteRef>(queryQuote, parameterQuote);
+                    foreach (var item in QuoteData)
                     {
-                        shipmentRef.VesselModel.Carrier = item.Carrier;
-                        shipmentRef.VesselModel.ETD = item.ETD;
-                        shipmentRef.VesselModel.ETA = item.ETA;
-                        shipmentRef.VesselModel.VesselName = item.VesselName;
-                        shipmentRef.VesselModel.VoyNo = item.VoyNo;
+                        shipmentRef.QuoteRefModel.TransshipmentType = item.TransshipmentType;
                     }
                 }
             }
@@ -1936,12 +1991,13 @@ namespace DryAgentSystem.Data
                     var parameters = new DynamicParameters();
                     parameters.Add("UniversalSerialNr", UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string query = "Select UniversalSerialNr, InvoiceNo, InvoiceType, AmountinUSDSUM, AmountinUSDSUMWTax, Amountinwords, TaxAmountSum, InvoiceDate, LoadPort, DischargePort, ETD, ETA , InvoiceMonth, CreditTerms, DueDate, BillingParty, BillingPartyAddress, Grossweight, GrossweightUnit, ContainerNo, Remarks, JobRefNo from SalesInvoiceDry where UniversalSerialNr = ? AND InvoiceType = 'EXPORT'";
+                    string query = "Select UniversalSerialNr, InvoiceNo, ProformaInvoiceNo, InvoiceType, AmountinUSDSUM, AmountinUSDSUMWTax, Amountinwords, TaxAmountSum, InvoiceDate, LoadPort, DischargePort, ETD, ETA , InvoiceMonth, CreditTerms, DueDate, BillingParty, BillingPartyAddress, Grossweight, GrossweightUnit, ContainerNo, Remarks, JobRefNo, VesselName, VoyageNo from SalesInvoiceDry where UniversalSerialNr = ? AND InvoiceType = 'EXPORT'";
 
                     var InvoiceData = conn.Query<Invoice>(query, parameters);
                     foreach (var item in InvoiceData)
                     {
                         invoiceRef.InvoiceNo = item.InvoiceNo;
+                        invoiceRef.ProformaInvoiceNo = item.ProformaInvoiceNo;
                         invoiceRef.InvoiceType = item.InvoiceType;
                         invoiceRef.InvoiceDate = item.InvoiceDate;
                         invoiceRef.InvoiceMonth = item.InvoiceMonth;
@@ -1963,6 +2019,8 @@ namespace DryAgentSystem.Data
                         invoiceRef.AmountinUSDSUMWTax = item.AmountinUSDSUMWTax;
                         invoiceRef.TaxAmountSum = item.TaxAmountSum;
                         invoiceRef.Amountinwords = item.Amountinwords;
+                        invoiceRef.VesselName = item.VesselName;
+                        invoiceRef.VoyageNo = item.VoyageNo;
                     }
                 }
             }
@@ -1982,15 +2040,16 @@ namespace DryAgentSystem.Data
             string RateType = GetRateTypeFromUSN(invoice.UniversalSerialNr);
             invoice.CreditTerms = GetCreditTermFromAddress(invoice.BillingParty);
             string InvoiceType = "EXPORT";
-            invoice.InvoiceNo = GenerateInvoiceNumber(RateType, InvoiceType);
+            string AccMonth = DateTime.Today.ToString("MMMyy");
+            invoice.ProformaInvoiceNo = GenerateInvoiceNumber(RateType, InvoiceType);
             try
             {
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
                     var parameters = new DynamicParameters();
 
-                    parameters.Add("InvoiceNo", invoice.InvoiceNo, DbType.String, ParameterDirection.Input);
-                    //parameters.Add("InvoiceDate", invoice.InvoiceDate, DbType.Date, ParameterDirection.Input);
+                    parameters.Add("ProformaInvoiceNo", invoice.ProformaInvoiceNo, DbType.String, ParameterDirection.Input);
+                    parameters.Add("AcctMonth", AccMonth, DbType.String, ParameterDirection.Input);
                     parameters.Add("InvoiceMonth", DateTime.Today.Month, DbType.Int16, ParameterDirection.Input);
                     //parameters.Add("DueDate", invoice.DueDate, DbType.Date, ParameterDirection.Input);
                     parameters.Add("BillingParty", invoice.BillingParty, DbType.String, ParameterDirection.Input);
@@ -2004,11 +2063,13 @@ namespace DryAgentSystem.Data
                     parameters.Add("JobRefNo", invoice.JobRefNo, DbType.String, ParameterDirection.Input);
                     parameters.Add("CreditTerms", invoice.CreditTerms, DbType.Int32, ParameterDirection.Input);
                     parameters.Add("Status", Constant.Issued, DbType.String, ParameterDirection.Input);
+                    parameters.Add("VesselName", invoice.VesselName, DbType.String, ParameterDirection.Input);
+                    parameters.Add("VoyageNo", invoice.VoyageNo, DbType.String, ParameterDirection.Input);
 
 
 
-                    string odbcQuery = "Insert Into SalesInvoiceDRY(InvoiceNo, InvoiceMonth, BillingParty, Grossweight, " +
-                        "GrossweightUnit, Remarks, UniversalSerialNr, CreatedBy, InvoiceType, JobRefNo, CreditTerms, Status) Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    string odbcQuery = "Insert Into SalesInvoiceDRY(ProformaInvoiceNo, AcctMonth, InvoiceMonth, BillingParty, Grossweight, " +
+                        "GrossweightUnit, Remarks, UniversalSerialNr, CreatedBy, InvoiceType, JobRefNo, CreditTerms, Status, VesselName, VoyageNo) Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                     int rowsAffected = conn.Execute(odbcQuery, parameters);
                     if (rowsAffected > 0)
@@ -2020,7 +2081,7 @@ namespace DryAgentSystem.Data
                         errorLog.IsError = true;
                     }
 
-                    string query = "SELECT ID FROM SalesInvoiceDRY WHERE InvoiceNo = '" + invoice.InvoiceNo+ "'";
+                    string query = "SELECT ID FROM SalesInvoiceDRY WHERE ProformaInvoiceNo = '" + invoice.ProformaInvoiceNo+ "'";
 
                     var invoicereference = conn.Query<Invoice>(query);
                     foreach (var item in invoicereference)
@@ -2033,7 +2094,7 @@ namespace DryAgentSystem.Data
                 }
 
 
-                errorLog.ErrorMessage = invoice.InvoiceNo;
+                errorLog.ErrorMessage = invoice.ProformaInvoiceNo;
             }
             catch (Exception ex)
             {
@@ -2047,6 +2108,7 @@ namespace DryAgentSystem.Data
         public static ErrorLog SaveShipment(ShipmentBL shipmentRef)
         {
             string username = HttpContext.Current.User.Identity.Name;
+            
             //string status = "DRAFT";
             //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
 
@@ -2109,8 +2171,10 @@ namespace DryAgentSystem.Data
                     parameterbl.Add("NotifyPartyAddress", shipmentRef.BLDetailsModel.NotifyPartyAddress, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("DischAgentAddress", shipmentRef.ShipmentDetailsModel.DischAgentAddress, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("LoadPort", shipmentRef.ShipmentDetailsModel.LoadPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LoadPortAlias", shipmentRef.BLDetailsModel.LoadPortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PlaceofReceipt", shipmentRef.ShipmentDetailsModel.PlaceOfReceipt, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("DischPort", shipmentRef.ShipmentDetailsModel.DischPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischPortAlias", shipmentRef.BLDetailsModel.DischPortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PlaceofDelivery", shipmentRef.ShipmentDetailsModel.PlaceOfDelivery, DbType.String, ParameterDirection.Input);
                     //parameterbl.Add("VesselDetails", shipmentRef.BLDetailsModel.VesselDetails, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("MarksandNo", shipmentRef.BLDetailsModel.MarksandNo, DbType.String, ParameterDirection.Input);
@@ -2123,8 +2187,9 @@ namespace DryAgentSystem.Data
                     parameterbl.Add("MBLFreightPayment", shipmentRef.BLDetailsModel.MBLFreightPayment, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("NoofOriginalBLissued", shipmentRef.BLDetailsModel.NoofOriginalBLissued, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("NoOfPkgs", shipmentRef.BLDetailsModel.NoOfPkgs.ToString(), DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PortAlias", shipmentRef.BLDetailsModel.PortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PkgType", shipmentRef.BLDetailsModel.PkgType, DbType.String, ParameterDirection.Input);
-                    //parameterbl.Add("GrossWeightUnit", shipmentRef.BLDetailsModel.GrossWeightUnit, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PreCarriageBy", shipmentRef.BLDetailsModel.PreCarriageBy, DbType.String, ParameterDirection.Input);
                     //parameterbl.Add("NetWtUnit", shipmentRef.BLDetailsModel.NetWtUnit, DbType.String, ParameterDirection.Input);
                     //parameterbl.Add("MeasurementUnit", shipmentRef.BLDetailsModel.MeasurementUnit, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
@@ -2136,15 +2201,15 @@ namespace DryAgentSystem.Data
                     if (CheckShipmentfromBL(shipmentRef.ShipmentDetailsModel.UniversalSerialNr))
                     {
                         odbcQuerybl = "Update BLDetail  SET ShipperNameBL = ?, ConsigneeNameBL = ?, ShipperAddressBL = ?, ConsigneeAddressBL = ?, NotifyPartyName = ?, DischAgentNameBL = ?, NotifyPartyAddress = ?, DischAgentAddress = ?, " +
-                        "LoadPort = ?, PlaceofReceipt = ?, DischPort = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
-                        "NoofOriginalBLissued = ?, NoOfPkgs = ?, PkgType = ?, UniversalSerialNr = ?, JobRefFull = ?, ModifiedBy = ? WHERE JobRef = ? ";
+                        "LoadPort = ?, LoadPortAlias = ?, PlaceofReceipt = ?, DischPort = ?, DischPortAlias = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
+                        "NoofOriginalBLissued = ?, NoOfPkgs = ?, PortAlias = ?, PkgType = ?, PreCarriageBy = ?, UniversalSerialNr = ?, JobRefFull = ?, ModifiedBy = ? WHERE JobRef = ? ";
                     }
                     else
                     {
                         odbcQuerybl = "Insert Into BLDetail (ShipperNameBL, ConsigneeNameBL, ShipperAddressBL, ConsigneeAddressBL, NotifyPartyName, DischAgentNameBL, NotifyPartyAddress, DischAgentAddress, " +
-                        "LoadPort, PlaceofReceipt, DischPort, PlaceofDelivery, MarksandNo, CargoDescription, LadenOnBoard, HBLFreightPayment, BLFinalisedDate, DateofIssue, MBLFreightPayment, " +
-                        "NoofOriginalBLissued, NoOfPkgs, PkgType, UniversalSerialNr, JobRefFull, CreatedBy, JobRef) " +
-                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        "LoadPort, LoadPortAlias, PlaceofReceipt, DischPort, DischPortAlias, PlaceofDelivery, MarksandNo, CargoDescription, LadenOnBoard, HBLFreightPayment, BLFinalisedDate, DateofIssue, MBLFreightPayment, " +
+                        "NoofOriginalBLissued, NoOfPkgs, PortAlias, PkgType, PreCarriageBy, UniversalSerialNr, JobRefFull, CreatedBy, JobRef) " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     }
                     
                     int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
@@ -2175,6 +2240,7 @@ namespace DryAgentSystem.Data
             string username = HttpContext.Current.User.Identity.Name;
             //string status = "DRAFT";
             //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
+            
 
             try
             {
@@ -2224,8 +2290,10 @@ namespace DryAgentSystem.Data
                     parameterbl.Add("NotifyPartyAddress", shipmentRef.BLDetailsModel.NotifyPartyAddress, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("DischAgentAddress", shipmentRef.ShipmentDetailsModel.DischAgentAddress, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("LoadPort", shipmentRef.ShipmentDetailsModel.LoadPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("LoadPortAlias", shipmentRef.BLDetailsModel.LoadPortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PlaceofReceipt", shipmentRef.ShipmentDetailsModel.PlaceOfReceipt, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("DischPort", shipmentRef.ShipmentDetailsModel.DischPort, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("DischPortAlias", shipmentRef.BLDetailsModel.DischPortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PlaceofDelivery", shipmentRef.ShipmentDetailsModel.PlaceOfDelivery, DbType.String, ParameterDirection.Input);
                     //parameterbl.Add("VesselDetails", shipmentRef.BLDetailsModel.VesselDetails, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("MarksandNo", shipmentRef.BLDetailsModel.MarksandNo, DbType.String, ParameterDirection.Input);
@@ -2238,16 +2306,17 @@ namespace DryAgentSystem.Data
                     parameterbl.Add("MBLFreightPayment", shipmentRef.BLDetailsModel.MBLFreightPayment, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("NoofOriginalBLissued", shipmentRef.BLDetailsModel.NoofOriginalBLissued, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("NoOfPkgs", shipmentRef.BLDetailsModel.NoOfPkgs.ToString(), DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PortAlias", shipmentRef.BLDetailsModel.PortAlias, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("PkgType", shipmentRef.BLDetailsModel.PkgType, DbType.String, ParameterDirection.Input);
-                    parameterbl.Add("GrossWeightUnit", shipmentRef.BLDetailsModel.GrossWeightUnit, DbType.String, ParameterDirection.Input);
-                    parameterbl.Add("NetWtUnit", shipmentRef.BLDetailsModel.NetWtUnit, DbType.String, ParameterDirection.Input);
-                    parameterbl.Add("MeasurementUnit", shipmentRef.BLDetailsModel.MeasurementUnit, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("PreCarriageBy", shipmentRef.BLDetailsModel.PreCarriageBy, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("NetWtUnit", shipmentRef.BLDetailsModel.NetWtUnit, DbType.String, ParameterDirection.Input);
+                    //parameterbl.Add("MeasurementUnit", shipmentRef.BLDetailsModel.MeasurementUnit, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("ModifiedBy", username, DbType.String, ParameterDirection.Input);
                     parameterbl.Add("JobRef", shipmentRef.ShipmentDetailsModel.JobRef, DbType.String, ParameterDirection.Input);
 
                     string odbcQuerybl = "Update BLDetail  SET ShipperNameBL = ?, ConsigneeNameBL = ?, ShipperAddressBL = ?, ConsigneeAddressBL = ?, NotifyPartyName = ?, DischAgentNameBL = ?, NotifyPartyAddress = ?, DischAgentAddress = ?, " +
-                        "LoadPort = ?, PlaceofReceipt = ?, DischPort = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
-                        "NoofOriginalBLissued = ?, NoOfPkgs = ?, PkgType = ?, GrossWeightUnit = ?, NetWtUnit = ?, MeasurementUnit = ?, ModifiedBy = ? WHERE JobRef = ? ";
+                        "LoadPort = ?, LoadPortAlias = ?, PlaceofReceipt = ?, DischPort = ?, DischPortAlias = ?, PlaceofDelivery = ?, MarksandNo = ?, CargoDescription = ?, LadenOnBoard = ?, HBLFreightPayment = ?, BLFinalisedDate = ?, DateofIssue = ?, MBLFreightPayment = ?, " +
+                        "NoofOriginalBLissued = ?, NoOfPkgs = ?, PortAlias = ?, PkgType = ?, PreCarriageBy = ?, ModifiedBy = ? WHERE JobRef = ? ";
 
                     int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
 
@@ -2365,6 +2434,121 @@ namespace DryAgentSystem.Data
             }
             return errorLog;
         }
+        
+        public static ErrorLog SendCostLICharges(List<string> SelectedExportLocalCharges, List<string> SelectedImportLocalCharges, string RateID)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+            
+            try
+            {
+
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    foreach(var item in SelectedExportLocalCharges)
+                    {
+                        DQuoteSales costcharges = new DQuoteSales();
+                        var parameters = new DynamicParameters();
+                        parameters.Add("ID", item, DbType.String, ParameterDirection.Input);
+                        string Query = "Select ChargeDescription AS Description, Cost AS UnitRate, Currency, ID FROM AgencyLocalCharges WHERE ID = ?";
+                        var chargedetails = conn.Query<DQuoteSales>(Query, parameters);
+                        foreach(var itemdetails in chargedetails)
+                        {
+                            costcharges.Description = itemdetails.Description;
+                            costcharges.UnitRate = itemdetails.UnitRate;
+                            costcharges.Currency = itemdetails.Currency;
+                            costcharges.ID = itemdetails.ID;
+                            costcharges.PayBy = "SH";
+                            costcharges.PaymentTerm = "PREPAID";
+                        }
+
+                        string query = "Select Rate FROM ExchangeRate WHERE currency = '" + costcharges.Currency + "' AND status = 'current'";
+
+                        costcharges.Exrate = conn.QueryFirst<Double>(query);
+
+                        var parameterc = new DynamicParameters();
+                        parameterc.Add("Description", costcharges.Description, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("UnitRate", costcharges.UnitRate, DbType.Double, ParameterDirection.Input);
+                        parameterc.Add("Currency", costcharges.Currency, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("CostTypeID", costcharges.ID, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("Exrate", costcharges.Exrate, DbType.Double, ParameterDirection.Input);
+                        parameterc.Add("PayBy", costcharges.PayBy, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("PaymentTerm", costcharges.PaymentTerm, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("RateID", RateID, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+
+                        string costliQuery = "Insert Into DQuoteCostLI (Description, UnitRate, Currency, CostTypeID, Exrate, PayBy, PaymentTerm, RateID, CreatedBy) " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        int rowsAffected = conn.Execute(costliQuery, parameterc);
+                        if (rowsAffected > 0)
+                        {
+                            errorLog.IsError = false;
+                        }
+                        else
+                        {
+                            errorLog.IsError = true;
+                        }
+                    }
+
+                    foreach (var item in SelectedImportLocalCharges)
+                    {
+                        DQuoteSales costcharges = new DQuoteSales();
+                        var parameters = new DynamicParameters();
+                        parameters.Add("ID", item, DbType.String, ParameterDirection.Input);
+                        string Query = "Select ChargeDescription AS Description, Cost AS UnitRate, Currency, ID FROM AgencyLocalCharges WHERE ID = ?";
+                        var chargedetails = conn.Query<DQuoteSales>(Query, parameters);
+                        foreach (var itemdetails in chargedetails)
+                        {
+                            costcharges.Description = itemdetails.Description;
+                            costcharges.UnitRate = itemdetails.UnitRate;
+                            costcharges.Currency = itemdetails.Currency;
+                            costcharges.ID = itemdetails.ID;
+                            costcharges.PayBy = "CN";
+                            costcharges.PaymentTerm = "COLLECT";
+                        }
+
+                        string query = "Select Rate FROM ExchangeRate WHERE currency = '" + costcharges.Currency + "' AND status = 'current'";
+
+                        costcharges.Exrate = conn.QueryFirst<Double>(query);
+
+                        var parameterc = new DynamicParameters();
+                        parameterc.Add("Description", costcharges.Description, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("UnitRate", costcharges.UnitRate, DbType.Double, ParameterDirection.Input);
+                        parameterc.Add("Currency", costcharges.Currency, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("CostTypeID", costcharges.ID, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("Exrate", costcharges.Exrate, DbType.Double, ParameterDirection.Input);
+                        parameterc.Add("PayBy", costcharges.PayBy, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("PaymentTerm", costcharges.PaymentTerm, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("RateID", RateID, DbType.String, ParameterDirection.Input);
+                        parameterc.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+
+                        string costliQuery = "Insert Into DQuoteCostLI (Description, UnitRate, Currency, CostTypeID, Exrate, PayBy, PaymentTerm, RateID, CreatedBy) " +
+                        "Values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                        int rowsAffected = conn.Execute(costliQuery, parameterc);
+                        if (rowsAffected > 0)
+                        {
+                            errorLog.IsError = false;
+                        }
+                        else
+                        {
+                            errorLog.IsError = true;
+                        }
+                    }
+
+                }
+
+
+                
+            }
+            catch (Exception ex)
+            {
+
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message.ToString();
+            }
+            return errorLog;
+        }
 
         public static ErrorLog SaveInvoiceCharges(Invoice invoice)
         {
@@ -2393,12 +2577,12 @@ namespace DryAgentSystem.Data
                         parameters.Add("PaymentTerm", item.PaymentTerm, DbType.String, ParameterDirection.Input);
                         parameters.Add("UniversalSerialNr", invoice.UniversalSerialNr, DbType.String, ParameterDirection.Input);
                         parameters.Add("CompanyName", invoice.BillingParty, DbType.String, ParameterDirection.Input);
-                        parameters.Add("InvoiceNo", invoice.InvoiceNo, DbType.String, ParameterDirection.Input);
+                        parameters.Add("ProformaInvoiceNo", invoice.ProformaInvoiceNo, DbType.String, ParameterDirection.Input);
                         parameters.Add("ContainerNo", ContainerNo, DbType.String, ParameterDirection.Input);
                         parameters.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
                         parameters.Add("IDInvoiceNr", invoice.ID, DbType.String, ParameterDirection.Input);
 
-                        salesQuery = "Insert Into SalesInvoiceLineItemDRY (Description, UnitRate, Currency, Exrate, Quantity, PaymentTerm, UniversalSerialNr, CompanyName, InvoiceNo, ContainerNo, CreatedBy, IDInvoiceNr) " +
+                        salesQuery = "Insert Into SalesInvoiceLineItemDRY (Description, UnitRate, Currency, Exrate, Quantity, PaymentTerm, UniversalSerialNr, CompanyName, ProformaInvoiceNo, ContainerNo, CreatedBy, IDInvoiceNr) " +
                         "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                         int rowsAffected = conn.Execute(salesQuery, parameters);
@@ -2572,7 +2756,7 @@ namespace DryAgentSystem.Data
                                 parameters1.Add("ActiveLDepotTerminal", shipment.LDepotTerminal, DbType.String, ParameterDirection.Input);
                                 parameters1.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
 
-                                invQuery1 = "UPDATE Inventory SET ActiveLPort = ?, ActiveDPort = ?, ActiveLDepotTerminal = ?, ActiveDDepotTerminal = null, " +
+                                invQuery1 = "UPDATE Inventory SET ActiveLPort = ?, ActiveDPort = ?, ActiveLDepotTerminal = ?, ActiveDDepotTerminal = null, ActiveLDate = ActiveDDate, " +
                                     "ActiveDDate = null, ERequestDate = null, ERequestLog = null, ERequester = null, PreUniversalSerialNr[2] = PreUniversalSerialNr[1] WHERE ContainerNo = ? ";
 
                             }
@@ -2584,7 +2768,7 @@ namespace DryAgentSystem.Data
                                 parameters1.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
 
                                 invQuery1 = "UPDATE Inventory SET ActiveLPort = ActiveDPort, ActiveDPort = ?, ActiveLDepotTerminal = ActiveDDepotTerminal, ActiveDDepotTerminal = ?, " +
-                                    "ActiveDDate = null, ERequestDate = null, ERequestLog = null, ERequester = null, PreUniversalSerialNr[2] = PreUniversalSerialNr[1], UserModify = ? WHERE ContainerNo = ? ";
+                                    "ActiveDDate = null, ERequestDate = null, ERequestLog = null, ERequester = null, PreUniversalSerialNr[2] = PreUniversalSerialNr[1] WHERE ContainerNo = ? ";
 
                             }
                             int rowsAffectedq1 = conn.Execute(invQuery1, parameters1);
@@ -2622,26 +2806,65 @@ namespace DryAgentSystem.Data
                             }
                         }
 
-
-                        var parametersm = new DynamicParameters();
-                        parametersm.Add("UniversalSerialNr", shipment.UniversalSerialNr, DbType.String, ParameterDirection.Input);
-                        parametersm.Add("LoadPort", shipment.LoadPort, DbType.String, ParameterDirection.Input);
-                        parametersm.Add("DischargePort", shipment.DischPort, DbType.String, ParameterDirection.Input);
-                        parametersm.Add("LDepotTerminal", shipment.LDepotTerminal, DbType.String, ParameterDirection.Input);
-                        parametersm.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
-                        parametersm.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
-
-                        string movQuery = "INSERT Into MovementRecord (UniversalSerialNr, LoadPort, DischargePort, LDepotTerminal, CreatedBy, ContainerNo) " +
-                            "Values(?, ?, ?, ?, ?, ?)";
-
-                        int rowsAffectedm = conn.Execute(movQuery, parametersm);
-                        if (rowsAffectedm > 0)
+                        if (StatusTrack != "new")
                         {
-                            errorLog.IsError = false;
+                            var parametermr = new DynamicParameters();
+                            parametermr.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
+                            string querymr = "Select DGateInDate FROM MovementRecord WHERE ContainerNo = ? ORDER BY CreateDate DESC FETCH FIRST 1 ROWS ONLY";
+
+                            MovementRecord movement = new MovementRecord();
+
+                            var movementData = conn.Query<MovementRecord>(querymr, parametermr);
+                            foreach (var movementitem in movementData)
+                            { 
+                                movement.LGateInDate = movementitem.DGateInDate;
+                            }
+
+                            var parametersm = new DynamicParameters();
+                            parametersm.Add("UniversalSerialNr", shipment.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("LoadPort", shipment.LoadPort, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("LGateInDate", movement.LGateInDate, DbType.Date, ParameterDirection.Input);
+                            parametersm.Add("DischargePort", shipment.DischPort, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("LDepotTerminal", shipment.LDepotTerminal, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
+
+                            string movQuery = "INSERT Into MovementRecord (UniversalSerialNr, LoadPort, LGateInDate, DischargePort, LDepotTerminal, CreatedBy, ContainerNo) " +
+                                "Values(?, ?, ?, ?, ?, ?, ?)";
+
+                            int rowsAffectedm = conn.Execute(movQuery, parametersm);
+                            if (rowsAffectedm > 0)
+                            {
+                                errorLog.IsError = false;
+                            }
+                            else
+                            {
+                                errorLog.IsError = true;
+                            }
                         }
                         else
                         {
-                            errorLog.IsError = true;
+                            var parametersm = new DynamicParameters();
+                            parametersm.Add("UniversalSerialNr", shipment.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("LoadPort", shipment.LoadPort, DbType.String, ParameterDirection.Input);
+                            //parametersm.Add("LGateInDate", movement.LGateInDate, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("DischargePort", shipment.DischPort, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("LDepotTerminal", shipment.LDepotTerminal, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
+                            parametersm.Add("ContainerNo", item, DbType.String, ParameterDirection.Input);
+
+                            string movQuery = "INSERT Into MovementRecord (UniversalSerialNr, LoadPort, DischargePort, LDepotTerminal, CreatedBy, ContainerNo) " +
+                                "Values(?, ?, ?, ?, ?, ?)";
+
+                            int rowsAffectedm = conn.Execute(movQuery, parametersm);
+                            if (rowsAffectedm > 0)
+                            {
+                                errorLog.IsError = false;
+                            }
+                            else
+                            {
+                                errorLog.IsError = true;
+                            }
                         }
                     }
                 }
@@ -3123,6 +3346,47 @@ namespace DryAgentSystem.Data
             }
             return errorLog;
         }
+        
+        public static ErrorLog RePrintRequest(string JobRef)
+        {
+            string username = HttpContext.Current.User.Identity.Name;
+
+            //string agentCostLi = ConvertToString(booking.SelectedExportLocalCharges) + "," + ConvertToString(booking.SelectedImportLocalCharges);
+
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+
+                    var parameterbl = new DynamicParameters();
+                    parameterbl.Add("UserModify", username, DbType.String, ParameterDirection.Input);
+                    parameterbl.Add("JobRef", JobRef, DbType.String, ParameterDirection.Input);
+
+                    string odbcQuerybl = "Update ShipmentDetailDRY SET PrintApproval = 'Approval Requested', UserModify = ? WHERE JobRef = ? ";
+
+
+                    int rowsAffectedbl = conn.Execute(odbcQuerybl, parameterbl);
+
+                    if (rowsAffectedbl > 0)
+                    {
+                        errorLog.IsError = false;
+                    }
+                    else
+                    {
+                        errorLog.IsError = true;
+                    }
+                }
+
+                errorLog.ErrorMessage = JobRef;
+            }
+            catch (Exception ex)
+            {
+
+                errorLog.IsError = true;
+                errorLog.ErrorMessage = ex.Message.ToString();
+            }
+            return errorLog;
+        }
 
         public static ErrorLog SaveShippingInstruction(BLDetails bLDetails)
         {
@@ -3334,14 +3598,14 @@ namespace DryAgentSystem.Data
                     parameters.Add("ActiveLPort", loadPort, DbType.String, ParameterDirection.Input);
                     parameters.Add("ActiveDPort", loadPort, DbType.String, ParameterDirection.Input);
 
-                    string query = "SELECT ContainerNo, UniversalSerialNr FROM Inventory WHERE(ActiveLPort = ?) AND (StatusTrack = 'new') OR (StatusTrack IN('available', 'post available')) AND (ActiveDPort = ?)";
+                    string query = "SELECT ContainerNo FROM Inventory WHERE(ActiveLPort = ?) AND (StatusTrack = 'new') OR (StatusTrack IN('available', 'post available')) AND (ActiveDPort = ?)";
 
                     var inventoryList = conn.Query<Inventory>(query, parameters);
                     foreach (var item in inventoryList)
                     {
                         inventories.Add(new Inventory
                         {
-                            UniversalSerialNr = item.UniversalSerialNr,
+                            //UniversalSerialNr = item.UniversalSerialNr,
                             ContainerNo = item.ContainerNo
                         });
                     }
@@ -3354,10 +3618,47 @@ namespace DryAgentSystem.Data
             }
             return inventories;
         }
+        
+        public static List<Vessel> GetTransVessel(ShipmentBL shipmentRef)
+        {
+            try
+            {
+                using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
+                {
+                    var parameterv = new DynamicParameters();
+                    parameterv.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
+
+                    string queryv = "Select Carrier,ETD, ETA,VesselName,VoyNo, LoadPort,  DischPort from VesselScheduleDry where UniversalSerialNr = ?";
+
+                    var VesselData = conn.Query<Vessel>(queryv, parameterv);
+
+                    foreach (var item in VesselData)
+                    {
+                        shipmentRef.TransVessel.Add(new Vessel
+                        {
+                            Carrier = item.Carrier,
+                            ETD = item.ETD,
+                            ETA = item.ETA,
+                            VesselName = item.VesselName,
+                            VoyNo = item.VoyNo,
+                            LoadPort = item.LoadPort,
+                            DischPort = item.DischPort
+                        });
+                    }
+                    
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
+            return shipmentRef.TransVessel;
+        }
 
         public static string GenerateInvoiceNumber(string RateType, string InvoiceType)
         {
-            string invoiceNumber = string.Empty;
+            string ProformaInvoiceNo = string.Empty;
             string year = DateTime.Now.ToString("yy");
             string month = DateTime.Now.ToString("MM");
             int counter = 0;
@@ -3383,27 +3684,27 @@ namespace DryAgentSystem.Data
                     invoiceTypeInitial = Constant.ImportInitial;
                 }
 
-                string invoicePrefix = string.Format("{0}{1}{2}{3}", rateTypeInitial, invoiceTypeInitial, year, month);
+                string ProformaInvPrefix = string.Format("{0}{1}{2}{3}{4}", Constant.ProformaInitial, rateTypeInitial, invoiceTypeInitial, year, month);
 
                 using (OdbcConnection conn = new OdbcConnection(ConfigurationManager.ConnectionStrings["LegendDryLogistics"].ConnectionString))
                 {
-                    string query = "SELECT Max(InvoiceNo) AS InvoiceNo FROM SalesInvoiceDRY where InvoicePrefix = ?";
+                    string query = "SELECT Max(ProformaInvoiceNo) AS ProformaInvoiceNo FROM SalesInvoiceDRY where ProformaInvPrefix = ?";
                     var parameters = new DynamicParameters();
-                    parameters.Add("InvoicePrefix", invoicePrefix, DbType.String, ParameterDirection.Input);
+                    parameters.Add("ProformaInvPrefix", ProformaInvPrefix, DbType.String, ParameterDirection.Input);
 
-                    invoiceNumber = conn.QueryFirst<string>(query, parameters);
-                    if (string.IsNullOrEmpty(invoiceNumber))
+                    ProformaInvoiceNo = conn.QueryFirst<string>(query, parameters);
+                    if (string.IsNullOrEmpty(ProformaInvoiceNo))
                     {
                         counter += 1;
                         string counterNumber = counter.ToString("D4");
-                        invoiceNumber = string.Format("{0}{1}", invoicePrefix, counterNumber);
+                        ProformaInvoiceNo = string.Format("{0}{1}", ProformaInvPrefix, counterNumber);
                     }
                     else
                     {
-                        counter = Convert.ToInt32(invoiceNumber.Substring(8));
+                        counter = Convert.ToInt32(ProformaInvoiceNo.Substring(10));
                         counter += 1;
                         string counterNumber = counter.ToString("D4");
-                        invoiceNumber = string.Format("{0}{1}", invoicePrefix, counterNumber);
+                        ProformaInvoiceNo = string.Format("{0}{1}", ProformaInvPrefix, counterNumber);
                     }
                 }
             }
@@ -3412,7 +3713,7 @@ namespace DryAgentSystem.Data
 
                 throw ex;
             }
-            return invoiceNumber;
+            return ProformaInvoiceNo;
         }
 
         public static List<SelectListItem> ShipmentTerm()
@@ -4008,7 +4309,7 @@ namespace DryAgentSystem.Data
                         "DP.ETD, DP.ETA, DP.ATA, DP.\"User\" from DischargePlan DP INNER JOIN AgentAddressBook AB ON UPPER(DP.ChargeParty) = UPPER(AB.CompanyName) " +
                         "AND AB.IDCompany = '" + IDCompany + "' AND";
 
-                    if ((search.Status != null || search.JobRef != null || search.DischargePort != null) || (search.LoadPort != null))
+                    if ((search.Status != null || search.JobRef != null || (search.CompanyName!=null) || search.DischargePort != null) || (search.LoadPort != null))
                     {
                         if (search.Status != null)
                         {
@@ -4018,6 +4319,11 @@ namespace DryAgentSystem.Data
                         if (search.JobRef != null)
                         {
                             query += " DP.JobRef = '" + search.JobRef + "' AND";
+                        }
+
+                        if (search.CompanyName != null)
+                        {
+                            query += " DP.ChargeParty = '" + search.CompanyName + "' AND";
                         }
 
                         if (search.DischargePort != null)
@@ -4377,11 +4683,16 @@ namespace DryAgentSystem.Data
                         "INNER JOIN AgentAddressBook AB ON UPPER(DP.ChargeParty) = UPPER(AB.CompanyName) AND AB.IDCompany = '" + IDCompany + "' " +
                         "WHERE SID.InvoiceType = 'IMPORT' AND DP.DischargePlanStatus = '" + Constant.Confirmed + "' AND SID.Status = '" + Constant.Issued + "' AND";
 
-                    if ((search.JobRef != null || search.DischargePort != null) || (search.LoadPort != null))
+                    if ((search.JobRef != null || (search.CompanyName != null) || search.DischargePort != null) || (search.LoadPort != null))
                     {
                         if (search.JobRef != null)
                         {
                             query += " DP.JobRef = '" + search.JobRef + "' AND";
+                        }
+
+                        if (search.CompanyName != null)
+                        {
+                            query += " DP.ChargeParty = '" + search.CompanyName + "' AND";
                         }
 
                         if (search.DischargePort != null)
@@ -4693,7 +5004,7 @@ namespace DryAgentSystem.Data
                         "INNER JOIN AgentAddressBook AB ON UPPER(BL.ConsigneeNameBL) = UPPER(AB.CompanyName) AND AB.IDCompany = '" + IDCompany + "' " +
                         "WHERE BL.BLTypes <> 'DRAFT' AND BL.JobRef NOT IN(select Jobref from DischargePlan) AND";
 
-                    if ((search.Status != null) || (search.JobRef != null) || (search.DischargePort != null) || (search.LoadPort != null))
+                    if ((search.Status != null) || (search.JobRef != null) || (search.CompanyName != null) || (search.DischargePort != null) || (search.LoadPort != null))
                     {
                         if (search.Status != null)
                         {
@@ -4702,6 +5013,11 @@ namespace DryAgentSystem.Data
                         if (search.JobRef != null)
                         {
                             query += " BL.JobRef = '" + search.JobRef + "' AND";
+                        }
+                        
+                        if (search.CompanyName != null)
+                        {
+                            query += " BL.ConsigneeNameBL = '" + search.CompanyName + "' AND";
                         }
 
                         if (search.DischargePort != null)
@@ -4863,16 +5179,7 @@ namespace DryAgentSystem.Data
                     var parameterv = new DynamicParameters();
                     parameterv.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string queryv = "Select ETA, VesselName, VoyNo, Carrier from VesselScheduleDry where UniversalSerialNr = ?";
-
-                    var VesselData = conn.Query<Vessel>(queryv, parameterv);
-                    foreach (var item in VesselData)
-                    {
-                        shipmentRef.VesselModel.ETA = item.ETA;
-                        shipmentRef.VesselModel.VesselName = item.VesselName;
-                        shipmentRef.VesselModel.VoyNo = item.VoyNo;
-                        shipmentRef.VesselModel.Carrier = item.Carrier;
-                    }
+                    shipmentRef.TransVessel = GetTransVessel(shipmentRef);
 
                     var parameterEquip = new DynamicParameters();
                     parameterEquip.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
@@ -4986,17 +5293,12 @@ namespace DryAgentSystem.Data
 
                     shipmentRef.DryShipmentSellLiModel = sellLi;
 
+                    shipmentRef.TransVessel = GetTransVessel(shipmentRef);
+
                     var parameterv = new DynamicParameters();
                     parameterv.Add("UniversalSerialNr", shipmentRef.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                    string queryv = "Select VesselName, VoyNo from VesselScheduleDry where UniversalSerialNr = ?";
-
-                    var VesselData = conn.Query<Vessel>(queryv, parameterv);
-                    foreach (var item1 in VesselData)
-                    {
-                        shipmentRef.VesselModel.VesselName = item1.VesselName;
-                        shipmentRef.VesselModel.VoyNo = item1.VoyNo;
-                    }
+                    
 
                     string queryGWeight = "Select TotalGweight, ConsigneeAddressBL,GrossWeightUnit, ConsigneeNameBL from BLDetail where UniversalSerialNr = ?";
 
@@ -5050,7 +5352,7 @@ namespace DryAgentSystem.Data
                     {
                         string RateType = GetRateTypeFromUSN(DetShipBL.ShipmentDetailsModel.UniversalSerialNr);
                         string InvoiceType = Constant.Import;
-                        string InvoiceNo = GenerateInvoiceNumber(RateType, InvoiceType);
+                        string ProformaInvoiceNo = GenerateInvoiceNumber(RateType, InvoiceType);
                         int creditTerms = GetCreditTermFromAddress(DetShipBL.BLDetailsModel.ConsigneeNameBL);
                         string ContainerNo = ConvertToString(GetContainerNo(DetShipBL.ShipmentDetailsModel.UniversalSerialNr));
                         string GetID = "";
@@ -5060,7 +5362,7 @@ namespace DryAgentSystem.Data
                         // SqlTransaction trans = conn.BeginTransaction();
                         var parameters = new DynamicParameters();
                         parameters.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
-                        parameters.Add("InvoiceNo", InvoiceNo, DbType.String, ParameterDirection.Input);
+                        parameters.Add("ProformaInvoiceNo", ProformaInvoiceNo, DbType.String, ParameterDirection.Input);
                         parameters.Add("InvoiceType", InvoiceType, DbType.String, ParameterDirection.Input);
                         parameters.Add("GrossWeightUnit", DetShipBL.BLDetailsModel.GrossWeightUnit, DbType.String, ParameterDirection.Input);
                         // parameters.Add("BillingPartyAddress", DetShipBL.BLDetailsModel.ConsigneeAddressBL, DbType.String, ParameterDirection.Input);
@@ -5075,8 +5377,8 @@ namespace DryAgentSystem.Data
                         // parameters.Add("MBLHAWB", DetShipBL.ShipmentDetailsModel.MBLMAWB, DbType.String, ParameterDirection.Input);
 
                         //parameters.Add("HBLHAWB", DetShipBL.ShipmentDetailsModel.HBLHAWB, DbType.String, ParameterDirection.Input);
-                        parameters.Add("VesselName", DetShipBL.VesselModel.VesselName, DbType.String, ParameterDirection.Input);
-                        parameters.Add("VoyageNo", DetShipBL.VesselModel.VoyNo, DbType.String, ParameterDirection.Input);
+                        parameters.Add("VesselName", DetShipBL.TransVessel[0].VesselName, DbType.String, ParameterDirection.Input);
+                        parameters.Add("VoyageNo", DetShipBL.TransVessel[0].VoyNo, DbType.String, ParameterDirection.Input);
 
                         //parameters.Add("LoadPort", DetShipBL.ShipmentDetailsModel.POL, DbType.String, ParameterDirection.Input);
                         //parameters.Add("DischargePort", DetShipBL.ShipmentDetailsModel.POD, DbType.String, ParameterDirection.Input);
@@ -5087,13 +5389,13 @@ namespace DryAgentSystem.Data
                         //parameters.Add("ContainerNo", ContainerNo, DbType.String, ParameterDirection.Input);
                         //parameters.Add("AmountinUSDSUM", agentaddressbook.AmountinUSDSUM, DbType.String, ParameterDirection.Input);
                         parameters.Add("Remarks", DetShipBL.ShipmentDetailsModel.Remark, DbType.String, ParameterDirection.Input);
-                        parameters.Add("PostDate", DateTime.Now, DbType.Date, ParameterDirection.Input);
+                        //parameters.Add("PostDate", DateTime.Now, DbType.Date, ParameterDirection.Input);
 
                         parameters.Add("Status", Constant.Issued, DbType.String, ParameterDirection.Input);
                         parameters.Add("UniversalSerialNr", DetShipBL.ShipmentDetailsModel.UniversalSerialNr, DbType.String, ParameterDirection.Input);
 
-                        string odbcQuery = "Insert Into SalesInvoiceDry(CreatedBy, InvoiceNo,InvoiceType,GrossWeightUnit, AcctMonth, BillingParty,JobRefNo,CreditTerms,VesselName,VoyageNo,Grossweight,Remarks,PostDate,Status,UniversalSerialNr)" +
-                            "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        string odbcQuery = "Insert Into SalesInvoiceDry(CreatedBy, ProformaInvoiceNo,InvoiceType,GrossWeightUnit, AcctMonth, BillingParty,JobRefNo,CreditTerms,VesselName,VoyageNo,Grossweight,Remarks,Status,UniversalSerialNr)" +
+                            "Values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         rowsAffectedInvoiceDry = conn.Execute(odbcQuery, parameters);
 
                         if (rowsAffectedInvoiceDry > 0)
@@ -5127,14 +5429,14 @@ namespace DryAgentSystem.Data
 
                             SalesLineparameter.Add("CompanyName", DetShipBL.DryShipmentSellLiModel[i].CompanyName, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("IDCompany", DetShipBL.DryShipmentSellLiModel[i].IDCompany, DbType.String, ParameterDirection.Input);
-                            SalesLineparameter.Add("InvoiceNo", InvoiceNo, DbType.String, ParameterDirection.Input);
+                            SalesLineparameter.Add("ProformaInvoiceNo", ProformaInvoiceNo, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("ContainerNo", ContainerNo, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("PaymentTerm", DetShipBL.DryShipmentSellLiModel[i].PaymentTerm, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("UniversalSerialNr", DetShipBL.DryShipmentSellLiModel[i].UniversalSerialNr, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("IDInvoiceNr", GetID, DbType.String, ParameterDirection.Input);
                             SalesLineparameter.Add("CreatedBy", username, DbType.String, ParameterDirection.Input);
 
-                            string processquery = "Insert Into SalesInvoiceLineItemDry(Quantity, Description, UnitRate, Currency, ExRate, CompanyName, IDcompany, InvoiceNo, ContainerNo,PaymentTerm, UniversalSerialNr, IDInvoiceNr, CreatedBy)" +
+                            string processquery = "Insert Into SalesInvoiceLineItemDry(Quantity, Description, UnitRate, Currency, ExRate, CompanyName, IDcompany, ProformaInvoiceNo, ContainerNo,PaymentTerm, UniversalSerialNr, IDInvoiceNr, CreatedBy)" +
                             " values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                             rowsAffected = conn.Execute(processquery, SalesLineparameter);
@@ -5173,7 +5475,7 @@ namespace DryAgentSystem.Data
                     parametersd.Add("JobRefNo", JobRef, DbType.String, ParameterDirection.Input);
                     parametersd.Add("InvoiceType", Constant.Import, DbType.String, ParameterDirection.Input);
 
-                    string querysd = "Select JobRefNo, BillingPartyAddress, BillingParty, InvoiceNo, InvoiceDate, CreditTerms, " +
+                    string querysd = "Select JobRefNo, BillingPartyAddress, BillingParty, InvoiceNo, ProformaInvoiceNo, InvoiceDate, CreditTerms, " +
                         " DueDate, MBLHAWB, HBLHAWB, VesselName, VoyageNo, LoadPort, DischargePort, ETD, ETA, " +
                         "  Grossweight, GrossWeightUnit, ContainerNo, AmountinUSDSUM, Remarks, AmountInWords, AmountinUSDSUMWTax, TaxAmountSum, " +
                         " UniversalSerialNr from SalesInvoiceDry where JobRefNo = ? AND InvoiceType = ? ";
@@ -5185,6 +5487,7 @@ namespace DryAgentSystem.Data
                         InvoiceRef.SalesInvoiceDryModel.BillingPartyAddress = item.BillingPartyAddress;
                         InvoiceRef.SalesInvoiceDryModel.BillingParty = item.BillingParty;
                         InvoiceRef.SalesInvoiceDryModel.InvoiceNo = item.InvoiceNo;
+                        InvoiceRef.SalesInvoiceDryModel.ProformaInvoiceNo = item.ProformaInvoiceNo;
                         InvoiceRef.SalesInvoiceDryModel.InvoiceDate = item.InvoiceDate;
                         InvoiceRef.SalesInvoiceDryModel.CreditTerms = item.CreditTerms;
 

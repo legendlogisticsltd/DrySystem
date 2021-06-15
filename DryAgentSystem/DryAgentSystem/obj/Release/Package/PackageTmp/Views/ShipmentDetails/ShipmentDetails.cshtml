@@ -23,11 +23,29 @@
     var blseawaystatus = "@Html.Raw(@Model.BLDetailsModel.BLSeawayStatus)";
     var invoicesave = "@Html.Raw(@Model.ShipmentDetailsModel.InvoiceSave)";
     var usn = "@Html.Raw(@Model.ShipmentDetailsModel.UniversalSerialNr)";
+    var allocatestatus = "@Html.Raw(@Model.ShipmentDetailsModel.AllocateStatus)";
+    var transShipmentType = "@Html.Raw(@Model.QuoteRefModel.TransshipmentType)";
+    var preCarriage = "@Html.Raw(@Model.BLDetailsModel.PreCarriageBy)";
+    var PortAlias = "@Html.Raw(@Model.BLDetailsModel.PortAlias)";
+    var PrintApproval = "@Html.Raw(@Model.ShipmentDetailsModel.PrintApproval)";
 </script>
 
 <style>
     label {
         margin-top: 6px;
+    }
+    label.form-check-label{
+        margin-top: 0px;
+    }
+    
+
+    .ThemeBox {
+        background: #F5F5F5;
+        border-color: rgba(0,153,204,0.4);
+        border-radius: 12px;
+        border-width: 1px;
+        border-style: solid;
+        padding: 13px;
     }
 </style>
 <style type="text/css">
@@ -45,11 +63,12 @@
                     <input type="submit" name="submit" id="Save" value="Save" class="btn btn-success" />
                     <input type="submit" name="submit" id="Update" value="Update" class="btn btn-success" />
                 </div>
-                <div class="col-md-2" style="margin-left: -1px;">
-                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice" onclick="ReloadPage()">Print Invoice</a>
-                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-8" style="text-align:right;">
+                    <a href='@Url.Action("InvoiceDetails", "InvoiceDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="ExportInvoice">Print Invoice</a>
 
-                <div class="col-md-3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
                         Shipping Instruction
                     </button>
@@ -62,7 +81,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body" style="text-align:left;">
                                     <p>
                                         <div class="row">
                                             <div class="col-md-6">
@@ -72,7 +91,7 @@
                                                     <span class="RequiredAstrik">*</span>
                                                     <br>
                                                     @Html.DropDownListFor(model => model.BLDetailsModel.ShipperNameSI, new SelectList(ViewBag.CompanyList, "Text", "Text"),
-                                                    "Select Agency", new { @class= "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shippernamesiDropDownList", style="width: 84%;"})
+                                                    "Select Agency", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "shippernamesiDropDownList", style = "width: 84%;" })
                                                     @Html.ValidationMessageFor(model => model.BLDetailsModel.ShipperNameSI, "", new { @class = "text-danger" })
                                                     <br><br>
                                                     <!-- Remove the below text and add shipper address -->
@@ -110,9 +129,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-3">
+
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+
                     <a href='@Url.Action("ManifestCargo", "ShipmentDetails", new { jobref = @Model.ShipmentDetailsModel.JobRef })' ; class="btn btn-outline-info" target="_blank" id="MANIFEST">Print Manifest Cargo</a>
                 </div>
                 <div class="col-md-2">
@@ -135,10 +154,13 @@
                 </div>
                 <div class="col-10"></div>
                 <div class="col-2">
-                    <input type="button" value="Re-PrintBL Request" class="btn btn-outline-info" onclick="RePrintMethod()" id="RePrint" />
+                    <input type="button" value="Re-PrintBL Request" class="btn btn-outline-info" id="RePrint" />
+                    <br />
+                    @Html.LabelFor(model => model.ShipmentDetailsModel.PrintApproval, htmlAttributes: new { @class = "control-label",@id="PrintApproval" })
                 </div>
             </div>
-            
+            <br />
+            <div class="ThemeBox">
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-3" style="margin-top: 14px;">
@@ -147,7 +169,7 @@
                         <span class="RequiredAstrik">*</span>
                     </b>
                 </div>
-                <div class="col-md-3 forleftalign" style="margin-top: 14px;">
+                <div class="col-md-3" style="margin-top: 18px;">
                     <b>
                         @Html.RadioButtonFor(model => model.BLDetailsModel.NoofOriginalBLissued, "ZERO", htmlAttributes: new { @id = "NoofOriginalBLissuedZero" })
                         ZERO  &nbsp;&nbsp;&nbsp;
@@ -159,8 +181,8 @@
                     @Html.ValidationMessageFor(model => model.BLDetailsModel.NoofOriginalBLissued, "", new { @class = "text-danger" })
                 </div>
             </div>
-            <fieldset class="quotationfieldset" style="padding: 20px;">
-                <legend class="shippingfieldsetlegend"> &nbsp; BL DETAILS &nbsp;</legend>
+            <fieldset class="quotationfieldset" style="padding: 20px; border-color: rgba(0,153,204,1);">
+                <legend class="shippingfieldsetlegend" style="background-color: rgba(0,153,204,0.6); border-radius: 10px;border-color:transparent;"> &nbsp; BL DETAILS &nbsp;</legend>
                 <div class="row">
                     <div class="col-md-2">
                         @Html.LabelFor(model => model.ShipmentDetailsModel.JobRef, htmlAttributes: new { @class = "control-label" })
@@ -326,215 +348,259 @@
                 </div>
             </fieldset>
             <br />
-            <fieldset class="quotationfieldset" style="padding: 20px;">
-                <legend class="shippingfieldsetlegend"> &nbsp; PORT DETAILS &nbsp;</legend>
+            <fieldset class="quotationfieldset" style="padding: 20px; border-color: rgba(0,153,204,1);">
+                <legend class="shippingfieldsetlegend" style="background-color: rgba(0,153,204,0.6); border-radius: 10px;border-color:transparent;"> &nbsp; PORT DETAILS &nbsp;</legend>
                 <div class="row">
                     <div class="col-md-2">
-                        @Html.LabelFor(model => model.ShipmentDetailsModel.LoadPort, htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.BLDetailsModel.PortAlias, htmlAttributes: new { @class = "control-label" ,style = "margin-top: 0px;" })
+                        <span class="RequiredAstrik" style="margin-top: 0px;">*</span>
                     </div>
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.ShipmentDetailsModel.LoadPort, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.LoadPort, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2">
-                        @Html.LabelFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, "", new { @class = "text-danger" })
+                    <div class="col-md-2 ForLeftAlignRadioBtn">
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.PortAlias, "YES", htmlAttributes: new { @id = "PortAliasYes" })
+                        Yes &nbsp;
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.PortAlias, "NO", htmlAttributes: new { @id = "PortAliasNo" })
+                        No
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.PortAlias, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="row" style="margin-top: 12px;">
-                    <div class="col-md-2">
-                        @Html.LabelFor(model => model.ShipmentDetailsModel.DischPort, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.ShipmentDetailsModel.DischPort, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.DischPort, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2">
-                        @Html.LabelFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, htmlAttributes: new { @class = "control-label" })
-                    </div>
-                    <div class="col-md-3">
-                        @Html.EditorFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-            </fieldset>
-            <br />
-            <fieldset class="quotationfieldset" style="padding: 20px;">
-                <legend class="shippingfieldsetlegend"> &nbsp; VESSEL DETAILS &nbsp;</legend>
-                @*<div class="row">
-                        <div class="col-md-9"></div>
+                    <div class="row">
                         <div class="col-md-2">
-                            @Html.CheckBoxFor(model => model.BLDetailsModel.VesselDetails) @Html.LabelFor(model => model.BLDetailsModel.VesselDetails, htmlAttributes: new { @class = "control-label" })
+                            @Html.LabelFor(model => model.ShipmentDetailsModel.LoadPort, htmlAttributes: new { @class = "control-label" })
                         </div>
-                    </div>*@
-                <div class="row" style="margin-top: 12px;">
-                    <div class="col-md-12">
-                        <table id="vesselGrid" class="overflow:auto;">
-                        </table>
-                        <div id="vesselPager">
+                        <div class="col-md-3">
+                            @Html.EditorFor(model => model.ShipmentDetailsModel.LoadPort, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.LoadPort, "", new { @class = "text-danger" })
                         </div>
-                    </div>
-
-                    @*<div class="col-md-1">
-                            @Html.LabelFor(model => model.VesselModel.ETD, htmlAttributes: new { @class = "control-label" })
-                            <br /><br />
-                            @Html.LabelFor(model => model.VesselModel.ETA, htmlAttributes: new { @class = "control-label", style = "margin-top: 11px;" })
-                        </div>
+                        <div class="col-md-2"></div>
                         <div class="col-md-2">
-                            @Html.TextBoxFor(model => model.VesselModel.ETD, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETDDatePicker" })
-                            @Html.ValidationMessageFor(model => model.VesselModel.ETD, "", new { @class = "text-danger" })
-                            <br />
-                            @Html.TextBoxFor(model => model.VesselModel.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
-                            @Html.ValidationMessageFor(model => model.VesselModel.ETA, "", new { @class = "text-danger" })
-                        </div>*@
-                </div>
-            </fieldset>
-            <br />
-
-            <fieldset class="quotationfieldset" style="padding: 20px;">
-                <legend class="shippingfieldsetlegend"> &nbsp; INVENTORY &nbsp;</legend>
-                <div class="row">
-                    <div class="col-md-3">
-                        @Html.Label("Available Containers")
-                        <span class="RequiredAstrik">*</span>
-                    </div>
-                    <div class="col-md-4">
-                        @Html.ListBoxFor(model => model.ShipmentDetailsModel.SelectedContainerList, Model.ShipmentDetailsModel.ContainerList, new { id = "ContainerList", @class = "selectContainerList" }) @* style = "width:300px;", size = "8", @class = "selectExportList show-tick form-control input-md"*@
-                        @*<span>  Containers Selected : <span id="CountingContainers"></span></span>*@
-                    </div>
-                    <div class="col-md-2">
-                        @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
-                        <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()" />
-                    </div>
-                </div>
-                <br />
-                <br />
-                <div class="row">
-                    <div class="col-md-12">
-                        <table id="containerGrid" class="overflow:auto;">
-                        </table>
-                        <div id="containerPager">
+                            @Html.LabelFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.EditorFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.PlaceOfReceipt, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                </div>
-            </fieldset>
+                    <div class="row" style="margin-top: 12px;">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.ShipmentDetailsModel.DischPort, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.EditorFor(model => model.ShipmentDetailsModel.DischPort, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.DischPort, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, htmlAttributes: new { @class = "control-label" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.EditorFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.PlaceOfDelivery, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 12px;">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.BLDetailsModel.LoadPortAlias, htmlAttributes: new { @class = "control-label", @id = "LoadPortLabel" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.BLDetailsModel.LoadPortAlias, new SelectList(ViewBag.LoadPortAliasList, "Text", "Text"),
+                            "Select Load Port Alias", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme" })
+                            @Html.ValidationMessageFor(model => model.BLDetailsModel.LoadPortAlias, "", new { @class = "text-danger", @id = "LoadPortValid" })
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.BLDetailsModel.DischPortAlias, htmlAttributes: new { @class = "control-label", @id = "DischPortLabel" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.DropDownListFor(model => model.BLDetailsModel.DischPortAlias, new SelectList(ViewBag.DischPortAliasList, "Text", "Text"),
+                            "Select Disch Port Alias", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme" })
+                            @Html.ValidationMessageFor(model => model.BLDetailsModel.DischPortAlias, "", new { @class = "text-danger", @id = "DischPortValid" })
+                        </div>
+                    </div>
+</fieldset>
             <br />
+            <fieldset class="quotationfieldset" style="padding: 20px; border-color: rgba(0,153,204,1);">
+                <legend class="shippingfieldsetlegend" style="background-color: rgba(0,153,204,0.6); border-radius: 10px;border-color:transparent;"> &nbsp; VESSEL DETAILS &nbsp;</legend>
 
-            <fieldset class="quotationfieldset" style="padding: 20px;">
-                <legend class="shippingfieldsetlegend"> &nbsp; MARK &amp; NOS &nbsp;</legend>
-                <div class="row">
-                    <div class="col-md-4">
+                    <div class="row" id="PrecarriageDiv">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.BLDetailsModel.PreCarriageBy, htmlAttributes: new { @class = "control-label" })
+                            @*<span class="RequiredAstrik">*</span>*@
+                        </div>
+                        <div class="col">
+                            @{int i = 0;}
+                            @foreach (var item in Model.TransVessel)
+                            {
+                                @Html.RadioButtonFor(model => model.BLDetailsModel.PreCarriageBy, item.VesselName+" VOY: "+item.VoyNo, htmlAttributes: new { @id = "PreCarriage" + i })
+                                @Html.Label(item.VesselName + " VOY: " + item.VoyNo)
+                                <text>&nbsp;</text>
+                                { i++; }
+                            }
 
-                        @Html.LabelFor(model => model.BLDetailsModel.MarksandNo, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
-                        @Html.TextAreaFor(model => model.BLDetailsModel.MarksandNo, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Marks & No", maxlength = "300", id = "MarksAndNo", onkeyup = "MarksAndNoCount()" })
-                        @Html.ValidationMessageFor(model => model.BLDetailsModel.MarksandNo, "", new { @class = "text-danger" })
-                        <span class="AligningCharacterCount"><span id="CountingCharactersMarksAndNo">0</span>/300</span>
+                        </div>
                     </div>
-                    <div class="col-md-4" style="margin-left: 50px;">
 
-                        @Html.LabelFor(model => model.BLDetailsModel.CargoDescription, htmlAttributes: new { @class = "control-label" })
-                        <span class="RequiredAstrik">*</span>
-                        @Html.TextAreaFor(model => model.BLDetailsModel.CargoDescription, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Cargo Desription", maxlength = "300", id = "CargoDescription", onkeyup = "CargoDescriptionCount()" })
-                        @Html.ValidationMessageFor(model => model.BLDetailsModel.CargoDescription, "", new { @class = "text-danger" })
-                        <span class="AligningCharacterCount"><span id="CountingCharactersCargo">0</span>/300</span>
-                    </div>
-                    <div class="col-md-3" style="margin-left: 40px;">
-                        @Html.LabelFor(model => model.ShipmentDetailsModel.Remark, htmlAttributes: new { @class = "control-label" })
+                    <div class="row" style="margin-top: 12px;">
+                        <div class="col-md-12">
+                            <table id="vesselGrid" class="overflow:auto;">
+                            </table>
+                            <div id="vesselPager">
+                            </div>
+                        </div>
 
-                        @Html.TextAreaFor(model => model.ShipmentDetailsModel.Remark, new { rows = "4", cols = "32", style = "resize:none;", placeholder = "Invoice Remarks", maxlength = "300", id = "InvoiceRemark", onkeyup = "InvoiceRemarkCount()" })
-                        @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.Remark, "", new { @class = "text-danger" })
-                        <span class="AligningCharacterCount"><span id="CountingCharactersRemarks">0</span>/300</span>
-                    </div>
+                        @*<div class="col-md-1">
+                    @Html.LabelFor(model => model.VesselModel.ETD, htmlAttributes: new { @class = "control-label" })
+                    <br /><br />
+                    @Html.LabelFor(model => model.VesselModel.ETA, htmlAttributes: new { @class = "control-label", style = "margin-top: 11px;" })
                 </div>
-                
-                @*<div class="row">
-                    <div class="col-md-2" style="margin-left: 470px;">
-                        @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select GW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "grossweightDropDownList", style="width: 170px" })
-                        @Html.ValidationMessageFor(model => model.BLDetailsModel.GrossWeightUnit, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2" style="margin-left: 20px;">
-                        @Html.DropDownListFor(model => model.BLDetailsModel.NetWtUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
-                            "Select NW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "netweightDropDownList", style = "width: 170px" })
-                        @Html.ValidationMessageFor(model => model.BLDetailsModel.NetWtUnit, "", new { @class = "text-danger" })
-                    </div>
-                    <div class="col-md-2" style="margin-left: 25px;">
-                        @Html.DropDownListFor(model => model.BLDetailsModel.MeasurementUnit, new SelectList(ViewBag.munitlist, "Text", "Text"),
-                            "Select M. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "munitDropDownList", style = "width: 170px" })
-                        @Html.ValidationMessageFor(model => model.BLDetailsModel.MeasurementUnit, "", new { @class = "text-danger" })
-                    </div>
+                <div class="col-md-2">
+                    @Html.TextBoxFor(model => model.VesselModel.ETD, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETDDatePicker" })
+                    @Html.ValidationMessageFor(model => model.VesselModel.ETD, "", new { @class = "text-danger" })
+                    <br />
+                    @Html.TextBoxFor(model => model.VesselModel.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
+                    @Html.ValidationMessageFor(model => model.VesselModel.ETA, "", new { @class = "text-danger" })
                 </div>*@
-                
-                
+                    </div>
+                </fieldset>
+                <br />
 
-            </fieldset>
-            <br />
-            <div class="row">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.BLDetailsModel.PlaceofIssue, htmlAttributes: new { @class = "control-label" })
+                <fieldset class="quotationfieldset" style="padding: 20px; border-color: rgba(0,153,204,1);">
+                    <legend class="shippingfieldsetlegend" style="background-color: rgba(0,153,204,0.6); border-radius: 10px;border-color:transparent;"> &nbsp; INVENTORY &nbsp;</legend>
+                    <div class="row">
+                        <div class="col-md-3">
+                            @Html.Label("Available Containers")
+                            <span class="RequiredAstrik">*</span>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.ListBoxFor(model => model.ShipmentDetailsModel.SelectedContainerList, Model.ShipmentDetailsModel.ContainerList, new { id = "ContainerList", @class = "selectContainerList" }) @* style = "width:300px;", size = "8", @class = "selectExportList show-tick form-control input-md"*@
+                            @*<span>  Containers Selected : <span id="CountingContainers"></span></span>*@
+                        </div>
+                        <div class="col-md-2">
+                            @* <input type="submit" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" />*@
+                            <input type="button" name="submit" id="Allocate" value="Allocate Containers" class="btn btn-primary" onclick="allocate()" />
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="containerGrid" class="overflow:auto;">
+                            </table>
+                            <div id="containerPager">
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <br />
+
+                <fieldset class="quotationfieldset" style="padding: 20px; border-color:rgba(0,153,204,1);">
+                    <legend class="shippingfieldsetlegend" style="background-color: rgba(0,153,204,0.6); border-radius: 10px;border-color:transparent;"> &nbsp; MARK &amp; NOS &nbsp;</legend>
+                    <div class="row">
+                        <div class="col-md-4" style="margin-left: 30px;">
+
+                            @Html.LabelFor(model => model.BLDetailsModel.MarksandNo, htmlAttributes: new { @class = "control-label" })
+                            <span class="RequiredAstrik">*</span>
+                            @Html.TextAreaFor(model => model.BLDetailsModel.MarksandNo, new { rows = "7", cols = "32", style = "resize:none;", placeholder = "Marks & No", maxlength = "300", id = "MarksAndNo", onkeyup = "MarksAndNoCount()" })
+                            @Html.ValidationMessageFor(model => model.BLDetailsModel.MarksandNo, "", new { @class = "text-danger" })
+                            <span class="AligningCharacterCount"><span id="CountingCharactersMarksAndNo">0</span>/300</span>
+                        </div>
+                        <div class="col-md-4" style="margin-left: -10px;">
+                            @Html.LabelFor(model => model.BLDetailsModel.CargoDescription, htmlAttributes: new { @class = "control-label" })
+                            <span class="RequiredAstrik">*</span>
+                            @Html.TextAreaFor(model => model.BLDetailsModel.CargoDescription, new { rows = "7", cols = "32", style = "resize:none;", placeholder = "Cargo Desription", maxlength = "300", id = "CargoDescription", onkeyup = "CargoDescriptionCount()" })
+                            @Html.ValidationMessageFor(model => model.BLDetailsModel.CargoDescription, "", new { @class = "text-danger" })
+                            <span class="AligningCharacterCount"><span id="CountingCharactersCargo">0</span>/300</span>
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.ShipmentDetailsModel.Remark, htmlAttributes: new { @class = "control-label" })
+                            @Html.TextAreaFor(model => model.ShipmentDetailsModel.Remark, new { rows = "7", cols = "32", style = "resize:none;", placeholder = "Invoice Remarks", maxlength = "300", id = "InvoiceRemark", onkeyup = "InvoiceRemarkCount()" })
+                            @Html.ValidationMessageFor(model => model.ShipmentDetailsModel.Remark, "", new { @class = "text-danger" })
+                            <span class="AligningCharacterCount"><span id="CountingCharactersRemarks">0</span>/300</span>
+                        </div>
+                    </div>
+
+                    @*<div class="row">
+                <div class="col-md-2" style="margin-left: 470px;">
+                    @Html.DropDownListFor(model => model.BLDetailsModel.GrossWeightUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
+                        "Select GW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "grossweightDropDownList", style="width: 170px" })
+                    @Html.ValidationMessageFor(model => model.BLDetailsModel.GrossWeightUnit, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3 forleftalign">
-                    @Html.EditorFor(model => model.BLDetailsModel.PlaceofIssue, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.PlaceofIssue, "", new { @class = "text-danger" })
+                <div class="col-md-2" style="margin-left: 20px;">
+                    @Html.DropDownListFor(model => model.BLDetailsModel.NetWtUnit, new SelectList(ViewBag.wtunitlist, "Text", "Text"),
+                        "Select NW. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "netweightDropDownList", style = "width: 170px" })
+                    @Html.ValidationMessageFor(model => model.BLDetailsModel.NetWtUnit, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.BLDetailsModel.LadenOnBoard, htmlAttributes: new { @class = "control-label" })
-                    <span class="RequiredAstrik">*</span>
+                <div class="col-md-2" style="margin-left: 25px;">
+                    @Html.DropDownListFor(model => model.BLDetailsModel.MeasurementUnit, new SelectList(ViewBag.munitlist, "Text", "Text"),
+                        "Select M. Unit", new { @class = "btn btn-primary dropdown-toggle ForDropdownTheme", @id = "munitDropDownList", style = "width: 170px" })
+                    @Html.ValidationMessageFor(model => model.BLDetailsModel.MeasurementUnit, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3 forleftalign">
-                    @Html.TextBoxFor(model => model.BLDetailsModel.LadenOnBoard, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ladenDatePicker" })
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.LadenOnBoard, "", new { @class = "text-danger" })
+            </div>*@
+
+
+
+                </fieldset>
+                <br />
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BLDetailsModel.PlaceofIssue, htmlAttributes: new { @class = "control-label" })
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.EditorFor(model => model.BLDetailsModel.PlaceofIssue, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.PlaceofIssue, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BLDetailsModel.LadenOnBoard, htmlAttributes: new { @class = "control-label" })
+                        <span class="RequiredAstrik">*</span>
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextBoxFor(model => model.BLDetailsModel.LadenOnBoard, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ladenDatePicker" })
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.LadenOnBoard, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="margin-top: 12px;">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.BLDetailsModel.BLFinalisedDate, htmlAttributes: new { @class = "control-label" })
-                    <span class="RequiredAstrik">*</span>
+                <div class="row" style="margin-top: 12px;">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BLDetailsModel.BLFinalisedDate, htmlAttributes: new { @class = "control-label" })
+                        <span class="RequiredAstrik">*</span>
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextBoxFor(model => model.BLDetailsModel.BLFinalisedDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "blfinalisedDatePicker" })
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.BLFinalisedDate, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BLDetailsModel.DateofIssue, htmlAttributes: new { @class = "control-label" })
+                        <span class="RequiredAstrik">*</span>
+                    </div>
+                    <div class="col-md-3 forleftalign">
+                        @Html.TextBoxFor(model => model.BLDetailsModel.DateofIssue, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "issueDatePicker" })
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.DateofIssue, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-                <div class="col-md-3 forleftalign">
-                    @Html.TextBoxFor(model => model.BLDetailsModel.BLFinalisedDate, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "blfinalisedDatePicker" })
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.BLFinalisedDate, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.BLDetailsModel.DateofIssue, htmlAttributes: new { @class = "control-label" })
-                    <span class="RequiredAstrik">*</span>
-                </div>
-                <div class="col-md-3 forleftalign">
-                    @Html.TextBoxFor(model => model.BLDetailsModel.DateofIssue, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "issueDatePicker" })
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.DateofIssue, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="row" style="margin-top: 12px;">
-                <div class="col-md-2">
-                    @Html.LabelFor(model => model.BLDetailsModel.HBLFreightPayment, htmlAttributes: new { @class = "control-label" })
-                    <span class="RequiredAstrik">*</span>
-                </div>
-                <div class="col-md-2 ForLeftAlignRadioBtn">
-                    @Html.RadioButtonFor(model => model.BLDetailsModel.HBLFreightPayment, "PREPAID", htmlAttributes: new { @id = "HBLPrepaidType" })
-                    Prepaid &nbsp;
-                    @Html.RadioButtonFor(model => model.BLDetailsModel.HBLFreightPayment, "COLLECT", htmlAttributes: new { @id = "HBLCollectType" })
-                    Collect
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.HBLFreightPayment, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-2 MBLFright">
-                    @Html.LabelFor(model => model.BLDetailsModel.MBLFreightPayment, htmlAttributes: new { @class = "control-label" })
-                    <span class="RequiredAstrik">*</span>
-                </div>
-                <div class="col-md-2 ForLeftAlignRadioBtn">
-                    @Html.RadioButtonFor(model => model.BLDetailsModel.MBLFreightPayment, "PREPAID", htmlAttributes: new { @id = "MBLPrepaidTypeYes" })
-                    Prepaid &nbsp;
-                    @Html.RadioButtonFor(model => model.BLDetailsModel.MBLFreightPayment, "COLLECT", htmlAttributes: new { @id = "MBLCollectType" })
-                    Collect
-                    @Html.ValidationMessageFor(model => model.BLDetailsModel.MBLFreightPayment, "", new { @class = "text-danger" })
+                <div class="row" style="margin-top: 12px;">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.BLDetailsModel.HBLFreightPayment, htmlAttributes: new { @class = "control-label", style = "margin-top: 0px;" })
+                        <span class="RequiredAstrik">*</span>
+                    </div>
+                    <div class="col-md-2 ForLeftAlignRadioBtn">
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.HBLFreightPayment, "PREPAID", htmlAttributes: new { @id = "HBLPrepaidType" })
+                        Prepaid &nbsp;
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.HBLFreightPayment, "COLLECT", htmlAttributes: new { @id = "HBLCollectType" })
+                        Collect
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.HBLFreightPayment, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-2 MBLFright">
+                        @Html.LabelFor(model => model.BLDetailsModel.MBLFreightPayment, htmlAttributes: new { @class = "control-label", style = "margin-top: 0px;" })
+                        <span class="RequiredAstrik">*</span>
+                    </div>
+                    <div class="col-md-2 ForLeftAlignRadioBtn">
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.MBLFreightPayment, "PREPAID", htmlAttributes: new { @id = "MBLPrepaidTypeYes" })
+                        Prepaid &nbsp;
+                        @Html.RadioButtonFor(model => model.BLDetailsModel.MBLFreightPayment, "COLLECT", htmlAttributes: new { @id = "MBLCollectType" })
+                        Collect
+                        @Html.ValidationMessageFor(model => model.BLDetailsModel.MBLFreightPayment, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
         </div>

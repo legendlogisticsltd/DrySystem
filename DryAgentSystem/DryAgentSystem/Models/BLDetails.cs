@@ -76,6 +76,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Disch Port")]
         public string DischPort { get; set; }
+        
+        [Display(Name = "Disch Port Alias")]
+        public string DischPortAlias { get; set; }
 
         [Display(Name = "Field Status")]
         public string FieldStatus { get; set; }
@@ -108,6 +111,9 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "Load Port")]
         public string LoadPort { get; set; }
+        
+        [Display(Name = "Load Port Alias")]
+        public string LoadPortAlias { get; set; }
 
         [Display(Name = "Marks and No.")]
         [Required(ErrorMessage = "Please provide Marks and No.")]
@@ -163,6 +169,10 @@ namespace DryAgentSystem.Models
 
         [Display(Name = "PreCarriage By")]
         public string PreCarriageBy { get; set; }
+
+        [Display(Name = "Port Alias Required")]
+        [Required(ErrorMessage = "Please provide if Port Alias Required")]
+        public string PortAlias { get; set; }
 
         [Display(Name = "Product Der")]
         public string ProductDer { get; set; }

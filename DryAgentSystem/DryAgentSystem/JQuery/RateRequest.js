@@ -50,7 +50,7 @@
                 name: 'DischargePort',
                 width: '150px'
             },
-            
+
             {
                 key: false,
                 name: 'PlaceOfDelivery'
@@ -143,34 +143,7 @@
         //caption: 'User Details',
         emptyrecords: 'No records to display',
         rownumbers: true,
-        //jsonReader:
-        //{
-        //    root: "rows",
-        //    total: "total",
-        //    records: "records",
-        //    page: "page",
-        //    repeatitems: false,
-        //    Id: 'ID'
-        //},
 
-
-        //pager-you have to choose here what icons should appear at the bottom  
-        //like edit,create,delete icons  
-    }).navGrid('#rateRequestDataPager', { edit: false, add: false, del: false, search: false, refresh: true });
-
-
-    function reloadGrid(refresh) {
-        if (refresh == true) {
-            //Set initial values of your filters here
-            //$("#txtId").val("");
-            //$("#txtEmployeeName").val("");
-
-            //reload grid's page 1 instead of current page
-            $("#rateRequestDataGrid").trigger("reloadGrid", { page: 1 });
-        }
-        else {
-            $("#rateRequestDataGrid").trigger("reloadGrid");
-        }
-    }
+    });
 
 });

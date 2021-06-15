@@ -39,8 +39,6 @@ $(function () {
         emptyrecords: 'No records to display'
     });
 
-    //.navGrid('#quoteChargesPager', { edit: false, add: false, del: false, search: false, refresh: true });
-
     if (rateCountered <= 0) {
         $("#rateCounteredLabel").hide();
         $("#RateCountered").hide();

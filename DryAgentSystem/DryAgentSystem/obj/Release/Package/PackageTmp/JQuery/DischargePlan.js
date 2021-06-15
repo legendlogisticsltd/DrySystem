@@ -20,7 +20,8 @@
             },
             {
                 key: false,
-                name: 'ChargeParty'
+                name: 'ChargeParty',
+                width: '289px'
             },
             {
                 key: true,
@@ -45,7 +46,8 @@
             },
             {
                 key: false,
-                name: 'Quantity'
+                name: 'Quantity',
+                width: '75px'
             },
             {
                 key: false,
@@ -55,7 +57,7 @@
                 key: false,
                 name: 'ATA',
                 formatter: 'date',
-                width: '140px',
+                width: '103px',
                 formatoptions: {
                     srcformat: 'm-d-Y',
                     newformat: 'm-d-Y'
@@ -65,7 +67,7 @@
                 key: false,
                 name: 'ETA',
                 formatter: 'date',
-                width: '140px',
+                width: '103px',
                 formatoptions: {
                     srcformat: 'm-d-Y',
                     newformat: 'm-d-Y'
@@ -75,7 +77,7 @@
                 key: false,
                 name: 'ETD',
                 formatter: 'date',
-                width: '140px',
+                width: '103px',
                 formatoptions: {
                     srcformat: 'm-d-Y',
                     newformat: 'm-d-Y'
@@ -100,18 +102,11 @@
         viewrecords: true,
         multiselect: false,
         altRows: true,
-        altclass: 'shipmentRow',
+        //altclass: 'shipmentRow',
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
-        //jsonReader: {
-        //    root: "rows",
-        //    page: "page",
-        //    total: "total",
-        //    records: "records",
-        //    repeatitems: false,
-        //    Id: "0"
-        //},
+        
     });
 
-    
+    $('#CompanyNameLabel').html('Charge Party');
 });

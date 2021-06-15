@@ -26,5 +26,6 @@ namespace DryAgentSystem.Data
         public const string Import = "IMPORT";
         public const string ExportInitial = "EX";
         public const string ImportInitial = "IM";
+        public const string ProformaInitial = "PR";
     }
 }

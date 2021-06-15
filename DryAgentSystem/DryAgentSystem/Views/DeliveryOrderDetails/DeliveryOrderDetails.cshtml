@@ -12,6 +12,16 @@
 @Styles.Render("~/Content/cssjqryUi")
 <script src="~/JQuery/DeliveryOrderDetails.js"></script>
 
+<style>
+    .ThemeBox {
+        background: #F5F5F5;
+        border-color: rgba(0,153,204,0.4);
+        border-radius: 12px;
+        border-width: 1px;
+        border-style: solid;
+        padding: 13px;
+    }
+</style>
 
 <div class="form-group">
     <h3 class="text-success">@ViewBag.Message</h3>
@@ -43,56 +53,56 @@
             </div>
         </div>
         <hr />
-        <div class="form-group">
-            <h3 class="text-success">@TempData["message"]</h3>
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.DishTo)
+        <div class="ThemeBox">
+            <div class="form-group">
+                <h3 class="text-success">@TempData["message"]</h3>
             </div>
-            <div class="col-md-3 forleftalign">
-                @Html.EditorFor(model => model.DishTo, new { htmlAttributes = new { @class = "form-control" } })
-                <br/>
-                <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishToalert">
-                    To is a mandatory field
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.DishTo)
+                </div>
+                <div class="col-md-3 forleftalign">
+                    @Html.EditorFor(model => model.DishTo, new { htmlAttributes = new { @class = "form-control" } })
+                    <br />
+                    <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishToalert">
+                        To is a mandatory field
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.DishAttn)
+                </div>
+                <div class="col-md-3 forleftalign">
+                    @Html.EditorFor(model => model.DishAttn, new { htmlAttributes = new { @class = "form-control" } })
+                    <br />
+                    <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishAttnalert">
+                        Attention is a mandatory field
+                    </div>
                 </div>
             </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.DishAttn)
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ETA)
+                </div>
+                <div class="col-md-3 forleftalign">
+                    @Html.TextBoxFor(model => model.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ATA)
+                </div>
+                <div class="col-md-3 forleftalign">
+                    @Html.TextBoxFor(model => model.ATA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ATADatePicker" })
+                </div>
             </div>
-            <div class="col-md-3 forleftalign">
-                @Html.EditorFor(model => model.DishAttn, new { htmlAttributes = new { @class = "form-control" } })
-                <br />
-                <div class="col-md-12 forleftalign,top , alert-danger collapse" id="DishAttnalert">
-                    Attention is a mandatory field
+            <br />
+            <div style="overflow:auto;">
+                <table id="deliveryOrderGrid">
+                </table>
+                <div id="deliveryPager" style="text-align: center;">
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.ETA)
-            </div>
-            <div class="col-md-3 forleftalign">
-                @Html.TextBoxFor(model => model.ETA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ETADatePicker" })
-            </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-2">
-                @Html.LabelFor(model => model.ATA)
-            </div>
-            <div class="col-md-3 forleftalign">
-                @Html.TextBoxFor(model => model.ATA, "{0:MM-dd-yyyy}", new { @class = "ui-datepicker form-control", @id = "ATADatePicker" })
-            </div>
-        </div>
-        <br />
-    </div>
-</div>
-
-
-<div style="overflow:auto;">
-    <table id="deliveryOrderGrid">
-    </table>
-    <div id="deliveryPager" style="text-align: center;">
     </div>
 </div>
 

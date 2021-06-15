@@ -4,7 +4,7 @@
         mtype: 'Get',
         url: 'Shipment/GetShipmentData', //'/QuotationDetails/GetQuoteChargesList'
         datatype: 'json',
-        colNames: ['JobRef', 'Charge Party', 'Booking No', 'QuoteRef ID', 'Discharge Port', 'Load Port', 'Shipment Status'],
+        colNames: ['JobRef', 'Charge Party', 'Booking No', 'QuoteRef ID', 'Shipment Status', 'Discharge Port', 'Load Port'],
         colModel: [
             {
                 key: true,
@@ -37,15 +37,15 @@
             },
             {
                 key: false,
+                name: 'BLTypes'
+            },
+            {
+                key: false,
                 name: 'DischPort'
             },
             {
                 key: false,
                 name: 'LoadPort'
-            },
-            {
-                key: false,
-                name: 'StatusShipment'
             }
         ],
         loadonce: true,
@@ -65,27 +65,9 @@
         loadtext: 'Loading Data please wait ...',
         rownumbers: true,
         emptyrecords: 'No records to display',
-        //jsonReader: {
-        //    root: "rows",
-        //    page: "page",
-        //    total: "total",
-        //    records: "records",
-        //    repeatitems: false,
-        //    Id: "0"
-        //},
+        
     });
 
-    //.navGrid('#quoteChargesPager', { edit: false, add: false, del: false, search: false, refresh: true });
-
-
-
-    //$("#submit").click(function () {
-    //    document.forms[0].submit();
-    //    return false;
-    //});
-    var $s = $("#statusDropDownList").selectmenu();
-    //var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    var $s = $("#companyDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    
+    
 });

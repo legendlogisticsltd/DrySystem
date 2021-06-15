@@ -16,7 +16,7 @@ namespace DryAgentSystem.Controllers
         public ActionResult DischargePlanDetails(string JobRef)
         {
             var shiprefdetails = DataContext.GetShipmentDetailsFromJobRef(JobRef);
-            ViewBag.PortList = DataContext.GetCountryPorts();
+            //ViewBag.PortList = DataContext.GetCountryPorts();
             TempData["UniversalSerialNr"] = shiprefdetails.UniversalSerialNr;
             return View(shiprefdetails);
         }
@@ -24,7 +24,7 @@ namespace DryAgentSystem.Controllers
         [HttpPost]
         public ActionResult DischargePlanDetails(ShipmentDetails shipmentDetails, string submit)
         {
-            ViewBag.PortList = DataContext.GetCountryPorts();
+            //ViewBag.PortList = DataContext.GetCountryPorts();
             if (submit == "Save")
             {
                 //if (ModelState.IsValid)
@@ -56,14 +56,14 @@ namespace DryAgentSystem.Controllers
         public ActionResult UpdateDischargePlanDetails(string JobRef)
         {
             var dischargePlanDetails = DataContext.GetDischargePlanFromIDNo(JobRef);
-            ViewBag.PortList = DataContext.GetCountryPorts();            
+            //ViewBag.PortList = DataContext.GetCountryPorts();            
 
             TempData["JobRef"] = JobRef;
             return View(dischargePlanDetails);
         }
         public ActionResult UpdateDischargePlanDetails(DischargePlan dischargePlan, string submit)
         {
-            ViewBag.PortList = DataContext.GetCountryPorts();
+            //ViewBag.PortList = DataContext.GetCountryPorts();
 
             if (submit == "Save")
             {

@@ -217,7 +217,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.DishTo, FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(":    " + (string.IsNullOrEmpty(DeliveryDet.DischargePlanModel.DishTo) ? string.Empty : DeliveryDet.DischargePlanModel.DishTo.ToUpperInvariant()), FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.Colspan = 3;
@@ -230,7 +230,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.DishAttn, FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(":    " + (string.IsNullOrEmpty(DeliveryDet.DischargePlanModel.DishAttn) ? string.Empty : DeliveryDet.DischargePlanModel.DishAttn.ToUpperInvariant()), FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.Colspan = 3;
@@ -316,7 +316,7 @@ namespace DryAgentSystem.Controllers
                 cell.AddElement(para1);
                 table.AddCell(cell);
 
-                para1 = new Paragraph(":    " + DeliveryDet.DischargePlanModel.LoadPort, FontFactory.GetFont("Arial", 8));
+                para1 = new Paragraph(":    " + (string.IsNullOrEmpty(DeliveryDet.DischargePlanModel.LoadPort) ? string.Empty : DeliveryDet.DischargePlanModel.LoadPort.ToUpperInvariant()), FontFactory.GetFont("Arial", 8));
                 cell = new PdfPCell();
                 cell.Border = 0;
                 cell.Colspan = 3;
@@ -432,11 +432,11 @@ namespace DryAgentSystem.Controllers
                     {
                         if (ParaContainer == "")
                         {
-                            ParaContainer = ":    " + DeliveryDet.DevAllocateEquipmentModel[i].ContainerNo + "/" + DeliveryDet.DevAllocateEquipmentModel[i].SealNo + "/" + DeliveryDet.QuoteRefModel.EquipmentType;
+                            ParaContainer = ":    " + DeliveryDet.DevAllocateEquipmentModel[i].ContainerNo + "/" + (string.IsNullOrEmpty(DeliveryDet.DevAllocateEquipmentModel[i].SealNo) ? string.Empty : DeliveryDet.DevAllocateEquipmentModel[i].SealNo.ToUpperInvariant()) + "/" + DeliveryDet.QuoteRefModel.EquipmentType;
                         }
                         else
                         {
-                            ParaContainer = ParaContainer + "\n" + "     " + DeliveryDet.DevAllocateEquipmentModel[i].ContainerNo + "/" + DeliveryDet.DevAllocateEquipmentModel[i].SealNo + "/" + DeliveryDet.QuoteRefModel.EquipmentType;
+                            ParaContainer = ParaContainer + "\n" + "     " + DeliveryDet.DevAllocateEquipmentModel[i].ContainerNo + "/" + (string.IsNullOrEmpty(DeliveryDet.DevAllocateEquipmentModel[i].SealNo) ? string.Empty : DeliveryDet.DevAllocateEquipmentModel[i].SealNo.ToUpperInvariant()) + "/" + DeliveryDet.QuoteRefModel.EquipmentType;
                         }
                     }
                 }

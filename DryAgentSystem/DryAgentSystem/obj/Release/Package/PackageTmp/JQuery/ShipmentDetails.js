@@ -1,7 +1,6 @@
 ﻿$(function () {
 
-    //$("#loadportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
-    //$("#dischportDropDownList").selectmenu().selectmenu("menuWidget").addClass("overflow");
+    
    
     $("#blfinalisedDatePicker").datepicker({
 
@@ -77,7 +76,7 @@
 
     $vesselGrid = $('#vesselGrid').jqGrid({
         mtype: 'Get',
-        url: 'GetVesselDetails', //'/QuotationDetails/GetQuoteChargesList'
+        url: 'GetVesselDetails', 
         datatype: 'json',
         colNames: ['ID', 'Vessel Name', 'Voy No', 'Load Port', 'Discharge Port', 'ETD POL', 'ETA POD', 'Carrier', 'UniversalSerialNr', 'CarrierBookingRefNo'],
         colModel: [
@@ -149,26 +148,16 @@
         altRows: true,        
         loadtext: 'Loading Data please wait ...',
         emptyrecords: 'No records to display',
-        //jsonReader: {
-        //    root: "rows",
-        //    page: "page",
-        //    total: "total",
-        //    records: "records",
-        //    repeatitems: false,
-        //    Id: "0"
-        //},
+        
         autowidth: true,
         multiselect: false,
         rownumbers: true
        
     });
 
-
-    $('#vesselGrid').navGrid('#vesselPager', { edit: false, add: false, del: false, search: false, refresh: true });
-
     $containerGrid = $('#containerGrid').jqGrid({
         mtype: 'Get',
-        url: 'GetContainerDetails', //'/QuotationDetails/GetQuoteChargesList'
+        url: 'GetContainerDetails', 
         editurl: 'ProcessContainerData',
         onAfterSaveCell: reload,
         datatype: 'json',
@@ -301,29 +290,7 @@
         }
     });
 
-
-
-    $('#containerGrid').navGrid('#containerPager', { edit: false, add: false, del: false, search: false, refresh: false });
-
-    //$('#containerGrid').jqGrid('inlineNav', '#containerPager',
-    //    {
-    //        edit: true,
-    //        editicon: "ui-icon-pencil",
-    //        edittext: "Edit",
-    //        add: false,
-    //        //addicon: "ui-icon-plus",
-    //        //addtext: "Add",
-    //        save: true,
-    //        saveicon: "ui-icon-disk",
-    //        savetext: "Save",
-    //        //saveurl: '/ShipmentDetails/AddTank/',
-    //        cancel: true,
-    //        cancelicon: "ui-icon-cancel",
-    //        canceltext: "Cancel",
-    //        addParams: { position: "last" }
-    //    });
-
-
+    
     function reload(rowid, result) {
         $("#containerGrid").trigger("reloadGrid");
     }
@@ -375,6 +342,17 @@
         $("#SURRENDER").hide();
     }
 
+    $("#ExportInvoice").click(function () {
+        if (allocatestatus == "False") {
+            alert('Please wait till the Containers are allocated and try again.');
+            event.preventDefault();
+        }
+        else {
+            ReloadPage()
+        }
+    })
+    
+
     if (housebl != "") {
         $("#Save").hide();
         $("#Update").show();
@@ -382,9 +360,11 @@
     else {
         $("#Save").show();
         $("#Update").hide();
-        $("#printbl").hide();
+        $("#printbls").hide();
         $("#ExportInvoice").hide();
     }
+
+    
 
     if (blstatus == "ORIGINAL ISSUED"){
         $("#MANIFEST").show();
@@ -426,6 +406,13 @@
         $("#MBLCollectType").prop("disabled", true);
         $("#Allocate").prop("disabled", true);
         $("#Update").hide();
+        $("#ContainerList").multiselect('disable');
+        $('#PreCarriage0').prop("disabled",true);
+        $('#PreCarriage1').prop("disabled",true);
+        $('#PortAliasNo').prop("disabled",true);
+        $('#PortAliasYes').prop("disabled",true);
+        $('#BLDetailsModel_DischPortAlias').prop("disabled",true);
+        $('#BLDetailsModel_LoadPortAlias').prop("disabled",true);
         
     }
     else {
@@ -469,16 +456,35 @@
 
     if ((blstatus == "ORIGINAL ISSUED") || (blseawaystatus == "SEAWAY ISSUED")) {
         $("#RePrint").show();
+        
     }
     else {
         $("#RePrint").hide();
+        
     }
 
 
     $("#RePrint").click(function () {
-        alert('Re-Print BL request Sent to HQ Successfully')
+        if (PrintApproval == "Approval Requested") {
+            alert('You have already sent a request for Re-Print BL')
+            event.preventDefault();
+        }
+        else {
+            RePrintMethod();
+        }
     })
 
+    if (PrintApproval == "Approval Requested") {
+        $("#PrintApproval").html('Re-Print Requested');
+        $("#PrintApproval").show();
+    }
+    else if (PrintApproval == "Rejected") {
+        $("#PrintApproval").html('Re-Print ' + PrintApproval);
+        $("#PrintApproval").show();
+    }
+    else {
+        $("#PrintApproval").hide();
+    }
 
 
     
@@ -541,6 +547,57 @@
     MarksAndNoCount();
     CargoDescriptionCount();
     InvoiceRemarkCount();
+    if (transShipmentType.toUpperCase() == "NO") {
+        $('#PrecarriageDiv').hide();
+    }
+    else {
+        $('#PrecarriageDiv').show();
+        if (preCarriage == "" || preCarriage == null) {
+            $('#PreCarriage0').prop("checked", true);
+        }
+        
+    }
+
+    $("#PortAliasYes").click(function () {
+        $('#LoadPortLabel').css('display', 'block');
+        $('#LoadPortValid').css('display', 'block');
+        $("#BLDetailsModel_LoadPortAlias").css('display', 'block');
+        $('#DischPortLabel').css('display', 'block');
+        $('#DischPortValid').css('display', 'block');
+        $("#BLDetailsModel_DischPortAlias").css('display', 'block');
+        $('#BLDetailsModel_LoadPortAlias').each(function () {
+            $(this).rules('add', {
+                required: true,
+                messages: {
+                    required: "Enter Load Port Alias"
+                }
+            });
+        });
+        $('#BLDetailsModel_DischPortAlias').each(function () {
+            $(this).rules('add', {
+                required: true,
+                messages: {
+                    required: "Enter Discharge Port Alias"
+                }
+            });
+        });
+    });
+
+    $("#PortAliasNo").click(function () {
+        $('#LoadPortLabel').css('display', 'none');
+        $('#LoadPortValid').css('display', 'none');
+        $("#BLDetailsModel_LoadPortAlias").css('display', 'none');
+        $('#DischPortLabel').css('display', 'none');
+        $('#DischPortValid').css('display', 'none');
+        $("#BLDetailsModel_DischPortAlias").css('display', 'none');
+    });
+
+    if (PortAlias.toUpperCase() == "YES") {
+        $("#PortAliasYes").trigger('click');
+    }
+    else {
+        $("#PortAliasNo").trigger('click');
+    }
 });
 
 function MarksAndNoCount() {
@@ -628,11 +685,12 @@ function shipping() {
 }
 
 function allocate() {
+    
     //var SelectedContainerList = $("#ContainerList :selected").
     var SelectedContainerListArray="";
     $("#ContainerList :selected").each(function (i,selected) {
         SelectedContainerListArray += $(selected).text() + ",";
-        selected.remove();
+        //selected.remove();
     });
     
     var Quantity = $('#ShipmentDetailsModel_Quantity').val();
@@ -641,7 +699,7 @@ function allocate() {
     var LDepotTerminal = $('#ShipmentDetailsModel_LDepotTerminal').val();
     var UniversalSerialNr = usn;
     $.ajax({
-        type: "GET",
+        type: "POST",
         url: 'AllocateContainers',
         data: {
             SelectedContainerListArray: SelectedContainerListArray,
@@ -652,15 +710,15 @@ function allocate() {
             UniversalSerialNr: UniversalSerialNr
         },
         dataType: "json",
-        success: function (data) {            
-            $("#ContainerList").multiselect('rebuild');
-            //if (data.length > 0) {
-            //    $("#ContainerList").appendTo(data[0].Value);
-            //}
-            //else {
-            //    $("#ContainerList").appendTo('');
-            //}
-            $('#containerGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
+        success: function (data) {
+            if (data.success == true) {
+                $("#ContainerList option:selected").remove();
+                $("#ContainerList").multiselect('rebuild');
+                $('#containerGrid').setGridParam({ datatype: "json" }).trigger('reloadGrid');
+            }
+            else {
+                alert(data.msg);
+            }
         }
     });
 }
